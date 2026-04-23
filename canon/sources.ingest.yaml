@@ -40,17 +40,19 @@ sources:
 
   - slug: cockburn-hexagonal-architecture
     manifest_ref: { author: "Alistair Cockburn", title: "Hexagonal Architecture", year: 2005 }
-    url: "https://alistair.cockburn.us/hexagonal-architecture/"
+    url: "https://web.archive.org/web/20170506170237id_/http://alistair.cockburn.us/Hexagonal+architecture"
     fetch: html
     license: "author-published-essay"
     topics: [hexagonal, ports-and-adapters, architecture, anti-corruption]
+    notes: "Author's site now serves 'coming soon' and the SSL cert is expired. This is a Web Archive snapshot (May 2017) of the original essay via the id_ flag (no archive chrome). If the author's site comes back, update the URL."
 
   - slug: helland-life-beyond-distributed-transactions
     manifest_ref: { author: "Pat Helland", title: "Life Beyond Distributed Transactions", year: 2007 }
-    url: "https://queue.acm.org/detail.cfm?id=3025012"
-    fetch: html
-    license: "publisher-open-access"
+    url: "https://ics.uci.edu/~cs223/papers/cidr07p15.pdf"
+    fetch: pdf-manual
+    license: "author-published-open-access"
     topics: [sagas, entities, eventual-consistency, distributed-systems]
+    notes: "PDF hosted at UCI (CIDR 2007 version, author-published open-access). The ingester does not parse PDFs; this entry stays as a stub until a curator manually converts (pdftotext) and runs ingest-owned-book.mjs. ACM Queue version at queue.acm.org/detail.cfm?id=3025012 blocks bots with 403."
 
   - slug: google-sre-book
     manifest_ref: { author: "Google SRE team", title: "Site Reliability Engineering", year: 2016 }

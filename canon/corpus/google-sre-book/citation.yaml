@@ -5,8 +5,8 @@ year: 2016
 kind: book
 topics: [slo, error-budget, toil, incident-response, on-call]
 source_url: "https://sre.google/sre-book/table-of-contents/"
-fetched_at: "2026-04-23T14:27:30.956Z"
-sha256: "59af8d6b6a514d06458f21fdd0e5c980dbbe271c7c2cd4ab5b54374fb6427efc"
+fetched_at: "2026-04-23T14:56:10.636Z"
+sha256: "37eed55f410f624a1b5d1ea23aa738a22b7db68d40df5c43406c6f948afe7936"
 license: "publisher-open-access"
 body_completeness: toc_plus_chapters
 chapter_offsets: []

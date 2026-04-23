@@ -4,18 +4,13 @@ title: "Hexagonal Architecture"
 year: 2005
 kind: essay
 topics: [hexagonal, ports-and-adapters, architecture, anti-corruption]
-source_url: "https://alistair.cockburn.us/hexagonal-architecture/"
-fetched_at: null
-sha256: null
+source_url: "https://web.archive.org/web/20170506170237id_/http://alistair.cockburn.us/Hexagonal+architecture"
+fetched_at: "2026-04-23T14:55:06.962Z"
+sha256: "5c5adcb4c9279c258a41768981da6ac99c5dd42422896bc72ed6c1d97fc096aa"
 license: "author-published-essay"
-body_completeness: fetch_blocked
+body_completeness: full
 chapter_offsets: []
 stale: false
 notes: |
-  Automated fetch blocked as of 2026-04-23: alistair.cockburn.us SSL
-  certificate has expired, causing all HTTPS clients (curl, Node fetch) to
-  refuse the connection. The essay itself is freely licensed and the URL is
-  correct; retry once the cert is renewed, or manually ingest via
-  bin/ingest-owned-book.mjs against a saved copy. The librarian must surface
-  this as a known-but-unavailable canonical source rather than substituting
-  a different author's treatment of hexagonal.
+  Fetched by bin/ingest-canon.mjs (html mode).
+  Author's site now serves 'coming soon' and the SSL cert is expired. This is a Web Archive snapshot (May 2017) of the original essay via the id_ flag (no archive chrome). If the author's site comes back, update the URL.

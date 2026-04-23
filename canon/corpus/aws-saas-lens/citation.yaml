@@ -5,8 +5,8 @@ year: 2024
 kind: book
 topics: [multi-tenancy, saas, well-architected, isolation]
 source_url: "https://docs.aws.amazon.com/wellarchitected/latest/saas-lens/toc-contents.json"
-fetched_at: "2026-04-23T14:29:39.426Z"
-sha256: "be85b4bce8fc7519af7c9f50016b670d29e4ec0ed4388a1ea0247ec25301a0e7"
+fetched_at: "2026-04-23T14:55:54.252Z"
+sha256: "26777c325df0c94c458c506b589713acbb52eb5fbe53d148dcf512a2ef63b6af"
 license: "publisher-open-access"
 body_completeness: full
 chapter_offsets: []

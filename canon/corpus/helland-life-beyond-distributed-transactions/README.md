@@ -1,31 +1,41 @@
 # helland-life-beyond-distributed-transactions
 
-**Status:** FETCH_BLOCKED — canonical source refuses automated access.
+**Status:** STUB (pdf-manual) — canonical source is a PDF, not auto-ingestable.
 
 **Author:** Pat Helland
-**Title:** Life Beyond Distributed Transactions
+**Title:** Life Beyond Distributed Transactions: an Apostate's Opinion
 **Year:** 2007
-**Source:** https://queue.acm.org/detail.cfm?id=3025012
-**Alternate source:** https://www.ics.uci.edu/~cs223/papers/cidr07p15.pdf (CIDR 2007, PDF)
-**License:** publisher-open-access
+**Primary source:** https://ics.uci.edu/~cs223/papers/cidr07p15.pdf (CIDR 2007, open-access, UCI mirror)
+**Alternate source:** https://queue.acm.org/detail.cfm?id=3025012 (ACM Queue, updated 2017 version — blocks bots with HTTP 403)
+**License:** author-published open access
 
 ## Why there is no `source.txt`
 
-The automated ingest run on 2026-04-23 failed with HTTP 403 Forbidden.
-ACM Queue serves the paper to browsers but blocks programmatic user
-agents. The paper is open-access; this is a scraping policy issue.
+The paper is distributed as a PDF. `bin/ingest-canon.mjs` doesn't parse
+PDFs — its `pdf-manual` fetch mode is a signal that curator action is
+required. Nothing is broken; this is the intended handoff point.
 
 ## How to populate this entry
 
-Manual ingest from a plaintext extraction of the PDF or HTML:
+1. Download the PDF:
+   ```
+   curl -o /tmp/helland.pdf https://ics.uci.edu/~cs223/papers/cidr07p15.pdf
+   ```
+2. Convert to plaintext:
+   ```
+   pdftotext -layout /tmp/helland.pdf /tmp/helland.txt
+   ```
+   (`pdftotext` is in the `poppler` package: `brew install poppler`.)
+3. Ingest:
+   ```
+   node ./bin/ingest-owned-book.mjs helland-life-beyond-distributed-transactions /tmp/helland.txt
+   ```
+   The helper writes `source.txt`, hashes it, and flips `citation.yaml`
+   `body_completeness: stub` → `full`.
 
-```
-# After converting the CIDR PDF to text (pdftotext, Preview, etc.):
-node ./bin/ingest-owned-book.mjs helland-life-beyond-distributed-transactions path/to/helland.txt
-```
+## What the librarian does until this is populated
 
-## What the librarian does with this stub
-
-Returns the citation with a note that the full text is not ingested. Does
-not substitute a different source's treatment of entities, sagas, or
-eventual consistency. Does not fabricate quotes.
+Returns the citation with a note that the full text is not ingested.
+Points at the PDF URL so a user can read the primary source directly.
+Does not substitute a different author's treatment of entities, sagas,
+or eventual consistency.

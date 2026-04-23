@@ -137,8 +137,12 @@ function splitTopLevel(s, delim) {
 // ---------------------------------------------------------------------------
 function stripHtml(html) {
   if (!html) return '';
-  // Remove full blocks we don't want
-  html = html.replace(/<(script|style|nav|footer|aside|header|head|form|noscript)\b[^>]*>[\s\S]*?<\/\1>/gi, '');
+  // Remove full blocks we don't want (script/style/nav/footer/aside/header/head/noscript).
+  // NOTE: `<form>` is intentionally NOT in this list — ASP.NET WebForms and other
+  // legacy CMSes wrap the entire page body in a single <form>, so dropping form
+  // blocks deletes all content. We instead strip form open/close tags below and
+  // keep their children, which is the right behavior for content extraction.
+  html = html.replace(/<(script|style|nav|footer|aside|header|head|noscript)\b[^>]*>[\s\S]*?<\/\1>/gi, '');
   // Remove HTML comments
   html = html.replace(/<!--[\s\S]*?-->/g, '');
   // Headings
@@ -214,6 +218,11 @@ async function fetchAndExtract(src) {
     case 'html-multi': return await fetchHtmlMulti(src);
     case 'arxiv-abs':  return await fetchArxivAbs(src);
     case 'aws-docs':   return await fetchAwsDocs(src);
+    case 'pdf-manual':
+      // Explicit signal: source is a PDF and must be ingested via
+      // bin/ingest-owned-book.mjs after local pdftotext conversion.
+      // Skip during automated runs — the entry stays as a stub.
+      throw new Error('pdf-manual: this source is a PDF; convert with pdftotext and run bin/ingest-owned-book.mjs. Not fetched automatically.');
     default:           throw new Error(`unknown fetch mode: ${src.fetch}`);
   }
 }
@@ -251,7 +260,11 @@ async function fetchAwsDocs(src) {
   return parts.join('');
 }
 
-const HTML_MULTI_MAX_CHAPTERS = 30;
+// Cap on how many child chapters html-multi / aws-docs will follow from a TOC.
+// Prevents runaway ingestion if a TOC links to every page on a large doc site.
+// 100 covers AWS SaaS Lens (~50 sections) fully; SRE Book will be capped at 100.
+// Raise per-source in sources.ingest.yaml (future: add per-entry `max_chapters`).
+const HTML_MULTI_MAX_CHAPTERS = 100;
 const NAV_NOISE = /^(home|back|next|previous|search|menu|contents|index|about|contact|help|subscribe|login|sign\s*up)$/i;
 
 async function fetchHtmlMulti(src) {

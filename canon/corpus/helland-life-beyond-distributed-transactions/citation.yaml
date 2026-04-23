@@ -1,22 +1,22 @@
 slug: helland-life-beyond-distributed-transactions
 author: "Pat Helland"
-title: "Life Beyond Distributed Transactions"
+title: "Life Beyond Distributed Transactions: an Apostate's Opinion"
 year: 2007
 kind: paper
 topics: [sagas, entities, eventual-consistency, distributed-systems]
-source_url: "https://queue.acm.org/detail.cfm?id=3025012"
+source_url: "https://ics.uci.edu/~cs223/papers/cidr07p15.pdf"
+alternate_source_url: "https://queue.acm.org/detail.cfm?id=3025012"
 fetched_at: null
 sha256: null
-license: "publisher-open-access"
-body_completeness: fetch_blocked
+license: "author-published-open-access"
+body_completeness: stub
 chapter_offsets: []
 stale: false
 notes: |
-  Automated fetch blocked as of 2026-04-23: ACM Queue returns HTTP 403
-  Forbidden to programmatic user agents. The paper is open-access when
-  accessed via a browser. Alternate sources (CIDR 2007 PDF at UCI,
-  https://www.ics.uci.edu/~cs223/papers/cidr07p15.pdf) exist but are PDFs
-  and this ingester does not parse PDFs. Populate manually via
-  bin/ingest-owned-book.mjs from a plaintext extraction. The librarian must
-  surface this as a known-but-unavailable canonical source rather than
-  substituting a different author's treatment of entities/sagas.
+  Paper is open-access but distributed only as a PDF (CIDR 2007 proceedings;
+  UCI mirror is stable). The ingester does not parse PDFs — fetch mode is
+  'pdf-manual'. Populate by running pdftotext (or Preview export) on the
+  PDF and then bin/ingest-owned-book.mjs. The ACM Queue HTML at
+  queue.acm.org is an updated version of the same paper but blocks bots
+  with HTTP 403. Librarian should surface this as a known-but-not-ingested
+  canonical source rather than substituting another author's treatment.
