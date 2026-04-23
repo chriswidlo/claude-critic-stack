@@ -1,0 +1,15 @@
+slug: vernon-strategic-monoliths
+author: "Vaughn Vernon, Tomasz Jaskuła"
+title: "Strategic Monoliths and Microservices: Driving Innovation Using Purposeful Architecture"
+year: 2021
+kind: book
+topics: [modulith, decomposition, readiness, strategic-architecture]
+source_url: null
+isbn: "978-0137355464"
+license: "paywalled-no-open-edition"
+body_completeness: stub
+chapter_offsets: []
+stale: false
+notes: |
+  Essential counterweight to microservices-by-default enthusiasm.
+  Populate via bin/ingest-owned-book.mjs if you own the book.

@@ -1,0 +1,16 @@
+slug: chen-devils-advocate-2024
+author: "Chen et al."
+title: "Devil's Advocate: Anticipatory Reflection for LLM Agents"
+year: 2024
+kind: paper
+topics: [multi-agent, devils-advocate, anticipatory-reflection, critic]
+source_url: "https://aclanthology.org/2024.findings-emnlp.53/"
+fetched_at: "2026-04-23T14:26:41.820Z"
+sha256: "5bca7e1e4aae5daf33a5779fb64fc13cadab3796e63ebedd5d04336bdd116b2e"
+license: "acl-open-access"
+body_completeness: full
+chapter_offsets: []
+stale: false
+notes: |
+  Fetched by bin/ingest-canon.mjs (html mode).
+  ACL Anthology HTML landing page; abstract + metadata.

@@ -1,0 +1,16 @@
+slug: nygard-release-it
+author: "Michael Nygard"
+title: "Release It! Design and Deploy Production-Ready Software (2nd Edition)"
+year: 2018
+kind: book
+topics: [stability-patterns, circuit-breaker, bulkhead, timeout, operations, capacity]
+source_url: null
+isbn: "978-1680502398"
+license: "paywalled-no-open-edition"
+body_completeness: stub
+chapter_offsets: []
+stale: false
+notes: |
+  Circuit breaker, bulkhead, steady-state, and other stability patterns
+  originate here (2nd edition is a near-rewrite). Populate via
+  bin/ingest-owned-book.mjs.

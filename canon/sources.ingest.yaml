@@ -1,0 +1,91 @@
+# Machine-readable companion to sources.yaml.
+#
+# Humans curate sources.yaml (topics, prose, rationale).
+# bin/ingest-canon.mjs reads THIS file to know what to fetch.
+#
+# Schema per entry:
+#   slug:         lowercase-kebab-case directory name under canon/corpus/
+#   manifest_ref: cross-reference into sources.yaml (author + title + year)
+#   url:          canonical URL to fetch
+#   fetch:        html | html-multi | arxiv-abs
+#   license:      short tag for audit (publisher-open-access | author-published-essay | arxiv-open-access | acl-open-access | publisher-published-essay)
+#   topics:       tags the librarian greps on (should overlap with sources.yaml topics)
+#   notes:        optional provenance
+#
+# Idempotent: the script skips any slug whose source.txt already exists.
+# Re-fetch with:  node ./bin/ingest-canon.mjs --force --only=<slug>
+
+sources:
+
+  - slug: anthropic-building-effective-agents
+    manifest_ref: { author: "Anthropic", title: "Building Effective Agents", year: 2024 }
+    url: "https://www.anthropic.com/research/building-effective-agents"
+    fetch: html
+    license: "publisher-published-essay"
+    topics: [agents, orchestration, tool-use, workflows, evaluator-optimizer]
+
+  - slug: anthropic-multi-agent-research-system
+    manifest_ref: { author: "Anthropic", title: "How we built our multi-agent research system", year: 2025 }
+    url: "https://www.anthropic.com/engineering/multi-agent-research-system"
+    fetch: html
+    license: "publisher-published-essay"
+    topics: [multi-agent, orchestration, evaluation, subagent]
+
+  - slug: anthropic-effective-context-engineering
+    manifest_ref: { author: "Anthropic", title: "Effective Context Engineering for AI Agents", year: 2025 }
+    url: "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
+    fetch: html
+    license: "publisher-published-essay"
+    topics: [context-engineering, prompting, agents, compaction]
+
+  - slug: cockburn-hexagonal-architecture
+    manifest_ref: { author: "Alistair Cockburn", title: "Hexagonal Architecture", year: 2005 }
+    url: "https://alistair.cockburn.us/hexagonal-architecture/"
+    fetch: html
+    license: "author-published-essay"
+    topics: [hexagonal, ports-and-adapters, architecture, anti-corruption]
+
+  - slug: helland-life-beyond-distributed-transactions
+    manifest_ref: { author: "Pat Helland", title: "Life Beyond Distributed Transactions", year: 2007 }
+    url: "https://queue.acm.org/detail.cfm?id=3025012"
+    fetch: html
+    license: "publisher-open-access"
+    topics: [sagas, entities, eventual-consistency, distributed-systems]
+
+  - slug: google-sre-book
+    manifest_ref: { author: "Google SRE team", title: "Site Reliability Engineering", year: 2016 }
+    url: "https://sre.google/sre-book/table-of-contents/"
+    fetch: html-multi
+    license: "publisher-open-access"
+    topics: [slo, error-budget, toil, incident-response, on-call]
+    notes: "TOC page; script fetches linked chapters and concatenates."
+
+  - slug: aws-saas-lens
+    manifest_ref: { author: "AWS", title: "SaaS Lens — AWS Well-Architected", year: 2024 }
+    url: "https://docs.aws.amazon.com/wellarchitected/latest/saas-lens/toc-contents.json"
+    fetch: aws-docs
+    license: "publisher-open-access"
+    topics: [multi-tenancy, saas, well-architected, isolation]
+    notes: "TOC is a JSON index; aws-docs mode walks it recursively."
+
+  - slug: shinn-reflexion-2023
+    manifest_ref: { author: "Noah Shinn et al.", title: "Reflexion: Language Agents with Verbal Reinforcement Learning", year: 2023 }
+    url: "https://arxiv.org/abs/2303.11366"
+    fetch: arxiv-abs
+    license: "arxiv-open-access"
+    topics: [agents, reflection, self-critique, verbal-reinforcement]
+
+  - slug: chen-devils-advocate-2024
+    manifest_ref: { author: "Chen et al.", title: "Devil's Advocate: Anticipatory Reflection for LLM Agents", year: 2024 }
+    url: "https://aclanthology.org/2024.findings-emnlp.53/"
+    fetch: html
+    license: "acl-open-access"
+    topics: [multi-agent, devils-advocate, anticipatory-reflection, critic]
+    notes: "ACL Anthology HTML landing page; abstract + metadata."
+
+  - slug: agentic-problem-frames-2026
+    manifest_ref: { author: "Agentic Problem Frames authors", title: "Agentic Problem Frames", year: 2026 }
+    url: "https://arxiv.org/abs/2602.19065"
+    fetch: arxiv-abs
+    license: "arxiv-open-access"
+    topics: [agents, requirements, problem-frames, framing]

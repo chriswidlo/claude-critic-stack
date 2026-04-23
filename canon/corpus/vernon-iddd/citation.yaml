@@ -1,0 +1,14 @@
+slug: vernon-iddd
+author: "Vaughn Vernon"
+title: "Implementing Domain-Driven Design"
+year: 2013
+kind: book
+topics: [aggregate-design, event-sourcing, cqrs, context-mapping]
+source_url: null
+isbn: "978-0321834577"
+license: "paywalled-no-open-edition"
+body_completeness: stub
+chapter_offsets: []
+stale: false
+notes: |
+  Stub entry. Populate via bin/ingest-owned-book.mjs if you own the book.

@@ -1,0 +1,16 @@
+slug: google-sre-book
+author: "Google SRE team"
+title: "Site Reliability Engineering"
+year: 2016
+kind: book
+topics: [slo, error-budget, toil, incident-response, on-call]
+source_url: "https://sre.google/sre-book/table-of-contents/"
+fetched_at: "2026-04-23T14:27:30.956Z"
+sha256: "59af8d6b6a514d06458f21fdd0e5c980dbbe271c7c2cd4ab5b54374fb6427efc"
+license: "publisher-open-access"
+body_completeness: toc_plus_chapters
+chapter_offsets: []
+stale: false
+notes: |
+  Fetched by bin/ingest-canon.mjs (html-multi mode).
+  TOC page; script fetches linked chapters and concatenates.

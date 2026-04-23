@@ -1,0 +1,19 @@
+slug: hohpe-eip
+author: "Gregor Hohpe, Bobby Woolf"
+title: "Enterprise Integration Patterns"
+year: 2003
+kind: book
+topics: [messaging, routing, transformation, correlation-identifier, scatter-gather, aggregator]
+source_url: null
+isbn: "978-0321200686"
+license: "paywalled-no-open-edition"
+book_companion_site: "https://www.enterpriseintegrationpatterns.com/"
+license_note: "Book is paywalled; the author's companion site hosts freely-licensed pattern summaries (not full chapters)."
+body_completeness: stub
+chapter_offsets: []
+stale: false
+notes: |
+  Correlation Identifier, Scatter-Gather, Aggregator, and most other
+  integration patterns are defined here. For quick lookup without the book,
+  the companion site at enterpriseintegrationpatterns.com hosts the pattern
+  catalog. Populate the full book via bin/ingest-owned-book.mjs.

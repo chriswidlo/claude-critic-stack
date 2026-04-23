@@ -1,0 +1,15 @@
+slug: anthropic-effective-context-engineering
+author: "Anthropic"
+title: "Effective Context Engineering for AI Agents"
+year: 2025
+kind: essay
+topics: [context-engineering, prompting, agents, compaction]
+source_url: "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
+fetched_at: "2026-04-23T14:26:38.041Z"
+sha256: "ea6e86ad5e17abe33c4d451fd2cbca6caedbc8b6b4c7871939bfe5c4916187dc"
+license: "publisher-published-essay"
+body_completeness: full
+chapter_offsets: []
+stale: false
+notes: |
+  Fetched by bin/ingest-canon.mjs (html mode).

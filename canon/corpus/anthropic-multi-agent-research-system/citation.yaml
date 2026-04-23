@@ -1,0 +1,15 @@
+slug: anthropic-multi-agent-research-system
+author: "Anthropic"
+title: "How we built our multi-agent research system"
+year: 2025
+kind: essay
+topics: [multi-agent, orchestration, evaluation, subagent]
+source_url: "https://www.anthropic.com/engineering/multi-agent-research-system"
+fetched_at: "2026-04-23T14:26:37.635Z"
+sha256: "375f6dc791c6af822617eef120a9b8ddf5ba518c6a6c98ad0d20c030243cb0ab"
+license: "publisher-published-essay"
+body_completeness: full
+chapter_offsets: []
+stale: false
+notes: |
+  Fetched by bin/ingest-canon.mjs (html mode).

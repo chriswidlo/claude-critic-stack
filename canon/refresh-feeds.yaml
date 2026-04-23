@@ -1,0 +1,28 @@
+# Feeds the canon-refresher agent reads when proposing new corpus entries.
+#
+# Each feed is polled as an RSS/Atom URL. Items newer than `max_age_days` are
+# considered for proposal. URLs must be in `domain_filter` (at least one match).
+# `keyword_filter` is optional; if present, title+description must match at
+# least one term for the item to be considered.
+#
+# The refresher NEVER writes to canon/corpus/. It emits proposed
+# sources.ingest.yaml blocks that the human curator accepts or discards.
+
+feeds:
+
+  - name: anthropic-engineering
+    url: "https://raw.githubusercontent.com/conoro/anthropic-engineering-rss-feed/main/anthropic_engineering_rss.xml"
+    domain_filter: ["anthropic.com"]
+    propose_to_topic: agents
+    max_age_days: 30
+    last_validated: "2026-04-23"
+    notes: "Community-maintained RSS; Anthropic does not publish one officially. Revalidate every ~6 months."
+
+  - name: arxiv-cs-ai
+    url: "https://rss.arxiv.org/rss/cs.ai"
+    domain_filter: ["arxiv.org"]
+    propose_to_topic: agents
+    keyword_filter: [agent, multi-agent, critic, reflection, retrieval, evaluation, prompting, tool-use]
+    max_age_days: 14
+    last_validated: "2026-04-23"
+    notes: "cs.AI is a firehose; keyword_filter matches title+abstract (OR)."

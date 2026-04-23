@@ -1,0 +1,15 @@
+slug: feathers-legacy-code
+author: "Michael Feathers"
+title: "Working Effectively with Legacy Code"
+year: 2004
+kind: book
+topics: [legacy, seams, characterization-tests, refactoring-untested-code]
+source_url: null
+isbn: "978-0131177055"
+license: "paywalled-no-open-edition"
+body_completeness: stub
+chapter_offsets: []
+stale: false
+notes: |
+  Introduces the "seam" concept and characterization tests. Populate via
+  bin/ingest-owned-book.mjs.

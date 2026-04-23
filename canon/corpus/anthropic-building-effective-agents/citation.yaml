@@ -1,0 +1,15 @@
+slug: anthropic-building-effective-agents
+author: "Anthropic"
+title: "Building Effective Agents"
+year: 2024
+kind: essay
+topics: [agents, orchestration, tool-use, workflows, evaluator-optimizer]
+source_url: "https://www.anthropic.com/research/building-effective-agents"
+fetched_at: "2026-04-23T14:26:32.018Z"
+sha256: "9c832520ead14b31380c4969a16f04ceb9211ab9eb748ded301604ffbbb4ab0f"
+license: "publisher-published-essay"
+body_completeness: full
+chapter_offsets: []
+stale: false
+notes: |
+  Fetched by bin/ingest-canon.mjs (html mode).

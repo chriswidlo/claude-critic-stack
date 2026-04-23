@@ -1,0 +1,15 @@
+slug: meszaros-xunit
+author: "Gerard Meszaros"
+title: "xUnit Test Patterns: Refactoring Test Code"
+year: 2007
+kind: book
+topics: [test-design, test-smells, fixtures, test-doubles]
+source_url: null
+isbn: "978-0131495050"
+license: "paywalled-no-open-edition"
+body_completeness: stub
+chapter_offsets: []
+stale: false
+notes: |
+  Canonical taxonomy of test smells, fixtures, and test doubles. Populate
+  via bin/ingest-owned-book.mjs.

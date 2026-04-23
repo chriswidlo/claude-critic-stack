@@ -1,0 +1,22 @@
+slug: helland-life-beyond-distributed-transactions
+author: "Pat Helland"
+title: "Life Beyond Distributed Transactions"
+year: 2007
+kind: paper
+topics: [sagas, entities, eventual-consistency, distributed-systems]
+source_url: "https://queue.acm.org/detail.cfm?id=3025012"
+fetched_at: null
+sha256: null
+license: "publisher-open-access"
+body_completeness: fetch_blocked
+chapter_offsets: []
+stale: false
+notes: |
+  Automated fetch blocked as of 2026-04-23: ACM Queue returns HTTP 403
+  Forbidden to programmatic user agents. The paper is open-access when
+  accessed via a browser. Alternate sources (CIDR 2007 PDF at UCI,
+  https://www.ics.uci.edu/~cs223/papers/cidr07p15.pdf) exist but are PDFs
+  and this ingester does not parse PDFs. Populate manually via
+  bin/ingest-owned-book.mjs from a plaintext extraction. The librarian must
+  surface this as a known-but-unavailable canonical source rather than
+  substituting a different author's treatment of entities/sagas.

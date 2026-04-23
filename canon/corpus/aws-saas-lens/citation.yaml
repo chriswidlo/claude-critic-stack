@@ -1,0 +1,16 @@
+slug: aws-saas-lens
+author: "AWS"
+title: "SaaS Lens — AWS Well-Architected"
+year: 2024
+kind: book
+topics: [multi-tenancy, saas, well-architected, isolation]
+source_url: "https://docs.aws.amazon.com/wellarchitected/latest/saas-lens/toc-contents.json"
+fetched_at: "2026-04-23T14:29:39.426Z"
+sha256: "be85b4bce8fc7519af7c9f50016b670d29e4ec0ed4388a1ea0247ec25301a0e7"
+license: "publisher-open-access"
+body_completeness: full
+chapter_offsets: []
+stale: false
+notes: |
+  Fetched by bin/ingest-canon.mjs (aws-docs mode).
+  TOC is a JSON index; aws-docs mode walks it recursively.

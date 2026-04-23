@@ -1,0 +1,15 @@
+slug: fowler-poeaa
+author: "Martin Fowler"
+title: "Patterns of Enterprise Application Architecture"
+year: 2002
+kind: book
+topics: [enterprise-patterns, data-access, concurrency, identity-map, gateway]
+source_url: null
+isbn: "978-0321127426"
+license: "paywalled-no-open-edition"
+body_completeness: stub
+chapter_offsets: []
+stale: false
+notes: |
+  Identity Map, Gateway, Registry patterns are defined here. Populate via
+  bin/ingest-owned-book.mjs.

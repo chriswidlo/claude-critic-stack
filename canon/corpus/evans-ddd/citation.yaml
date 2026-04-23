@@ -1,0 +1,15 @@
+slug: evans-ddd
+author: "Eric Evans"
+title: "Domain-Driven Design: Tackling Complexity in the Heart of Software"
+year: 2003
+kind: book
+topics: [bounded-context, ubiquitous-language, aggregate, anti-corruption, domain-model]
+source_url: null
+isbn: "978-0321125217"
+license: "paywalled-no-open-edition"
+body_completeness: stub
+chapter_offsets: []
+stale: false
+notes: |
+  Stub entry. Populate via bin/ingest-owned-book.mjs if you own the book
+  and have an OCR'd or subscription-provided plaintext.

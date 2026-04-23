@@ -1,0 +1,14 @@
+slug: fowler-refactoring
+author: "Martin Fowler"
+title: "Refactoring: Improving the Design of Existing Code (2nd Edition)"
+year: 2018
+kind: book
+topics: [refactoring, code-smells, evolutionary-design, testing]
+source_url: null
+isbn: "978-0134757599"
+license: "paywalled-no-open-edition"
+body_completeness: stub
+chapter_offsets: []
+stale: false
+notes: |
+  Second edition uses JavaScript examples. Populate via bin/ingest-owned-book.mjs.

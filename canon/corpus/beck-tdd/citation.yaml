@@ -1,0 +1,14 @@
+slug: beck-tdd
+author: "Kent Beck"
+title: "Test-Driven Development: By Example"
+year: 2002
+kind: book
+topics: [tdd, red-green-refactor, testing]
+source_url: null
+isbn: "978-0321146533"
+license: "paywalled-no-open-edition"
+body_completeness: stub
+chapter_offsets: []
+stale: false
+notes: |
+  The canonical TDD reference. Populate via bin/ingest-owned-book.mjs.

@@ -1,0 +1,15 @@
+slug: shinn-reflexion-2023
+author: "Noah Shinn et al."
+title: "Reflexion: Language Agents with Verbal Reinforcement Learning"
+year: 2023
+kind: paper
+topics: [agents, reflection, self-critique, verbal-reinforcement]
+source_url: "https://arxiv.org/abs/2303.11366"
+fetched_at: "2026-04-23T14:26:40.629Z"
+sha256: "20c028340bec1c11b2bfbeeb8be023c028ef8fb6b1028ae3576e31cd181573a2"
+license: "arxiv-open-access"
+body_completeness: abstract_only
+chapter_offsets: []
+stale: false
+notes: |
+  Fetched by bin/ingest-canon.mjs (arxiv-abs mode).
