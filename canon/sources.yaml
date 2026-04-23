@@ -1,0 +1,171 @@
+# Canon sources — ingestion manifest
+#
+# This file lists the works that should be in canon/corpus/ for the
+# canon-librarian agent to retrieve from. You are responsible for the licensing
+# of whatever you ingest. Prefer: books you own, open-access papers, author-published
+# essays, conference talks with published transcripts.
+#
+# For each entry:
+#   author:    primary author(s)
+#   title:     work title
+#   year:      publication year (most recent edition if multiple)
+#   kind:      book | paper | essay | talk | standard
+#   topics:    tags used by canon-librarian for retrieval
+#   notes:     provenance, edition notes, caveats
+#
+# Grouped roughly by topic. This is a starting set — extend liberally.
+
+distributed_systems:
+  - author: "Martin Kleppmann"
+    title: "Designing Data-Intensive Applications"
+    year: 2017
+    kind: book
+    topics: [replication, consistency, consensus, stream-processing, batch]
+    notes: "The single most load-bearing work for modern data architecture."
+
+  - author: "Leslie Lamport"
+    title: "Time, Clocks, and the Ordering of Events in a Distributed System"
+    year: 1978
+    kind: paper
+    topics: [time, causality, logical-clocks]
+
+  - author: "Pat Helland"
+    title: "Life Beyond Distributed Transactions"
+    year: 2007
+    kind: paper
+    topics: [sagas, entities, eventual-consistency]
+
+  - author: "Peter Bailis et al."
+    title: "Highly Available Transactions: Virtues and Limitations"
+    year: 2013
+    kind: paper
+    topics: [isolation, availability, cap]
+
+domain_driven_design:
+  - author: "Eric Evans"
+    title: "Domain-Driven Design"
+    year: 2003
+    kind: book
+    topics: [bounded-context, ubiquitous-language, aggregate, anti-corruption]
+
+  - author: "Vaughn Vernon"
+    title: "Implementing Domain-Driven Design"
+    year: 2013
+    kind: book
+    topics: [aggregate-design, event-sourcing, cqrs]
+
+  - author: "Vaughn Vernon"
+    title: "Strategic Monoliths and Microservices"
+    year: 2021
+    kind: book
+    topics: [modulith, decomposition, readiness]
+    notes: "Essential counterweight to microservices enthusiasm."
+
+refactoring_and_evolution:
+  - author: "Martin Fowler"
+    title: "Refactoring: Improving the Design of Existing Code"
+    year: 2018
+    kind: book
+    topics: [refactoring, code-smells, evolutionary-design]
+    notes: "Second edition; JavaScript examples."
+
+  - author: "Michael Feathers"
+    title: "Working Effectively with Legacy Code"
+    year: 2004
+    kind: book
+    topics: [legacy, seams, characterization-tests]
+
+  - author: "Martin Fowler"
+    title: "StranglerFigApplication"
+    year: 2004
+    kind: essay
+    topics: [migration, incremental]
+
+integration_and_messaging:
+  - author: "Gregor Hohpe, Bobby Woolf"
+    title: "Enterprise Integration Patterns"
+    year: 2003
+    kind: book
+    topics: [messaging, routing, transformation]
+
+event_driven:
+  - author: "Martin Fowler"
+    title: "What do you mean by Event-Driven?"
+    year: 2017
+    kind: essay
+    topics: [event-notification, event-sourced-state, cqrs]
+    notes: "Critical taxonomy — four distinct things often conflated as 'event-driven'."
+
+resilience_and_operations:
+  - author: "Michael Nygard"
+    title: "Release It!"
+    year: 2018
+    kind: book
+    topics: [stability-patterns, circuit-breaker, bulkhead, operations]
+    notes: "Second edition."
+
+  - author: "Google SRE team"
+    title: "Site Reliability Engineering"
+    year: 2016
+    kind: book
+    topics: [slo, error-budget, toil, incident-response]
+    notes: "Free online: sre.google/books"
+
+  - author: "John Allspaw"
+    title: "The Infinite Hows (instead of Five Whys)"
+    year: 2014
+    kind: essay
+    topics: [incident-review, post-mortem]
+
+architecture_decisions:
+  - author: "Michael Nygard"
+    title: "Documenting Architecture Decisions"
+    year: 2011
+    kind: essay
+    topics: [adr, decision-records]
+
+  - author: "Gregor Hohpe"
+    title: "The Software Architect Elevator"
+    year: 2020
+    kind: book
+    topics: [architecture-role, communication, stakeholders]
+
+testing:
+  - author: "Gerard Meszaros"
+    title: "xUnit Test Patterns"
+    year: 2007
+    kind: book
+    topics: [test-design, test-smells, fixtures]
+
+  - author: "Kent Beck"
+    title: "Test-Driven Development: By Example"
+    year: 2002
+    kind: book
+    topics: [tdd, red-green-refactor]
+
+forecasting_and_judgment:
+  - author: "Daniel Kahneman, Dan Lovallo"
+    title: "Timid Choices and Bold Forecasts: A Cognitive Perspective on Risk Taking"
+    year: 1993
+    kind: paper
+    topics: [outside-view, base-rate, forecasting]
+    notes: "Foundational for the outside-view technique."
+
+  - author: "Bent Flyvbjerg"
+    title: "From Nobel Prize to Project Management: Getting Risks Right"
+    year: 2006
+    kind: paper
+    topics: [reference-class-forecasting, megaprojects, estimation]
+
+  - author: "Philip Tetlock"
+    title: "Superforecasting"
+    year: 2015
+    kind: book
+    topics: [calibration, forecasting, judgment]
+
+# Topics not yet well-covered in this manifest. Candidates for extension:
+# - Frontend architecture (Adam Silver, Kent Dodds, etc.)
+# - Security engineering (Ross Anderson, NIST SSDF)
+# - Data platform / lakehouse (Databricks, Snowflake whitepapers)
+# - AI/ML system design (Chip Huyen, Andrej Karpathy essays)
+# - Organizational: Team Topologies, Accelerate

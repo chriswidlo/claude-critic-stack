@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/krzys/Development/Projects/claude-critic-stack/**)",
+      "Glob(//Users/krzys/Development/Projects/claude-critic-stack/**)",
+      "Grep(//Users/krzys/Development/Projects/claude-critic-stack/**)",
+      "Bash(ls:*)",
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(find:*)"
+    ],
+    "deny": [
+      "Bash(rm:*)",
+      "Bash(git push:*)"
+    ]
+  }
+}
