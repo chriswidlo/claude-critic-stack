@@ -1,0 +1,11 @@
+# Curator-promoted session artifacts live here.
+# This file exists so the directory is tracked in git even when empty.
+#
+# To promote a session, copy the entire .claude/session-artifacts/<id>/
+# directory into this folder under a descriptive name, e.g.:
+#
+#   ark-mono-connector-routing/
+#   multi-agent-subagent-anchoring/
+#
+# The regression test at tests/regression/ark-mono-connector-routing.md
+# is the first candidate for exemplar promotion.

@@ -8,4 +8,11 @@ canon/corpus/*/source.txt
 # Bash permissions). The shared settings.json IS tracked.
 .claude/settings.local.json
 
+# Per-session reasoning artifacts produced by the 12-step workflow.
+# Ephemeral by default; curator-promoted exemplars (and the README) ARE tracked.
+# See .claude/session-artifacts/README.md for the lifecycle.
+.claude/session-artifacts/*/
+!.claude/session-artifacts/exemplars/
+!.claude/session-artifacts/README.md
+
 .DS_Store

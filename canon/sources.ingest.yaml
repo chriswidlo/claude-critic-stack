@@ -85,9 +85,8 @@ sources:
     topics: [multi-agent, devils-advocate, anticipatory-reflection, critic]
     notes: "ACL Anthology HTML landing page; abstract + metadata."
 
-  - slug: agentic-problem-frames-2026
-    manifest_ref: { author: "Agentic Problem Frames authors", title: "Agentic Problem Frames", year: 2026 }
-    url: "https://arxiv.org/abs/2602.19065"
-    fetch: arxiv-abs
-    license: "arxiv-open-access"
-    topics: [agents, requirements, problem-frames, framing]
+  # NOTE: `agentic-problem-frames-2026` was removed 2026-04-24. The URL
+  # (arxiv.org/abs/2602.19065) encoded a February 2026 arxiv ID that never
+  # existed — a hallucinated citation I (Claude) introduced when seeding this
+  # manifest. The entry is gone; if a real paper with this title appears,
+  # re-add with the correct arxiv ID. See Phase-2 plan C1 for the audit trail.

@@ -339,6 +339,18 @@ async function fetchArxivAbs(src) {
   const subjBlock = html.match(/<td[^>]*class=["'][^"']*tablesubjects[^"']*["'][^>]*>([\s\S]*?)<\/td>/i);
   const subject = subjBlock ? stripHtml(subjBlock[1]).trim() : '';
 
+  // Guard against 404-as-200 and other soft-fail responses. A hallucinated or
+  // dead arXiv ID can return HTML that superficially looks like an abstract
+  // page but has no citation metadata. Without this check, bin/ingest-canon.mjs
+  // writes a clean-looking source.txt + citation.yaml with a real sha256 over
+  // a fake body — silent correctness failure. See Phase-2 plan C1/C2.
+  if (!title || title.length < 5) {
+    throw new Error(`arxiv-abs: title missing or <5 chars at ${absUrl} (likely 404-as-200 or dead ID)`);
+  }
+  if (!abstract || abstract.length < 200) {
+    throw new Error(`arxiv-abs: abstract missing or <200 chars at ${absUrl} (likely placeholder page)`);
+  }
+
   return [
     `Title: ${title}`,
     ``,
@@ -442,6 +454,34 @@ function buildReadme(src) {
 }
 
 // ---------------------------------------------------------------------------
+// Schema validation — fail fast on bad entries instead of mid-loop runtime
+// errors. See Phase-2 plan C11. A typo like `fech: html` instead of
+// `fetch: html` would otherwise throw `unknown fetch mode: undefined`
+// mid-ingestion after other entries had already been written.
+// ---------------------------------------------------------------------------
+const ALLOWED_FETCH = new Set(['html', 'html-multi', 'arxiv-abs', 'aws-docs', 'pdf-manual']);
+
+function validateSources(sources) {
+  const errors = [];
+  const seenSlugs = new Set();
+  for (const s of sources) {
+    const slug = s && typeof s.slug === 'string' ? s.slug : '<no-slug>';
+    const errs = [];
+    if (!s.slug || typeof s.slug !== 'string') errs.push('missing or non-string slug');
+    else if (seenSlugs.has(s.slug)) errs.push(`duplicate slug: ${s.slug}`);
+    else seenSlugs.add(s.slug);
+    if (!s.url || typeof s.url !== 'string') errs.push('missing or non-string url');
+    if (!s.fetch || typeof s.fetch !== 'string') errs.push('missing or non-string fetch');
+    else if (!ALLOWED_FETCH.has(s.fetch)) errs.push(`unknown fetch mode: ${s.fetch} (allowed: ${[...ALLOWED_FETCH].join(', ')})`);
+    if (!s.license || typeof s.license !== 'string') errs.push('missing or non-string license');
+    if (errs.length) errors.push(`  [${slug}] ${errs.join('; ')}`);
+  }
+  if (errors.length) {
+    throw new Error(`canon/sources.ingest.yaml failed validation:\n${errors.join('\n')}`);
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
 async function main() {
@@ -449,6 +489,7 @@ async function main() {
   const ingestPath = join(ROOT, 'canon', 'sources.ingest.yaml');
   const text = await readFile(ingestPath, 'utf8');
   const { sources } = parseSourcesYaml(text);
+  validateSources(sources);
 
   let ok = 0, skipped = 0, failed = 0;
   const failures = [];

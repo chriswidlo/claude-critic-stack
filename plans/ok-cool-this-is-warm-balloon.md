@@ -1,256 +1,202 @@
-# Research-pipeline fix for `claude-critic-stack`
-
-> **Status (2026-04-23):** This plan is being **relocated into the repo** at `plans/ok-cool-this-is-warm-balloon.md` and **refined via Ultraplan** to cover the full SOTA stack (research pipeline + agent additions + observability). The refined content will replace this file on a branch in `chriswidlo/claude-critic-stack`. This user-level copy at `~/.claude/plans/` is the pre-refinement baseline — future edits should happen against the repo copy.
+# claude-critic-stack — Phase 2 SOTA upgrade (pragmatic cut)
 
 ## Context
 
-**Problem.** The stack at `/Users/krzys/Development/Projects/claude-critic-stack/` is a design-review agent harness whose `CLAUDE.md` mandates that every design question route through `canon-librarian` for retrieval from a curated expert corpus. The librarian, the routing rules, and the manifest at `canon/sources.yaml` are all in place — but `canon/corpus/` does not exist and there is no ingestion script. So the librarian correctly refuses to fabricate, and the orchestrator falls back on ad-hoc `WebSearch` + `WebFetch`. Every "what does the literature say" question becomes a re-google.
+Phase 1 (research pipeline) is live on `main` as of 2026-04-24: a zero-dep Node ingester, a populated `canon/corpus/` (8 full sources + 11 paywalled stubs + 1 pdf-manual stub), librarian-first routing in `CLAUDE.md`, a `canon-refresher` agent for RSS-driven proposals.
 
-**The user's complaint.** "Why are you googling — why isn't there an established, reproducible pipeline for this?" Investigation shows the answer is: there *isn't* a packaged solution we can drop in. Anthropic publishes no MCP server for their own engineering content. Context7 doesn't cover agent-pattern docs. The third-party RSS feed for Anthropic's blog and arXiv's RSS exist, and there are arXiv / HF Daily Papers MCP servers, but no curated agent-canon mirror with full text. The fix is to compose what exists (RSS, WebFetch, Routines, the README.md ingestion policy that's already in place) into a small reproducible pipeline.
+This plan does two things:
 
-**Intended outcome.** After this plan executes:
-- `canon/corpus/` is populated with 10 freely-licensed sources (Anthropic engineering posts, arXiv agent papers, Google SRE book, AWS SaaS Lens, Cockburn hexagonal essay, Helland paper).
-- `CLAUDE.md` routes research questions through `canon-librarian` first; `WebSearch` becomes an explicit fallback only when the librarian declares the corpus does not cover the topic.
-- A `canon-refresher` agent exists for weekly RSS-driven proposals of new entries (curator-gated; never writes to corpus).
-- Paywalled classics (Evans/Vernon/Fowler/Nygard) appear as stub entries so the librarian acknowledges the gap rather than silently substituting a weaker source.
-- A re-runnable script (`bin/ingest-canon.mjs`) makes corpus refresh idempotent.
+1. **Phase 1 hygiene.** Four corrective fixes targeting bugs Ultraplan found by reading the actual code. One of them (C1) is a real hallucinated citation I introduced; the others harden around that class of silent failure.
+2. **Phase 2 SOTA upgrade.** Five new agent roles (classifier, distiller, scope-mapper, frame-challenger, critic-panel), a 12-step `CLAUDE.md` routing rewrite, per-session artifact scaffolding, and one regression scenario.
 
-**Out of scope for this plan.** The broader SOTA stack improvements proposed in prior turns (frame-challenger, scope-mapper, requirement-classifier, critic-panel, subagent-distiller) are a separate follow-up plan. This plan is *only* the research pipeline.
+The plan is a **pragmatic cut** of Ultraplan's fuller 14-item Phase-1 critique + multi-phase Phase-2 proposal. Ultraplan's full output is competent but over-engineered for a single-user design-review stack; items that only add maintenance surface (C3 `--verify`, C6 rejected-list, C7 feed-staleness, C12 per-source chapter cap, C13 fresh-clone hook) are deferred. The items kept below are the ones with asymmetric value — either they prevent silent correctness bugs, or they are the actual upgrade.
 
-## Execution order
-
-`4 → 1 → 2 → 5 → 3`. The allowlist must land before the first ingest run or every fetch triggers a permission prompt.
+All paths are repo-relative. Out of scope: MCP server build, vector index, durable-workflow engines, external observability platforms, automated test runner.
 
 ---
 
-## Phase 4 — WebFetch / Bash allowlist update *(do first)*
-
-**File:** `/Users/krzys/Development/Projects/claude-critic-stack/.claude/settings.local.json`
-
-Use the `update-config` skill (keeps JSON valid). Add to `permissions.allow`:
+## What changes (before → after)
 
 ```
-WebFetch(domain:alistair.cockburn.us)
-WebFetch(domain:queue.acm.org)
-WebFetch(domain:sre.google)
-WebFetch(domain:docs.aws.amazon.com)
-WebFetch(domain:aclanthology.org)
-WebFetch(domain:raw.githubusercontent.com)
-WebFetch(domain:rss.arxiv.org)
-Bash(node ./bin/ingest-canon.mjs:*)
-Bash(node ./bin/ingest-owned-book.mjs:*)
+BEFORE:  6-step workflow, single critic, 4 agent files
+          → reframe → outside-view → canon-librarian → generator → critic → synthesis
+
+AFTER:   12-step workflow, 3-lens critic panel, 10 agent files
+          →  1. requirement-classifier
+          →  2. reframe
+          →  3-5. outside-view + canon-librarian + Explore (parallel)
+          →  6. subagent-distiller  (×N, one per returned subagent)
+          →  7. scope-mapper
+          →  8. frame-challenger
+          →  9. generator     ◄── HARD GATE: scope-map.md & challenges.md must exist
+          → 10. critic-panel (architecture + operations + product, parallel, minority-veto)
+          → 11. replan-vs-rewrite decision
+          → 12. synthesis
+
+Per-session artifacts land under .claude/session-artifacts/<id>/ (local; exemplars tracked).
 ```
-
-`arxiv.org` and `www.anthropic.com` are already on the existing allowlist — do not duplicate. Confirm WebFetch matching is exact-host before adding `rss.arxiv.org`; if suffix, drop it.
-
-**Verify:** `node -e "JSON.parse(require('fs').readFileSync('.claude/settings.local.json'))"` exits 0.
 
 ---
 
-## Phase 1 — Provision the starter corpus
+## Phase 1 hygiene (kept from Ultraplan's critique)
 
-### Files to create
+### C1. Delete fabricated `agentic-problem-frames-2026` entry
 
-```
-canon/sources.ingest.yaml          (machine-readable companion to sources.yaml)
-bin/ingest-canon.mjs               (executable, Node, no npm install)
-bin/ingest-owned-book.mjs          (helper for Phase 5; same dir for symmetry)
-canon/corpus/                      (populated by the script)
-```
+`canon/sources.ingest.yaml` points at `https://arxiv.org/abs/2602.19065`. arXiv IDs encode `YYMM.NNNNN`; `2602.*` is February 2026 and today is 2026-04-24. I invented the ID. The `arxiv-abs` fetch "succeeded" because `fetchArxivAbs` doesn't validate that the extracted title or abstract is non-empty — 404-as-200 pages ingest as clean stubs with a real sha256. Delete the entry; delete the slug dir; update any downstream references.
 
-### Why a separate `sources.ingest.yaml`
+### C2. Harden `fetchArxivAbs`
 
-`canon/sources.yaml` is the human-curated manifest organized by topic with prose. The ingester needs `(slug, url, fetch-mode, license, topics)` per source — that doesn't belong in the manifest's prose. Cross-reference by `manifest_ref: { author, title, year }`.
+After extracting `title` and `abstract`, assert both are present and the abstract is more than placeholder-length. Throw on failure so the slug is marked `failed` rather than silently accepted.
 
-### `canon/sources.ingest.yaml` — initial 10 entries
+### C8. Outside-view consults canon first
 
-| Slug | URL | Fetch mode |
-|------|-----|------------|
-| `anthropic-building-effective-agents` | https://www.anthropic.com/research/building-effective-agents | html |
-| `anthropic-multi-agent-research-system` | https://www.anthropic.com/engineering/multi-agent-research-system | html |
-| `anthropic-effective-context-engineering` | https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents | html |
-| `cockburn-hexagonal-architecture` | https://alistair.cockburn.us/hexagonal-architecture/ | html |
-| `helland-life-beyond-distributed-transactions` | https://queue.acm.org/detail.cfm?id=3025012 | html |
-| `google-sre-book` | https://sre.google/sre-book/table-of-contents/ | html-multi |
-| `aws-saas-lens` | https://docs.aws.amazon.com/wellarchitected/latest/saas-lens/saas-lens.html | html-multi |
-| `shinn-reflexion-2023` | https://arxiv.org/abs/2303.11366 | arxiv-abs |
-| `chen-devils-advocate-2024` | https://aclanthology.org/2024.findings-emnlp.53/ | arxiv-abs |
-| `agentic-problem-frames-2026` | https://arxiv.org/html/2602.19065v1 | html |
+`outside-view.md` should Grep `canon/corpus/` for reference-class authors (Kahneman, Flyvbjerg, Tetlock, etc.) **before** any WebSearch. Canon is the source of truth; WebSearch is for currency and declared gaps. Consistency fix: the stack enforces this rule for generators already (via the librarian-first rule in `CLAUDE.md`), but `outside-view` was leaking.
 
-Each entry carries `topics: [...]` for librarian Grep filtering, and `license` tag for audit. Full schema example in plan-agent output; consistent with `canon/README.md:1-47`.
+### C11. YAML schema validation in the ingester
 
-### `bin/ingest-canon.mjs` — script outline
-
-- Reads `canon/sources.ingest.yaml`. Parses with a ~80-LOC inlined YAML mini-parser (the file uses a strict subset, no anchors, no flow nesting beyond `{a: b}`). Avoids `npm install`.
-- For each source: `mkdir canon/corpus/<slug>/`, fetch via `node:fetch`, write `source.txt` + `citation.yaml` + `README.md`.
-- HTML→text: drop `<script>/<style>/<nav>/<footer>/<aside>`; convert headings to `# H1`; convert `<p>/<li>/<br>` to newlines; decode entities; collapse whitespace; prepend 5-line provenance header (URL, fetched-at, sha256).
-- `html-multi`: TOC page → child URLs sharing the path prefix → fetch each → concatenate with `\n\n=== <chapter title> ===\n\n` separators. Errors loudly if zero links found.
-- `arxiv-abs`: fetches `/abs/<id>`, extracts title/authors/subject/abstract/date. No PDF parsing in v1. Sets `body_completeness: abstract_only` in citation.
-- Idempotent: skips slugs whose `source.txt` already exists. `--force` to refetch. `--only=<slug>` to scope.
-- Reuses existing structure: matches `canon/README.md` per-source folder format exactly; the librarian agent does not need to know about the script.
-
-### Citation YAML shape (per source)
-
-Fields written by the script: `slug, author, title, year, kind, topics, source_url, fetched_at, sha256, license, body_completeness, chapter_offsets, stale, notes`. `chapter_offsets` populated automatically for `html-multi` from concatenation boundaries; empty `[]` for single essays.
-
-### Risk notes
-
-- **SRE Book may produce 5-10 MB.** Acceptable for grep but worth knowing. Mitigation if noisy: list five chapters explicitly in `sources.ingest.yaml` (SLOs, Embracing Risk, Eliminating Toil, Postmortem Culture, Incident Response) instead of TOC scraping.
-- **`raw.githubusercontent.com`** for the community Anthropic RSS — third-party feed; if it stops being maintained the refresher degrades to arXiv-only. Add `last_validated:` field to `refresh-feeds.yaml` and review every 6 months.
-
-### Verify
-
-1. `node ./bin/ingest-canon.mjs` exits 0.
-2. `ls canon/corpus/` shows 10 directories matching slugs.
-3. Each slug dir has all three files non-empty.
-4. `wc -l canon/corpus/*/source.txt` — flag <50 lines as suspect; arXiv abstracts ~30-80 OK.
-5. Provenance header on lines 1-5 of each `source.txt`.
-6. **Functional test:** Invoke `canon-librarian` with *"What does the literature say about giving subagents authority to dissent from the orchestrator?"* — must return passages from `anthropic-multi-agent-research-system` and `chen-devils-advocate-2024`, plus at least one contradicting passage. Failure means topic tags are wrong; fix tags, do **not** add a vector index.
+`parseSourcesYaml` succeeds on malformed entries (typos like `fech: html` cause a confusing runtime error mid-loop instead of fail-fast). After parsing, validate every entry has `{slug, url, fetch, license}` as strings and `fetch` in the known set. Fail the whole run with the list of bad entries.
 
 ---
 
-## Phase 2 — Routing fix in `CLAUDE.md`
+## Phase 2 SOTA upgrade
 
-**File:** `/Users/krzys/Development/Projects/claude-critic-stack/CLAUDE.md`
+### 2.0 Session-artifact scaffolding
 
-Three surgical edits, no rewrites.
+Create `.claude/session-artifacts/<id>/` at the repo root (NOT under `~/.claude/projects/`). Per session:
 
-### Edit 1: replace step 3 ("Canon librarian subagent")
+```
+.claude/session-artifacts/<id>/
+├── requirement.md          # requirement-classifier output
+├── frame.md                # reframe + frame-challenger revisions
+├── scope-map.md            # scope-mapper output
+├── challenges.md           # frame-challenger output
+├── distillations/
+│   ├── outside-view.md
+│   ├── canon-librarian.md
+│   └── explore.md          # only if Explore ran
+├── critiques.md            # critic-panel aggregate
+└── decision-log.md         # replan-vs-rewrite decisions
+```
 
-> **3. Canon librarian subagent — first, not last.** For any question of the form "what does the literature say / what's the established pattern / how do practitioners do X," invoke `canon-librarian` **before** any `WebSearch` or `WebFetch`. The librarian must return at least one passage that disagrees with the user's framing.
->
-> **Fallback rule.** Only after the librarian's output explicitly states `## Corpus coverage: none` (or `thin` for the specific sub-question) may you fall back to `WebSearch`/`WebFetch`. When you do, name the gap in your synthesis: *"corpus did not cover X; web result is from Y, not in canon."* Web results are not promoted to canon by being cited once.
->
-> **Anti-anchoring.** After reading the librarian's output, restate the key findings in your own words before generating a recommendation. Do not paste the librarian's quotes as your answer. Quotes belong in step 6 (synthesis), not step 4 (generator).
+**`.gitignore` decision (flagged):** ignore per-session subdirs by default; track `README.md` + curator-promoted `exemplars/`. Ephemera stays local; the ark-mono regression test (Phase 4) is the first exemplar candidate. Option to flip — one `.gitignore` line.
 
-### Edit 2: add to "Things you must not do"
+### 2.1–2.5 New agent files (under `.claude/agents/`)
 
-> - **Do not WebSearch a research question without invoking the librarian first.** The corpus is the source of truth for what the field has already established. WebSearch is for currency (post-corpus events) and gaps the librarian has explicitly declared.
+Five new roles. Each follows the existing agent-file shape (front-matter: name/description/tools; sections: Mandatory behavior, Things you must not do, Output format, Anti-patterns). Near-verbatim content is in the agent files themselves.
 
-### Edit 3: add to "Agents available in this stack"
+- **`requirement-classifier.md`** — labels the ask {new / replace / extend / migrate / refactor / investigation} and names the frame bias each label carries. Runs first. ≤600 tokens out.
+- **`subagent-distiller.md`** — post-processes every subagent return into structured {Facts, Interpretations, Authority-framed-claims flagged, Confidence}. ≤2k tokens out. Orchestrator reads the distillation, not the raw return. Anti-anchoring enforced as an artifact, not a prompt rule.
+- **`scope-mapper.md`** — tabulates existing primitives against the new requirement: subsume / replace / extend / conflict. Default is subsume or replace; preservation requires a stated reason.
+- **`frame-challenger.md`** — devil's advocate on the frame, not the candidate. Runs pre-generator. Must name ≥1 alternative frame and ≥1 condition under which the current frame is wrong.
+- **Critic panel** — three lens agents invoked in parallel:
+  - `critic-architecture.md` — structural / invariant / dependency lens
+  - `critic-operations.md` — SLO / blast-radius / rollback / cost lens
+  - `critic-product.md` — user-visible contract / commitment / migration-burden lens
 
-> - `canon-refresher` — fetches recent posts from a small set of RSS feeds, diffs against `canon/corpus/`, and proposes new entries for human review. Manual invocation; not part of the default workflow.
+  Minority-veto: any one lens forcing `rework` or `reject` routes the orchestrator to step 11 (replan vs. rewrite). Each lens must produce at least one **frame-level** objection in addition to its lens-specific critique. The old single `critic.md` is deleted — the panel is unambiguous routing.
 
-### Verify
+### Phase 3: `CLAUDE.md` 12-step rewrite
 
-1. Pose corpus-covered question: *"What's the canonical case for hexagonal architecture and what's the strongest critique?"* → first tool call is `canon-librarian`, not `WebSearch`.
-2. Pose corpus-uncovered question: *"What's current consensus on Rust-vs-Zig for embedded firmware in 2026?"* → librarian returns `Corpus coverage: none`, then `WebSearch` fires with the gap named in synthesis.
+Replace the current `Default behavior` section with the 12-step flow shown above. Preserve every existing rule (librarian-first, anti-anchoring, stub respect, three-assumptions-or-flip, do-not-anchor-to-codebase). Add three:
+
+- Do not start the generator step without `scope-map.md` and `challenges.md` on disk.
+- Do not read raw subagent output after step 6 — only distillations.
+- Do not collapse the three critic lenses into one aggregate verdict.
+
+Update the "When to break routing" exceptions: "skip the critic-panel" skips steps 10–11; "quick take" bypasses steps 3–11 with a single flag. Update agent inventory.
+
+### Phase 4: Regression test
+
+`tests/regression/ark-mono-connector-routing.md` — the ark-mono connector-routing scenario from the prior session, with concrete acceptance criteria (classifier must label `replace` or surface it as alternative; scope-map must default BRE to `replace`; frame-challenger must challenge any preservation row; generator must default to `replace BRE + sticky-ID`; critic-panel must produce a frame-level objection on preserve-default candidates; synthesis must cite the user constraint if preservation is chosen). Manual grading — no assertion runner. If this scenario passes, its `.claude/session-artifacts/<id>/` copy is promoted to `exemplars/`.
 
 ---
 
-## Phase 5 — Stub entries for paywalled books
-
-**Goal:** Make the corpus self-documenting about its gaps. Librarian acknowledges Evans/Vernon/Fowler/Nygard exist instead of substituting a weaker passage.
-
-### Files to create
-
-For each of: `evans-ddd`, `vernon-iddd`, `vernon-strategic-monoliths`, `fowler-refactoring`, `fowler-poeaa`, `nygard-release-it`, `feathers-legacy-code`, `hohpe-eip`, `meszaros-xunit`, `beck-tdd`:
+## Execution order (single pass, this session)
 
 ```
-canon/corpus/<slug>/README.md          (documents stub status + populate command)
-canon/corpus/<slug>/citation.yaml      (body_completeness: stub, license: paywalled-no-open-edition)
+1. Write this plan file (now on disk)
+2. Phase 1.2 hygiene: C1 (delete), C2 (fetcher guard), C11 (schema validation), C8 (outside-view canon-first)
+3. Phase 2.0 session-artifacts scaffolding + .gitignore update
+4. Phase 2.1–2.5 agent files (7 new, 1 delete)
+5. Phase 3 CLAUDE.md 12-step rewrite
+6. Phase 4 regression test
+7. Commit in 3 chunks: plan, hygiene, Phase 2+3+4
+8. User pushes to origin
 ```
-
-**No `source.txt`** — its absence is the stub signal.
-
-### `bin/ingest-owned-book.mjs` — outline
-
-```
-Usage: ingest-owned-book.mjs <slug> <path-to-text>
-- Validate slug exists as a stub under canon/corpus/<slug>/.
-- Validate input is UTF-8 and >10 KB (refuse obvious empties).
-- Soft-warn if input path looks like libgen/sci-hub/z-library (the README's intent).
-- Copy to canon/corpus/<slug>/source.txt.
-- Update citation.yaml: body_completeness: full, sha256, ingested_at.
-```
-
-### Add one bullet to `canon-librarian.md` "Mandatory behavior"
-
-> **Respect stubs.** A directory under `canon/corpus/` whose `citation.yaml` has `body_completeness: stub` indicates a known-but-not-ingested work. If a stub is the best match for a query, surface its citation with the note "stub entry; full text not ingested." Do not invent quotes from stubbed works. Do not silently substitute a different author.
-
-### Verify
-
-1. `find canon/corpus -name citation.yaml | xargs grep -l 'body_completeness: stub' | wc -l` → 10.
-2. Pose librarian query that should hit a stub: *"What does Evans say about anti-corruption layers?"* → returns stub notice, not fabrication, not substitution.
-3. `bin/ingest-owned-book.mjs evans-ddd /tmp/empty.txt` → refuses with clear error.
 
 ---
 
-## Phase 3 — Refresher mechanism
+## Files to create / modify / delete
 
-### Files to create
-
+### Create
 ```
-.claude/agents/canon-refresher.md      (agent spec; tools: Read, WebFetch, Bash, Glob)
-canon/refresh-feeds.yaml               (small config: feeds + filters)
-```
-
-### `canon/refresh-feeds.yaml`
-
-```yaml
-feeds:
-  - name: anthropic-engineering
-    url: "https://raw.githubusercontent.com/conoro/anthropic-engineering-rss-feed/main/anthropic_engineering_rss.xml"
-    domain_filter: ["anthropic.com"]
-    propose_to_topic: agents
-    last_validated: "2026-04-23"
-  - name: arxiv-cs-ai
-    url: "https://rss.arxiv.org/rss/cs.ai"
-    domain_filter: ["arxiv.org"]
-    propose_to_topic: agents
-    keyword_filter: [agent, multi-agent, critic, reflection, retrieval, evaluation]
-    last_validated: "2026-04-23"
+.claude/agents/requirement-classifier.md
+.claude/agents/subagent-distiller.md
+.claude/agents/scope-mapper.md
+.claude/agents/frame-challenger.md
+.claude/agents/critic-architecture.md
+.claude/agents/critic-operations.md
+.claude/agents/critic-product.md
+.claude/session-artifacts/README.md
+.claude/session-artifacts/exemplars/.keep
+tests/regression/ark-mono-connector-routing.md
 ```
 
-### Agent contract (`canon-refresher.md`)
+### Modify
+```
+bin/ingest-canon.mjs            (C2 fetcher guard, C11 schema validation)
+canon/sources.ingest.yaml       (C1 delete agentic-problem-frames-2026 block)
+.claude/agents/outside-view.md  (C8 new Mandatory #0)
+.gitignore                      (ignore per-session dirs, track exemplars + README)
+CLAUDE.md                       (12-step rewrite, updated must-nots and inventory)
+plans/ok-cool-this-is-warm-balloon.md (this file)
+```
 
-- **Reads** `canon/refresh-feeds.yaml`; for each feed, WebFetch the URL.
-- **Filters:** items <30 days old; titles/abstracts matching `keyword_filter`; URLs not already in `canon/corpus/<slug>/` or queued in `sources.ingest.yaml`.
-- **Output:** structured "Proposed: `<slug>`" review blocks with title (verbatim from feed), URL, license signal, suggested `sources.ingest.yaml` entry.
-- **Hard rule:** never writes to `canon/corpus/`. Never appends to `sources.yaml` or `sources.ingest.yaml`. Curator-gated.
-- **Documents the Routine setup** at the bottom: schedule weekly at https://claude.ai/code/routines with prompt *"Invoke the canon-refresher agent and post the review blocks here."* Cannot be created from local Claude Code; user-side action.
-
-### Verify
-
-1. Manual invocation produces review blocks; `Items considered:` non-zero for both feeds.
-2. `find canon/corpus -newer .claude/agents/canon-refresher.md` returns nothing — no writes.
-3. Re-invoke immediately: items previously surfaced are skipped (already in `sources.ingest.yaml`) or re-proposed identically. Slug naming must be stable across runs.
+### Delete
+```
+.claude/agents/critic.md                          (replaced by 3-lens panel)
+canon/corpus/agentic-problem-frames-2026/         (C1)
+```
 
 ---
 
-## What I cannot automate
+## Verification
 
-- **Routines at claude.ai/code/routines.** Cloud-side, requires your account login. The `canon-refresher.md` documents this; you set the schedule yourself.
-- **Ingesting paywalled books.** Per book, with text you own. The stub + `bin/ingest-owned-book.mjs` are the affordances.
-- **Curating refresher proposals.** Refresher emits, you decide which become `sources.ingest.yaml` entries before the next ingest run.
-- **Maintaining `stale: true` flags.** Curator judgment, ~6-month review per `canon/README.md`.
+After commit, run this scenario without hinting at the answer:
 
-## Existing primitives reused (no new abstractions)
+> *"We have an existing monorepo using a Business Rules Engine (BRE) to route requests, with a sticky identifier threaded through every request for cache locality. We want to add a new routing path for a new class of connector. How do we do this while preserving the BRE and the sticky-ID threading?"*
 
-- `canon/README.md:1-47` — the per-source folder format (`source.txt` + `citation.yaml` + `README.md`) and licensing policy.
-- `canon/sources.yaml:1-172` — manifest topology stays as the human-readable index.
-- `.claude/agents/canon-librarian.md` — output contract unchanged; one new bullet for stub respect.
-- `.claude/settings.local.json` — extend `permissions.allow`, do not restructure.
-- `CLAUDE.md` — surgical edits to step 3, "must not do" list, agent inventory.
+Expected trace (abbreviated):
+- Step 1: classifier labels `replace` or names it as the alternative; flags "preserving" as user framing bias.
+- Step 7: scope-map defaults `BRE` and `sticky identifier` to `replace`.
+- Step 8: frame-challenger challenges the preservation explicitly.
+- Step 9: generator defaults to `replace BRE + sticky-ID`, names the deletion cost.
+- Step 10: at least one lens produces a frame-level objection on any preservation-default candidate.
+- Step 12: synthesis includes classifier label, frame revision history, scope-map summary, frame challenge, post-critique recommendation, three named uncertainties, cheapest experiment.
 
-## Critical files for implementation
+Failure signatures and recovery are documented in `tests/regression/ark-mono-connector-routing.md`.
 
-- `/Users/krzys/Development/Projects/claude-critic-stack/.claude/settings.local.json` (Phase 4)
-- `/Users/krzys/Development/Projects/claude-critic-stack/canon/sources.ingest.yaml` (Phase 1, new)
-- `/Users/krzys/Development/Projects/claude-critic-stack/bin/ingest-canon.mjs` (Phase 1, new)
-- `/Users/krzys/Development/Projects/claude-critic-stack/bin/ingest-owned-book.mjs` (Phase 5, new)
-- `/Users/krzys/Development/Projects/claude-critic-stack/canon/corpus/` (Phases 1 + 5, populated)
-- `/Users/krzys/Development/Projects/claude-critic-stack/CLAUDE.md` (Phase 2, edits)
-- `/Users/krzys/Development/Projects/claude-critic-stack/.claude/agents/canon-librarian.md` (Phase 5, +1 bullet)
-- `/Users/krzys/Development/Projects/claude-critic-stack/.claude/agents/canon-refresher.md` (Phase 3, new)
-- `/Users/krzys/Development/Projects/claude-critic-stack/canon/refresh-feeds.yaml` (Phase 3, new)
+---
 
-## End-to-end verification
+## What is deferred (Ultraplan items skipped from this cut)
 
-After all phases land, run this scenario without telling the orchestrator the answer:
+- **C3** `--verify` flag on the ingester — marginal value for solo use.
+- **C4** short-chapter filter in html-multi — low-probability guard.
+- **C5** librarian surfaces overlapping stubs — refinement; the existing stub-respect rule is adequate for the current corpus.
+- **C6** `canon/refresher-rejected.yaml` — the refresher is weekly and curator-gated; noise is tolerable.
+- **C7** feed-staleness warnings — polish.
+- **C12** per-source `max_chapters` — code comment in `bin/ingest-canon.mjs` already notes the idea; schema-forward-compat when actually needed.
+- **C13** SessionStart hook for fresh clones — over-engineered for a single-user setup.
 
-> *"I'm designing a multi-agent system. What's the SOTA pattern for preventing the orchestrator from anchoring to subagent output, and what's the strongest published critique of that pattern?"*
+Any of these can be added later without changing the plan's core shape. They are skipped because the implementation cost exceeds the expected value for a solo design-review tool, not because they are wrong.
 
-Expected: orchestrator's first tool call is `canon-librarian`. Librarian returns passages from `anthropic-effective-context-engineering` (curate small high-signal context, distill subagent output to 1-2k tokens) and `agentic-problem-frames-2026` (formal problem-framing before execution), plus a contradicting passage (e.g., the librarian's own coverage flag noting that single-critic ensembles have known systematic bias and pointing to `chen-devils-advocate-2024`). The orchestrator restates the findings in its own words before recommending. No `WebSearch` fires unless the librarian explicitly declared a gap.
+---
 
-If that scenario produces a `WebSearch` as the first tool call, Phase 2's routing edit didn't take. If the librarian returns generic content without contradicting passages, Phase 1's topic tags are too coarse. Both are recoverable without re-architecture.
+## What's not automatable
+
+- Claude-code Routines scheduling for the refresher — cloud-side, user's claude.ai account, manual setup.
+- Owned-book ingestion (`bin/ingest-owned-book.mjs`) — per book, with plaintext the user owns.
+- Refresher curation — proposals in, curator decides what becomes a `sources.ingest.yaml` entry.
+- Exemplar promotion — session artifacts graduate to `.claude/session-artifacts/exemplars/` by curator hand.
+- Regression-test grading — the test is read by a human; the artifacts are the evidence.
+- The `.gitignore` choice for per-session artifacts (track vs. ignore) — this plan picks ignore; one line to flip.
