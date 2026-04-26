@@ -4,8 +4,45 @@ This folder is the lab. It is the place where profound, novel, and creative idea
 
 It is not a backlog. It is not a planning system. It is not a project tracker. It is a **lab notebook tradition**: the place where thinking lives before it knows what it is, and where it can stay long enough to mature, mutate, or be quietly killed.
 
+## What an entry is — and what it is not
+
+An entry is a **seed of thought** — a proposal that someone (operator, AI, or both) thought worth writing down. Filing an entry is a low-ceremony act: any tier, any length, any shape, half-baked welcome, wrong-on-arrival welcome. Authoring is the easy part, and *that is by design* (see [Principles](#principles--encourage-freedom-mind-only-security)).
+
+What an entry is **not**:
+
+- **Not a task.** Filed ≠ to-be-implemented. Most entries should never become commits; the lab's job is to catch the ones that should.
+- **Not a decision.** "Someone wrote it down" is not "this is happening." The operator has not agreed by virtue of an entry's existence.
+- **Not pre-reviewed.** The author of an entry is the only person who has looked at it at filing time. That view is *one perspective*, not the verdict.
+- **Not a backlog item ranked for execution.** No priority field, no scheduling, no due dates. Entries are not work — they are *candidates for work*.
+
+### What turns a seed into a real upgrade
+
+An entry may graduate into a real change to this repo *if and only if* it earns the graduation through the [state lifecycle](#the-state-lifecycle). Each state is an **epistemic checkpoint** that filters a class of failure the prior state cannot see:
+
+- 🔬 **spiked** filters infeasible ideas — does the basic mechanism even work?
+- 📋 **prepared** filters misfit, duplication, and wrong-shape implementations — does this entry survive contact with the rest of this repo's primitives, principles, and existing capability?
+- ✅ **accepted** filters *"operator does not actually want this as designed"* — an explicit operator decision on the entry as it stands, not on the original idea.
+- ⚙️ **run-through-repo** filters design-level critique on the *implementation choices* — the original 12-step (if any) judged the adoption decision; this state judges the implementation.
+- 🔨 **implemented** filters bugs and broken builds via real code plus a smoke test.
+- 💎 **value-proved** filters *"looked good in design, did not survive contact with use"* — evidence from real workflow runs.
+- 🏁 **completed** filters tech-debt-by-omission — residual disagreements either resolved or explicitly closed.
+
+A graduating entry, surfaced through these states, must satisfy in aggregate:
+
+- **Tangible value** — a specific class of failure prevented, work made cheaper, or epistemic gap closed. Not "would be nice."
+- **Demonstrably better than the alternatives this repo could choose** — including doing nothing, doing a smaller version, or absorbing this work into an existing entry. The comparator is local to this stack, not the global state of the art.
+- **Belongingness in this repo specifically.** The right idea for *this* stack's primitives (canon, outside-view, the critic-panel, the lab itself) and principles (closed-world trust, librarian-first, anti-anchoring). Generic-good-idea is not the same as right-for-here.
+- **No better-existing solution.** No subsumption by an existing primitive, no duplication of capability already shipped, no fragmentation of a bigger entry that already contains this proposal as a sub-piece.
+
+### The asymmetry the lab depends on
+
+**Permissive on authoring; disciplined on implementation.** Anyone — operator, AI, future agent — is welcome to file anything. Nobody is welcome to ship without the lifecycle.
+
+Skipping states is not "fast." Each state exists because it filters a failure the prior state cannot see; skipping a state means shipping with that failure class undetected. The lab has documented this anti-pattern in its own entries (`format-only-state-transition-gate`, `casual-output-is-workflow-unprotected`, `subagents-claim-writes-not-on-disk`) — the failures keep recurring because the structural enforcement is still wishful, not real.
+
 ## Table of contents
 
+- [What an entry is — and what it is not](#what-an-entry-is--and-what-it-is-not)
 - [What goes here](#what-goes-here)
 - [Principles — encourage freedom, mind only security](#principles--encourage-freedom-mind-only-security)
 - [How entries are organized — the four tiers](#how-entries-are-organized--the-four-tiers)
