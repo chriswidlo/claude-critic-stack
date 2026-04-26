@@ -35,6 +35,7 @@ These either close audit-chain gaps that compromise the stack's value prop, or d
 | 2 | [`limitations.md` as first-class artifact](no-brainer/2026-04-26-limitations-md-as-first-class-artifact.md) | ✅ | 🌱 | S | New CLAUDE.md "things you must do, in flight" section; per-session `limitations.md` path convention; optional Stop hook. |
 | 3 | [Subagents claim writes not on disk](profound/2026-04-26-subagents-claim-writes-not-on-disk.md) | 💎 | 🌱 | S | `PostToolUse` hook on Agent calls that greps the return for claimed paths and verifies they exist. Pairs with #2. |
 | 4 | [Constitutional layer — GOALS / MODULES / per-module READMEs](no-brainer/2026-04-26-constitutional-layer-goals-modules.md) | ✅ | 🌱 | S | Three docs at root + READMEs per module. The seven-capability taxonomy lives here. |
+| 4a | [Workflow is blind to the lab — CLAUDE.md doesn't know it exists](profound/2026-04-26-workflow-blind-to-the-lab.md) | 💎 | 🌱 | XS | Add `upgrades/` to CLAUDE.md's named persistent surfaces (alongside `canon/`, `session-artifacts/`, `memory/`). One bullet under "Things you must do" naming lab-shaped utterances ("submit as upgrade", "we should add") that route through the lab. ~5 sentences total. **Pedagogy stays in `upgrades/README.md`; CLAUDE.md only mentions the surface.** Plus a one-sentence README load-ordering tweak. |
 
 ## Group B — Correctness multipliers (every session benefits)
 

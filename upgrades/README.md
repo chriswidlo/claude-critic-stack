@@ -7,6 +7,7 @@ It is not a backlog. It is not a planning system. It is not a project tracker. I
 ## Table of contents
 
 - [What goes here](#what-goes-here)
+- [Principles — encourage freedom, mind only security](#principles--encourage-freedom-mind-only-security)
 - [How entries are organized — the four tiers](#how-entries-are-organized--the-four-tiers)
 - [Required format for every entry](#required-format-for-every-entry)
 - [The two prepended tables — meta and state](#the-two-prepended-tables--meta-and-state)
@@ -23,6 +24,31 @@ It is not a backlog. It is not a planning system. It is not a project tracker. I
 Anything profound, novel, or creative about how to elevate this AI system. Half-baked is welcome. Wrong is welcome (write the entry, mark the wrongness in the body when it surfaces). Theoretical with no practical follow-through is welcome. Entries by the operator, by the AI, or co-written are all welcome.
 
 What is *not* welcome: routine task tracking, status updates, ephemeral session notes (those go in `.claude/session-artifacts/<id>/`), and ideas that have been fully implemented (those become commits and `CLAUDE.md` updates, not entries here). When in doubt: if it would be interesting to re-read in a year, it belongs here.
+
+## Principles — encourage freedom, mind only security
+
+The lab is **deliberately permissive** about *how* an idea is captured. Discipline lives in the filing (the four tiers, the meta + state tables, the slug-naming convention). Authoring is yours. There is no editorial gate on creativity, length, shape, or content. Short ideas don't need padding; long ideas don't need compression. The lab exists to catch things that wouldn't survive a backlog — that means the format must not impose backlog-like constraints.
+
+### Encouraged
+
+- **Any length.** A paragraph is fine. Thirty pages is fine. The idea decides.
+- **Any body shape.** Prose, tables, mermaid diagrams, ASCII art, lists, fenced code-for-illustration, embedded images, transcripts, multi-perspective debates, raw thinking. Mix and match. Use what serves the idea.
+- **Any content type.** Observations, manifestos, half-baked sketches, fully-formed designs, speculative fiction about the system's future, retrospective notes about why something failed, questions answered by future entries, contradictions left unresolved.
+- **Folder-shaped entries.** When a single `.md` isn't enough — when an idea wants supporting data, draft notes, example outputs, screenshots, transcripts, working files — promote the entry to a folder named with the entry's slug. The canonical entry doc lives inside as `<slug>.md`. (Mechanics still being settled — see open lab entries on folder migration.)
+- **Wrong, half-baked, speculative, theoretical, embarrassing.** All welcome. Mark wrongness in prose at the top when it surfaces; the entry stays as historical record.
+- **Creativity, vision, exploration, novelty.** The lab's purpose. If an idea would feel awkward in a Jira ticket but you'd defend it over a beer, it belongs here.
+
+### The only limits — minimal security boundaries
+
+These exist to protect the repo and its operator. They are not editorial restrictions; they are the lines that exist for everything in this codebase, surfaced here because the lab is permissive on everything else.
+
+- **No malicious-intent information.** No instructions for harming people, exploiting systems for unauthorized access, building weapons, or other clearly harmful content.
+- **No executable scripts inside entries.** Code shown for illustration (fenced markdown, clearly non-executable, kept short) is welcome and encouraged. Anything meant to *run* belongs outside the entry — a `bin/` directory, `.claude/session-artifacts/<id>/`, or wherever the repo's existing conventions place it. The entry can link to or describe the script.
+- **No dangerous downloads or embedded payloads.** Don't include binaries. If web content is load-bearing for an idea, **prefer linking to it** over copying its content into the entry. Links are auditable; embedded copies aren't.
+- **No secrets.** No API keys, tokens, passwords, private credentials, or other anything-confidential. Use `<placeholder>` syntax in examples that need them.
+- **No law-breaking content.** Standard disclaimer.
+
+That is the entire restriction list. Everything not on it is allowed and encouraged.
 
 ## How entries are organized — the four tiers
 
