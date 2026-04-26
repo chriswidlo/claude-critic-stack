@@ -1,0 +1,121 @@
+# Upgrades ledger — value-ranked, all tiers mixed
+
+This is the single ranked queue across all four tier folders. Entries are ordered by **value of implementing now**, not by tier and not by effort. A no-brainer can sit below an outlandish if the outlandish unlocks more.
+
+> **Groups here are pickup hints — not categorization.** The real categorization is the **tier folder** (`profound/`, `outlandish/`, `no-brainer/`, `normal/`) — see `README.md` for the placement rule. Groups in this ledger (Foundational, Correctness multipliers, Workflow control, etc.) are an *ordering convenience* for the operator: which entries to consider first. Group placement is fuzzy and re-rankable; tier placement is the entry's identity.
+>
+> Every entry, regardless of group or rank, still goes through the full upgrade lifecycle when worked on. The ledger is a reading aid, not a shortcut around the process.
+
+## How to read this
+
+| Column | Meaning |
+|---|---|
+| **#** | Implementation priority (1 = do first). Re-rank when adding. |
+| **Title** | Linked to the entry file. |
+| **Tier** | 💎 profound · 🚀 outlandish · ✅ no-brainer · 🌿 normal |
+| **State** | 🌱 created · 🔬 spiked · 📋 prepared · ✅ accepted · ⚙️ run-through-repo · 🔨 implemented · 💎 value-proved · 🏁 completed |
+| **Effort** | XS (≤30 min) · S (≤3 h) · M (≤8 h) · L (≤2 d) · XL (weeks–months) |
+| **Implement as** | One-line concrete shape. The entry body has the full plan. |
+
+State emoji `🌱` = not finalised (just captured). Anything past `🌱` = work has begun. Anything `🔨` or beyond = finalised.
+
+## How to add a new entry
+
+When `/upgrade` writes a new entry, also append a row to the appropriate group below — or open a new group if none fit. Re-number when the rank shifts. The rank is a judgment call (value × leverage × dependency-on/by-others), not a formula.
+
+---
+
+## Group A — Foundational (unlock everything else)
+
+These either close audit-chain gaps that compromise the stack's value prop, or define the contract every other upgrade tests against. Implement first.
+
+| # | Title | Tier | State | Effort | Implement as |
+|---|---|---|---|---|---|
+| 1 | [Critics get the Write tool](no-brainer/2026-04-26-critics-get-write-tool.md) | ✅ | 🌱 | XS | Add `Write` to three critic frontmatters; one body line each; one CLAUDE.md sentence. |
+| 2 | [`limitations.md` as first-class artifact](no-brainer/2026-04-26-limitations-md-as-first-class-artifact.md) | ✅ | 🌱 | S | New CLAUDE.md "things you must do, in flight" section; per-session `limitations.md` path convention; optional Stop hook. |
+| 3 | [Subagents claim writes not on disk](profound/2026-04-26-subagents-claim-writes-not-on-disk.md) | 💎 | 🌱 | S | `PostToolUse` hook on Agent calls that greps the return for claimed paths and verifies they exist. Pairs with #2. |
+| 4 | [Constitutional layer — GOALS / MODULES / per-module READMEs](no-brainer/2026-04-26-constitutional-layer-goals-modules.md) | ✅ | 🌱 | S | Three docs at root + READMEs per module. The seven-capability taxonomy lives here. |
+
+## Group B — Correctness multipliers (every session benefits)
+
+These fix recurring failure modes the operator named in the opening retrospective. Each one improves *every subsequent run*.
+
+| # | Title | Tier | State | Effort | Implement as |
+|---|---|---|---|---|---|
+| 5 | [The critic panel is correlated by default — shadow comparator](profound/2026-04-26-critic-panel-correlated-by-default.md) | 💎 | 🌱 | L | `SHADOW_PANEL=1` env var; each lens fires twice (Opus + Sonnet); new `critic-comparator` agent writes `critiques/<lens>.comparison.md`. Off by default. |
+| 6 | [The workflow over-designs when told to under-design](profound/2026-04-26-workflow-overdesigns-when-told-to-underdesign.md) | 💎 | 🌱 | M | Start with the cheapest path: pre-synthesis "could this be 10% of itself?" check in CLAUDE.md. If that doesn't bite, escalate to a minimalist panel lens. |
+| 7 | [Corpus-bias compensation as Step 6.5](no-brainer/2026-04-26-corpus-bias-compensation-step.md) | ✅ | 🌱 | XS | CLAUDE.md addition between Step 6 and Step 7; optional `PostToolUse` hook on distiller writes for bias keywords. |
+| 8 | [Citation-audit as canon-librarian discipline](no-brainer/2026-04-26-citation-audit-as-canon-discipline.md) | ✅ | 🌱 | XS | Two agent file edits: every cited source carries `verified` / `asserted` / `cached` marker. |
+| 9 | [Wire `claude-code-guide` into parallel-gather](no-brainer/2026-04-26-wire-claude-code-guide.md) | ✅ | 🌱 | XS | One CLAUDE.md paragraph in Steps 3–5 section. Trigger heuristic on Claude Code primitive keywords. |
+
+## Group C — Workflow control & user agency
+
+Operator-controllable escape hatches and metacognitive surfaces. None foundational; all valuable when the workflow stops serving the question.
+
+| # | Title | Tier | State | Effort | Implement as |
+|---|---|---|---|---|---|
+| 10 | [`/drop-workflow` + intent checkpoints](no-brainer/2026-04-26-drop-workflow-and-intent-checkpoints.md) | ✅ | 🌱 | XS | New `.claude/commands/drop-workflow.md`; two CLAUDE.md sentence-additions between Steps 6→7 and 9→10. |
+| 11 | [Step 12 — experiment-running branch](normal/2026-04-26-step-12-experiment-running-branch.md) | 🌿 | 🌱 | M | New Step 12.5 in CLAUDE.md: classify named experiment as runnable-here / needs-user / not-runnable; offer to run if under ~20 agent-calls. |
+| 12 | [Two-question disambiguation in classifier](normal/2026-04-26-two-question-disambiguation-classifier.md) | 🌿 | 🌱 | M | Classifier prompt redesign to emit `ambiguous-scope:` and `blockers:` stanzas; new Step 1.5 in CLAUDE.md to surface high-severity blockers. |
+| 13 | [Step 13 — session ledger format](normal/2026-04-26-step-13-session-ledger.md) | 🌿 | 🌱 | M | Orchestrator writes `session-artifacts/<id>/ledger.md` after synthesis: agent calls, artifacts, loops, derived ratios, threshold warnings. |
+| 14 | [Hard gates as harness hooks](normal/2026-04-26-hard-gates-as-harness-hooks.md) | 🌿 | 🌱 | M | Three `PreToolUse` / `PostToolUse` hooks: Step-9 precondition gate, loop-cap counter, classifier-blocker surfacer. Env-var bypass on each. |
+| 14a | [Format-only state-transition gate for upgrade entries](normal/2026-04-26-format-only-state-transition-gate.md) | 🌿 | ⚙️ | M | Warning-only subcommand of `/upgrade` that reads schema from a table in `upgrades/README.md`. Spike done; ran through workflow on 2026-04-26 (loop 2 approved). Productionization (slash-command integration, `--apply`, log) deferred until git strategy. |
+
+## Group D — Repo hygiene & conventions
+
+Pure structural cleanups. Land any time; none unblock other work, but each makes the repo legible as it grows.
+
+| # | Title | Tier | State | Effort | Implement as |
+|---|---|---|---|---|---|
+| 15 | [Agent subdirectories by module](no-brainer/2026-04-26-agent-subdirectories-by-module.md) | ✅ | 🌱 | XS | Verify recursive loading with a test agent; `mv` files into six subdirectories mirroring MODULES.md. |
+| 16 | [Git strategy documentation](no-brainer/2026-04-26-git-strategy-documentation.md) | ✅ | 🌱 | S | New `GIT.md` covering commit conventions, capability tagging in commits, lab-to-commits link via `implemented_by:` field. |
+| 17 | [The R&D lab itself](no-brainer/2026-04-26-rnd-lab.md) | ✅ | 🌱 | — | Already built. Entry's state should advance to 💎 `value-proved` once a second session uses the lab non-trivially. |
+| 18 | [Closed-world trust model + MCP allowlist check](no-brainer/2026-04-26-closed-world-mcp-allowlist.md) | ✅ | 🌱 | XS | One CLAUDE.md bullet under "Things you must not do" rejecting vendor-live MCP retrieval; `bin/check-mcp-allowlist.sh` runs at workflow Step 0 and fails closed if a non-allowlisted MCP server is present in any scope. |
+| 18a | [Upgrade entries can grow into folders](no-brainer/2026-04-26-upgrade-entries-as-folders.md) | ✅ | 🌱 | XS | Redefine an entry as a folder containing one slug-named `.md` (the doc) plus any supporting files. Migrate the 28 existing entries via `git mv`. Update `upgrades/README.md` and `/upgrade` slash command to write the new shape. Precondition for #18b. |
+| 18b | [Agentic-engineering reference library from session research](normal/2026-04-26-agentic-engineering-reference-library.md) | 🌿 | 🌱 | S | Promote `temporary/decision-registry.md` + playbook into the entry's own folder (consumes #18a); route the four transcripts through `canon-refresher` as primary-source proposals; one paragraph in CLAUDE.md describing the migrated reference. |
+| 18c | [Tighten `⚙️ run-through-repo` regex](no-brainer/2026-04-26-tighten-run-through-repo-regex.md) | ✅ | 🌱 | XS | One README cell update + ~10 lines parser extension to verify matched session-id corresponds to a real `.claude/session-artifacts/<slug>/` directory. Closes the documented false positive from the format-only gate spike. |
+| 18d | [Draft / experimental status marker for README sections](no-brainer/2026-04-26-draft-status-marker-for-readme-sections.md) | ✅ | 🌱 | XS | Convention: blockquote at top of any README section documenting a contract whose tool isn't yet built. Apply immediately to the schema table that the gate reads. |
+| 18e | [Markdown-table parser convention (`\|` escapes)](no-brainer/2026-04-26-markdown-table-parser-convention.md) | ✅ | 🌱 | XS | One paragraph + 5-line helper. Lands in MODULES.md or GIT.md when those exist; until then this entry is the canonical reference. |
+| 18f | [State-table honesty discipline](normal/2026-04-26-state-table-honesty-discipline.md) | 🌿 | 🌱 | S | When same-session advancement crosses ≥2 states, append an `## Update history` blockquote naming what happened and why. Format-only gate eventually checks for the blockquote when ≥2 cells are filled with the same date. |
+
+## Group E — Observations (no immediate action)
+
+Entries that name a real thing but whose action is "answer this with a future entry," not "build something now."
+
+| # | Title | Tier | State | Effort | Implement as |
+|---|---|---|---|---|---|
+| 19 | [Memory and lab are the same primitive](profound/2026-04-26-memory-and-lab-are-the-same-primitive.md) | 💎 | 🌱 | — | No build. Open question to be answered by a future entry once the lab has run for ~10 sessions and the convergence/divergence becomes visible. |
+
+## Group F — Long-term bets (outlandish — defer until foundation lands)
+
+Each is months of work. None is wrong; each is wrong *now* because Groups A–C aren't done. Revisit after the foundation has been validated.
+
+| # | Title | Tier | State | Effort | Implement as |
+|---|---|---|---|---|---|
+| 20 | [Scope-projector capability](outlandish/2026-04-26-scope-projector-capability.md) | 🚀 | 🌱 | XL | Start with Path B (frame-challenger gains a "projected mature form" output). Promote to its own agent (Path A) only if Path B carries signal. |
+| 21 | [External shadow via OpenRouter](outlandish/2026-04-26-external-shadow-via-openrouter.md) | 🚀 | 🌱 | XL | `bin/external-critic.sh` wrapper; `EXTERNAL_SHADOW=1` env var; comparator extended to three-way. Depends on #5 landing first. |
+| 22 | [Research stack as sibling](outlandish/2026-04-26-research-stack-as-sibling.md) | 🚀 | 🌱 | XL | Sibling `claude-research-stack` repo; talks to this stack only via shared `canon/corpus/`. Months of design + scaffolding. |
+
+---
+
+## Suggested first session
+
+Five entries are XS effort and sit in Groups A or B. They can land in one short session and every subsequent run benefits:
+
+- **#1** Critics get Write
+- **#7** Corpus-bias Step 6.5
+- **#8** Citation-audit markers
+- **#9** Wire `claude-code-guide`
+- **#10** `/drop-workflow` + checkpoints
+
+After those, the next obvious move is **#2** + **#3** together (limitations.md + verification hook), since they pair structurally and both are S effort.
+
+## When to re-rank
+
+Re-rank this ledger when:
+- A new entry lands and its rank is non-obvious (think where it slots; bump everything below).
+- An entry advances state past `🌱` (the rank may matter less once it's underway).
+- A session reveals that an upgrade we ranked low is actually unblocking a frustration that fires every run (promote it).
+- Group F bets become more concrete (e.g., a benchmark exists for #20; a research-stack scaffold exists for #21).
+
+The ledger is a snapshot of judgment, not a permanent ordering.

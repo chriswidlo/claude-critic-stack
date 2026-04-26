@@ -28,23 +28,51 @@ What is *not* welcome: routine task tracking, status updates, ephemeral session 
 
 By the **value-and-scope tier of the upgrade idea**, with explicit boundaries so classification is fast and unambiguous. The point of these tiers is not just to sort entries — it is to **encourage thinking across the full spectrum**. Every tier deserves entries; an empty tier is a signal that thinking has gotten too narrow.
 
+### The hard rule — categorize by idea-character, never by technology
+
+An idea is a **creative thought about functionality — a logical or behavioral novelty**. Whatever primitives, technologies, or files are needed to realize it are downstream of the idea, not what the idea *is*. Categorizing by primitive (a `hooks/` folder, an `agents/` folder, a `frontmatter-edits/` folder) collapses the space of ideas onto the space of mechanisms and kills creativity at the filing step.
+
+The four tiers below are defined by **the character of the idea**: how revolutionary, how ambitious, how obvious, how ordinary. Two entries that touch the same primitive (e.g., both edit a frontmatter) can land in different tiers; two entries in the same tier can use entirely different primitives. That is the point.
+
+### The four tiers
+
 | Tier | What it is | Test | Lives in |
 |---|---|---|---|
-| 💎 **profound** | A revolutionary insight that would fundamentally change how the system works. Novel — something we genuinely had not considered. | Would I be excited to tell another engineer about this? | `upgrades/profound/` |
-| 🚀 **outlandish** | A visionary, ambitious, long-timeline idea. May require significant planning, may be unproven, may be impractical — but exciting. | Is this a months-long project, or an unproven moonshot? | `upgrades/outlandish/` |
-| ✅ **no-brainer** | An obvious win. Low effort, uncontroversial value, can be implemented quickly. | Would I implement this immediately if I had 30 minutes? | `upgrades/no-brainer/` |
-| 🌿 **normal** | An ordinary creative idea. Modest impact, modest effort. The bread and butter. | None of the above more strongly fits. | `upgrades/normal/` |
+| 💎 **profound** | A revolutionary *insight* that would fundamentally change how the system works or how we think about it. Novel — something we genuinely had not considered. The kind of entry whose value is *the seeing*, regardless of effort to act on it. | Would I be excited to tell another engineer about this? Does it shift how I'd evaluate future ideas? | `upgrades/profound/` |
+| 🚀 **outlandish** | A visionary, ambitious, long-timeline *bet*. May require significant planning, may be unproven, may be impractical — but exciting. The kind of entry whose value is in the scope of what it would unlock. | Is this a months-long project, or an unproven moonshot? Would I need a roadmap to start? | `upgrades/outlandish/` |
+| ✅ **no-brainer** | An obvious *win*. Low effort, uncontroversial value, can be implemented quickly. The kind of entry where hesitation is the only thing keeping it from being done. | Would I implement this immediately if I had 30 minutes and full attention? | `upgrades/no-brainer/` |
+| 🌿 **normal** | An ordinary creative *idea*. Modest impact, modest effort, real value. Neither revolutionary nor obvious nor moonshot. The bread and butter. | None of the above more strongly fits, but the idea is worth writing down. | `upgrades/normal/` |
 
-**Decision rule for ambiguous cases:**
+### Decision rule — apply in this order
+
+Run the questions sequentially. Stop at the first `yes`.
 
 ```
-1. Is this revolutionary in its insight or impact?           → profound
-2. Else, is the scope/effort large or visionary?             → outlandish
-3. Else, is the value obvious and the effort small?          → no-brainer
-4. Else                                                       → normal
+1. Is the value of this entry primarily an INSIGHT — does it
+   change how I'd think about the next idea, regardless of whether
+   anyone acts on it?                                          → profound
+
+2. Is the scope a BET larger than I can plan in one sitting —
+   months of work, multiple unknowns, or a roadmap to start?   → outlandish
+
+3. Would I IMPLEMENT it right now if I had 30 minutes —
+   no design uncertainty, value uncontroversial?               → no-brainer
+
+4. Else — modest creative idea, real value, real bounded work  → normal
 ```
 
-When in doubt between two tiers, default to the lower one. Entries can be promoted via re-tagging if they turn out bigger than expected.
+When in doubt between two tiers, default to the **lower** one (no-brainer over normal, normal over outlandish). Promotion later is cheap; demotion implicitly happens by the entry just sitting at `🌱 created` for a long time.
+
+### What is NOT a valid grouping
+
+Anti-patterns to refuse if the lab grows and someone proposes a re-organization:
+
+- ❌ **Grouping by primitive** — `hooks/`, `slash-commands/`, `agents/`, `bash-scripts/`. Same primitive can serve wildly different ideas.
+- ❌ **Grouping by file touched** — `claude-md-edits/`, `settings-json-edits/`. The file is implementation; the idea is what changes.
+- ❌ **Grouping by workflow step** — `step-1/`, `step-12/`. The workflow is one application surface; ideas live above it.
+- ❌ **Grouping by status** — `done/`, `in-progress/`. The state table already carries this; folder-by-status causes entries to move physically when nothing about the idea changed.
+
+The only valid axis is **idea-character** (the four tiers). Cross-cutting concerns (security, observability, audit) belong in the body or in `tags`, not in folder names.
 
 Subfolders are created lazily — `no-brainer/` exists today because the first entry lives there. The other three appear when their first entry lands.
 
@@ -113,6 +141,24 @@ Eight states, each with a color that resembles the state. Most entries never rea
 A state is reached by editing the table to fill in the date. There is no automation; it's a manual act of "yes, this happened." If a state is reached out of order (e.g., `implemented` before `accepted` because the operator just did it), fill in both dates honestly — the lifecycle is descriptive, not prescriptive.
 
 If an idea turns out to be wrong or no longer worth pursuing, mark this in prose at the top of the body — the lab is free-form enough to absorb honest negation without needing a `killed` state.
+
+### Required body elements per state
+
+The (forthcoming) `/upgrade advance` subcommand reads this table to know what to check before suggesting advancement to a new state. Each row names one state; the regex is a tolerant pattern matched (case-insensitive, multiline) against the entry body. The check is **advisory, not blocking** — the lifecycle remains descriptive (manual edit always allowed). False positives are friction; false negatives are corruption — patterns intentionally lean tolerant.
+
+<!-- machine-read by the upgrade-transition gate (see upgrades/normal/2026-04-26-format-only-state-transition-gate.md). do not change column count or order. -->
+
+| State | Required body element | Regex |
+|---|---|---|
+| 🔬 spiked | A heading naming the spike work (e.g. `## Spike`, `## What I tried`, `## Probe`). | `^#+\s+.*(spike\|tried\|probe\|explored)` |
+| 📋 prepared | A heading naming the plan (e.g. `## Plan`, `## Next steps`, `## Implementation plan`). | `^#+\s+.*(plan\|next steps\|implementation)` |
+| ✅ accepted | A line stating "accepted by" with a date. | `accepted by.*\d{4}-\d{2}-\d{2}` |
+| ⚙️ run-through-repo | A session-id reference (matching `YYYY-MM-DD-slug`). | `\d{4}-\d{2}-\d{2}-[a-z0-9-]+` |
+| 🔨 implemented | A git short-SHA in the body OR an `implemented_by:` row in the meta table. | `\b[a-f0-9]{7,40}\b\|implemented_by:` |
+| 💎 value-proved | A heading naming the evidence (e.g. `## Value evidence`, `## Outcome`, `## Demonstrated`). | `^#+\s+.*(value (proved\|evidence)\|outcome\|demonstrated)` |
+| 🏁 completed | A heading naming closure (e.g. `## Closure`, `## Closed`, `## Completed`). | `^#+\s+.*(closure\|closed\|completed)` |
+
+This table is the single source of truth for the gate's checks. To change what a state requires, edit this table — the gate updates next run. If the lifecycle is collapsed (states removed) or extended (states added), update the state-lifecycle table above and this table together.
 
 ## How to add an entry
 
