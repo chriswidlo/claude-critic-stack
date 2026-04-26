@@ -107,4 +107,24 @@ Each row is a *mechanism* — the user-authored, repo-resident object. Usage pat
 
 ---
 
-(continued in §4–§17 — see full file in branch `claude/sota-orchestration-knowledge-2026-04`)
+## 4. Usage patterns (compositions, not primitives)
+
+These are *patterns* that compose mechanisms from §3. Treating them as primitives was a category error in the first synthesis. Each pattern can be implemented with several different mechanism choices.
+
+| Pattern | Composition (typical) | When the pattern earns its complexity |
+|---|---|---|
+| **Self-critique / Constitutional-AI loop** | Subagent (implementer) + subagent (critic) in fresh contexts; orchestrator routes between them | Decisions where a wrong answer is expensive (this is what `claude-critic-stack` itself is) |
+| **Plan-execute split (same model)** | Subagent (planner) → subagent (executor) | Tasks where the cost of a wrong path is much greater than the cost of planning |
+| **Architect-coder split (cross-model)** | Frontier model plans, cheaper model executes | Cost arbitrage when token cost dominates (Aider, Roo Code's Architect/Code/Debug/Ask modes) |
+| **Self-consistency / multi-sample** | Same model, N samples, vote or aggregate | Sampling variance is the bottleneck; high-stakes single-shot tasks |
+| **Same-model aggregation (Self-MoA pattern)** | One strong model, multiple samples, aggregator | Directional 2026 finding: often beats cross-vendor mixes on at least some benchmarks (unverified at primary source) |
+| **Cross-model parallel-and-judge** | N vendor models, judge synthesizes | High-stakes verification, eval credibility, vendor hedging |
+| **Cross-model debate** | N models argue, judge decides | Research-active, production-rare; documented adversarial-debater failure modes |
+| **Eval-driven router** | Pre-measured per-task fitness; route per request | Production routing where workload is heterogeneous |
+| **High-stakes pre-commit verification with diverse checkers** | Parallel reviewers on different angles (logic / edges / security / perf), each finding independently reproduced | Cost of a wrong answer dominates cost of verification (`/ultrareview` is one productized instance) |
+
+**Important:** the patterns are *not* mutually exclusive. A real stack can run a self-critique loop *inside* a high-stakes verification archetype, or a plan-execute split *inside* a self-consistency loop. The mistake is naming them as if they were rivalrous.
+
+---
+
+(continued — chunk 2 of 5)
