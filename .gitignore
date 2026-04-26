@@ -9,10 +9,12 @@ canon/corpus/*/source.txt
 .claude/settings.local.json
 
 # Per-session reasoning artifacts produced by the 12-step workflow.
-# Ephemeral by default; curator-promoted exemplars (and the README) ARE tracked.
+# Tracked as a longitudinal human-facing record (drift detection, growth
+# vs regression analysis over time). The AI is not instructed to read
+# prior sessions — its perspective remains ephemeral scratchpad.
+# Do NOT prune for noise: low-value sessions are diagnostic data.
+# Periodic sweeps should be for PRIVACY REDACTION only (scrub pasted-in
+# proprietary names from other repos), not deletion.
 # See .claude/session-artifacts/README.md for the lifecycle.
-.claude/session-artifacts/*/
-!.claude/session-artifacts/exemplars/
-!.claude/session-artifacts/README.md
 
 .DS_Store

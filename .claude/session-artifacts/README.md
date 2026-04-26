@@ -24,14 +24,31 @@ The orchestrator assigns the session id on step 1 — typically
 
 ## Lifecycle
 
-- **Ephemeral by default.** Per-session subdirectories are **gitignored**.
-  Each session is a scratchpad; the history lives in the repo's real commits
-  and in memory/, not here.
-- **Promotion to `exemplars/`.** If a session produces a useful reference —
-  most often because it hit a regression scenario like
-  `tests/regression/ark-mono-connector-routing.md` — the curator copies the
-  whole `<session-id>/` directory into `exemplars/` under a descriptive name.
-  `exemplars/` IS tracked. Future runs are compared against these baselines.
+Two audiences, two postures:
+
+- **AI within-session: ephemeral scratchpad.** The orchestrator and subagents
+  write freely into the current `<session-id>/` directory. No agent is
+  instructed to read prior sessions, so the scratchpad voice is preserved —
+  the AI does not write for posterity.
+- **Human across-sessions: longitudinal record.** All session subdirectories
+  ARE tracked in git. The point is drift detection — being able to look back
+  and see where the workflow strengthened or weakened over time, which
+  agents started producing thinner output, which frames the system kept
+  picking up vs missing. Low-value sessions are themselves diagnostic data;
+  do **not** prune them for noise.
+- **Promotion to `exemplars/`.** If a session produces a regression-worthy
+  reference (e.g. a baseline like `tests/regression/ark-mono-connector-routing.md`),
+  the curator copies the whole `<session-id>/` directory into `exemplars/`
+  under a descriptive name. `exemplars/` is the *curated* shelf; the rest of
+  session-artifacts is the *raw* shelf. Both are tracked.
+
+### Periodic hygiene — privacy only
+
+The only sweep that should ever happen on the raw shelf is **privacy
+redaction**: scrubbing pasted-in proprietary names, client identifiers,
+or internal paths from other repos that ended up in `requirement.md` or
+`frame.md`. Noise-removal pruning is forbidden — it destroys the very
+longitudinal signal the tracking exists to capture.
 
 ## Hard gate on step 9
 
@@ -42,17 +59,21 @@ the single most important correctness rule added in the Phase-2 upgrade;
 it prevents the orchestrator from generating a candidate against an
 un-challenged frame.
 
-## Why in-repo and not `~/.claude/projects/`
+## Why in-repo and not in the user's global Claude Code memory dir
 
-The Claude-Code user-level memory directory (`~/.claude/projects/...`) is
-machine-local. Putting artifacts there would scatter them across machines
-and make `exemplars/` promotion awkward. Keeping them in the repo means
-(a) they are versioned when promoted, (b) a fresh clone gets the
-regression scenarios, (c) `.gitignore` governs ephemera with one line.
+The Claude Code user-level memory directory is machine-local. Putting
+artifacts there would scatter them across machines and make `exemplars/`
+promotion awkward. Keeping them in the repo means (a) they are versioned
+when promoted, (b) a fresh clone gets the regression scenarios,
+(c) `.gitignore` governs ephemera with one line.
 
 ## `.gitignore` choice (documented)
 
-Per-session subdirectories are ignored by default. `README.md` (this file)
-and `exemplars/` are tracked. If you want full audit history instead,
-replace the `.claude/session-artifacts/*/` line in `.gitignore` with an
-allowlist approach — one line change, reversible.
+All session subdirectories are tracked. The earlier design ignored them
+by default and required curator promotion to `exemplars/`; in practice the
+promotion ritual was too high-friction (after 8 active sessions, `exemplars/`
+remained empty) and the longitudinal-reflection use case was lost. The
+current design favors completeness for the human reader at the cost of
+some repo bloat (~100KB per session) and a privacy-redaction obligation.
+If you reverse this, do it by reinstating the
+`.claude/session-artifacts/*/` ignore line — one-line, reversible.

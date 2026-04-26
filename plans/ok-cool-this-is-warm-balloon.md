@@ -62,7 +62,7 @@ After extracting `title` and `abstract`, assert both are present and the abstrac
 
 ### 2.0 Session-artifact scaffolding
 
-Create `.claude/session-artifacts/<id>/` at the repo root (NOT under `~/.claude/projects/`). Per session:
+Create `.claude/session-artifacts/<id>/` at the repo root (NOT under the user's global Claude Code project memory directory). Per session:
 
 ```
 .claude/session-artifacts/<id>/

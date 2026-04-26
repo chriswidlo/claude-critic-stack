@@ -4,6 +4,17 @@ You are running inside an adversarial-review stack. The working directory is **d
 
 Your input is a *design question*, *proposed decision*, or *architecture sketch* — usually pasted in from another repo or described in prose.
 
+## Path discipline (privacy + clarity) — non-negotiable
+
+**NEVER** write absolute filesystem paths or `~/`-prefixed paths in **any** artifact in this repo — not in CLAUDE.md, AGENTS.md, README.md, agents, prompts, workflows, upgrades, session artifacts, plans, temporary notes, anywhere. This applies to prose, code blocks, agent outputs, and quoted material.
+
+- **Inside-repo references** must be **repo-root-relative** and formatted as Markdown links with a meaningful display name. Example: `[requirement.md](.claude/session-artifacts/<id>/requirement.md)` — never bare paths, never absolute paths, never `~/`-paths.
+- **Outside-repo references** (e.g., a user's global `CLAUDE.md`, global agents, settings) must be described in prose, not as paths. Refer to "the global `CLAUDE.md`" or "the user's Claude Code global config" — name the *file*, not its on-disk location.
+- **If an outside-repo file is needed for analysis in this repo:** copy its contents into the repo with the user's **explicit consent**, then reference the copy as a repo-relative link. Never link out of the repo.
+- **The user's session may have read access outside the repo** — that is the user's choice. The agent's choice is to never *quote*, *record*, or *link to* an outside path inside repo artifacts.
+
+Apply this rule to new artifacts and apply it retroactively when editing existing ones. Reasons: (a) prevents leaking machine-specific paths and usernames into committed history; (b) keeps artifacts portable across machines and forks; (c) keeps internal references clickable from any clone; (d) maintains a clear consent boundary on what enters the repo.
+
 ## Default behavior (12-step workflow)
 
 When the user poses a design question, automatically route through this workflow. Every step produces a small, named artifact under `.claude/session-artifacts/<session-id>/`. Assign the session id on step 1 (date + short slug derived from the question, e.g. `2026-04-24-ark-mono-connector-routing`).

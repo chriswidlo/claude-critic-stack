@@ -48,7 +48,7 @@ Every future "should we add X" decision tests against this doc. If X doesn't ser
 | **lab** | upgrades-curator (slash command), upgrades/ | observations, canon | upgrades/ | block live workflow |
 | **session-artifacts** | per-session ephemeral output | n/a | itself | leak across sessions |
 | **harness** | settings.json, hooks, env-var bypasses | nothing | enforces gates | live in agent prompts |
-| **memory** | auto-memory, project memory | session ledgers, lab | ~/.claude/projects/.../memory | overwrite without dedupe |
+| **memory** | auto-memory, project memory | session ledgers, lab | user's global Claude Code project memory dir | overwrite without dedupe |
 
 ## Why this lands first, before any other modular work
 

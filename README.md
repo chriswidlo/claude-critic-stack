@@ -21,7 +21,7 @@ These run *from this directory*, deliberately outside any specific repo. The wor
 ## How to use
 
 ```bash
-cd ~/Development/Projects/claude-critic-stack
+cd path/to/claude-critic-stack
 claude
 > I'm considering [design decision from my other repo]. Context: [...]. Review it.
 ```

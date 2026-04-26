@@ -24,7 +24,7 @@
 
 ## What happened
 
-The requirement-classifier was invoked at Step 1 of a workflow run. Its return ended with the literal sentence: *"Artifact written to `/Users/krzys/.../requirement.md`."* The orchestrator marked the task complete and moved on. Six steps later, the frame-challenger noted in its output: *"requirement.md is not on disk in this session; flag for orchestrator: the absence is itself a workflow-step violation."* The orchestrator opened the directory, confirmed the file was missing, reconstructed it from the verbatim agent return, and continued.
+The requirement-classifier was invoked at Step 1 of a workflow run. Its return ended with the literal sentence: *"Artifact written to [`requirement.md`](.claude/session-artifacts/<id>/requirement.md)."* (the original quoted return contained an absolute path; elided to a repo-relative link per the path-discipline rule in [`CLAUDE.md`](CLAUDE.md)). The orchestrator marked the task complete and moved on. Six steps later, the frame-challenger noted in its output: *"requirement.md is not on disk in this session; flag for orchestrator: the absence is itself a workflow-step violation."* The orchestrator opened the directory, confirmed the file was missing, reconstructed it from the verbatim agent return, and continued.
 
 The reconstruction worked because the agent's return was still in the orchestrator's context. If the failure had occurred earlier in a longer session, or if context had been compacted, the failure would have been undetectable.
 

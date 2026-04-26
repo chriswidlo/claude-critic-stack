@@ -41,7 +41,7 @@ The corpus is the right boundary because it is the *intent* of both systems' exi
 
 ## What this would take
 
-- A new repo, scaffolded as a sibling of `claude-critic-stack`. Probably `~/Development/Projects/claude-research-stack`.
+- A new repo, scaffolded as a sibling of `claude-critic-stack`. Probable name: `claude-research-stack`.
 - Either a shared corpus directory accessed by both stacks (filesystem mount), or a synchronization mechanism (research-stack pushes corpus updates; critic-stack pulls).
 - A common entry schema for corpus entries (already mostly exists in this stack's `canon/corpus/<slug>/citation.yaml`).
 - Research-stack's own agent suite. Probably 5-8 agents.
