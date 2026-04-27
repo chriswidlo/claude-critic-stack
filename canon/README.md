@@ -1,14 +1,15 @@
 # canon/
 
-The curated corpus the `canon-librarian` agent retrieves from.
+The curated corpus the `canon-librarian` agent retrieves from. Retrieval is over the `corpus/` directory tree; `sources.yaml` is the human inventory and `sources.ingest.yaml` is the auto-fetch queue (a strict subset of the inventory) used by `bin/ingest-canon.mjs` — neither YAML is read at retrieval time.
 
 ## Layout
 
 ```
 canon/
-├── README.md       (this file)
-├── sources.yaml    (manifest — what should be here and why)
-└── corpus/         (actual ingested material; gitignored)
+├── README.md            (this file)
+├── sources.yaml         (human inventory — what should be here and why)
+├── sources.ingest.yaml  (auto-fetch queue, strict subset of sources.yaml; consumed by bin/ingest-canon.mjs)
+└── corpus/              (actual ingested material; gitignored — this is what the librarian greps)
     ├── kleppmann-ddia/
     ├── evans-ddd/
     ├── fowler-refactoring/

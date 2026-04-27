@@ -1,0 +1,56 @@
+{
+  "$schema_note": "Registry of executable scripts under bin/. AI agents and humans both read this to decide which script to invoke and whether confirmation is needed before running it. Update on every add/remove/rename.",
+  "scripts": [
+    {
+      "name": "ingest-canon.mjs",
+      "purpose": "Populate canon/corpus/<slug>/ from canon/sources.ingest.yaml entries (HTML / HTML-multi / PDF-manual fetch).",
+      "usage": [
+        "node ./bin/ingest-canon.mjs",
+        "node ./bin/ingest-canon.mjs --force",
+        "node ./bin/ingest-canon.mjs --only=<slug>"
+      ],
+      "modes": null,
+      "read_only": false,
+      "writes": ["canon/corpus/<slug>/source.txt", "canon/corpus/<slug>/citation.yaml"],
+      "side_effects": ["network fetch (HTML, PDF)"],
+      "idempotent": true,
+      "consumed_by": ["canon-librarian agent (indirect — reads the corpus this populates)", "canon-refresher agent (proposes new entries this script ingests)"],
+      "tested": true,
+      "added": "2026-04-24"
+    },
+    {
+      "name": "ingest-owned-book.mjs",
+      "purpose": "Promote a paywalled-book stub at canon/corpus/<slug>/ from a LOCAL plaintext file the operator legitimately obtained (OCR of owned ebook, publisher plain-text export). Refuses if source.txt exists, file is <10 KB, or is empty; soft-warns on suspicious source paths.",
+      "usage": [
+        "node ./bin/ingest-owned-book.mjs <slug> <path-to-text>"
+      ],
+      "modes": null,
+      "read_only": false,
+      "writes": ["canon/corpus/<slug>/source.txt", "canon/corpus/<slug>/citation.yaml"],
+      "side_effects": [],
+      "idempotent": false,
+      "preconditions": ["canon/corpus/<slug>/citation.yaml exists with body_completeness: stub", "operator owns the source license"],
+      "consumed_by": ["operator (manual invocation only)"],
+      "tested": true,
+      "added": "2026-04-24"
+    },
+    {
+      "name": "check-path-discipline.sh",
+      "purpose": "Read-only verification of repo path discipline (CLAUDE.md L7-16). Three modes: --resolve checks every markdown link target exists under repo-root interpretation; --inbound lists inbound markdown references to a file (excludes .claude/); --style flags ../-chain, absolute, or ~/-prefixed link targets.",
+      "usage": [
+        "bin/check-path-discipline.sh --resolve <files...>",
+        "bin/check-path-discipline.sh --inbound <files...>",
+        "bin/check-path-discipline.sh --style <files...>"
+      ],
+      "modes": ["--resolve", "--inbound", "--style"],
+      "read_only": true,
+      "writes": [],
+      "side_effects": [],
+      "idempotent": true,
+      "exit_codes": {"0": "OK", "1": "violations found", "2": "usage / file-not-found"},
+      "consumed_by": ["cleanup punch-list items 1, 2, 3 (verification gate)"],
+      "tested": true,
+      "added": "2026-04-27"
+    }
+  ]
+}

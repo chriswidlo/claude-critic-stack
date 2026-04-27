@@ -16,7 +16,7 @@ Orchestrator asked Explore to map the current repo state relevant to giving the 
 9. Precedent directory [2026-04-26-format-only-state-transition-gate](.claude/session-artifacts/2026-04-26-format-only-state-transition-gate/) contains `critiques.md` plus `critiques/` with per-lens files (`architecture.md`, `architecture-v2.md`, `operations.md`, `operations-v2.md`, `product.md`, `product-v2.md`). (confidence: direct)
 10. Precedent directory [2026-04-26-upgrades-lab-design](.claude/session-artifacts/2026-04-26-upgrades-lab-design/) contains `critiques.md` (3.2 KB aggregate) plus per-lens files in `critiques/` (sizes 3.2–9.6 KB). (confidence: direct)
 11. [`.claude/settings.json`](.claude/settings.json) contains only allow/deny lists; no hook definitions; no `hooks/` directory exists in repo. (confidence: direct)
-12. Upgrade entry [`upgrades/no-brainer/2026-04-26-critics-get-write-tool.md`](upgrades/no-brainer/2026-04-26-critics-get-write-tool.md) Plan section is at lines 65–79. (confidence: direct)
+12. Upgrade entry [`upgrades/no-brainer/2026-04-26-critics-get-write-tool/README.md`](upgrades/no-brainer/2026-04-26-critics-get-write-tool/README.md) Plan section is at lines 65–79. (confidence: direct)
 13. Upgrade #3 ("Subagents claim writes not on disk") proposes a `PostToolUse` hook to verify claimed writes; tagged profound. (confidence: direct)
 14. Upgrade #14 ("Hard gates as harness hooks") names harness-level hooks as a future need; tagged normal. (confidence: direct)
 

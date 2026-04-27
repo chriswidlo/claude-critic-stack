@@ -1,11 +1,18 @@
 # Curator-promoted session artifacts live here.
 # This file exists so the directory is tracked in git even when empty.
 #
-# To promote a session, copy the entire .claude/session-artifacts/<id>/
-# directory into this folder under a descriptive name, e.g.:
+# Promotion is curator-driven: when the operator judges a session in
+# .claude/session-artifacts/<id>/ to be a high-quality reference for
+# future sessions, copy the whole directory in here under a descriptive
+# name, e.g.:
 #
-#   ark-mono-connector-routing/
-#   multi-agent-subagent-anchoring/
+#   .claude/session-artifacts/exemplars/multi-agent-subagent-anchoring/
+#   .claude/session-artifacts/exemplars/scope-map-replace-default/
 #
-# The regression test at tests/regression/ark-mono-connector-routing.md
-# is the first candidate for exemplar promotion.
+# Two purposes:
+# 1. Curated reference shelf — "what does a good session look like."
+# 2. Drift baseline — diff a recent session against an exemplar to detect
+#    workflow degradation.
+#
+# No automation. No promotion mechanism. Just `cp -r` when something is
+# worth keeping as a reference.

@@ -1,7 +1,7 @@
 # Independent meta-review — *"Critics get the Write tool"*
 
 > **Session id:** `2026-04-27-critics-get-write-tool-meta-review`
-> **Reviewing:** the workflow run at [`2026-04-27-critics-get-write-tool-impl/`](../2026-04-27-critics-get-write-tool-impl/) and the paused upgrade entry at [`upgrades/no-brainer/2026-04-26-critics-get-write-tool.md`](../../../upgrades/no-brainer/2026-04-26-critics-get-write-tool.md).
+> **Reviewing:** the workflow run at [`2026-04-27-critics-get-write-tool-impl/`](../2026-04-27-critics-get-write-tool-impl/) and the paused upgrade entry at [`upgrades/no-brainer/2026-04-26-critics-get-write-tool/README.md`](../../../upgrades/no-brainer/2026-04-26-critics-get-write-tool/README.md).
 > **Posture:** outside read; not a workflow run; the critic-panel was *not* invoked on this review (the recursion the brief asks us to escape).
 > **Date:** 2026-04-27
 
@@ -223,7 +223,7 @@ This section is a self-check, not a defense. The brief named four bars; each get
 
 ## What this meta-review does not do
 
-- It does not implement v2-D. v2-D is "do nothing"; the upgrade entry remains paused. The meta-review's effect on the entry is one paragraph appended to the pause notice (see [`upgrades/no-brainer/2026-04-26-critics-get-write-tool.md`](../../../upgrades/no-brainer/2026-04-26-critics-get-write-tool.md)) and one clause appended to the LEDGER row.
+- It does not implement v2-D. v2-D is "do nothing"; the upgrade entry remains paused. The meta-review's effect on the entry is one paragraph appended to the pause notice (see [`upgrades/no-brainer/2026-04-26-critics-get-write-tool/README.md`](../../../upgrades/no-brainer/2026-04-26-critics-get-write-tool/README.md)) and one clause appended to the LEDGER row.
 - It does not run the retrospective diff experiment. That is operator action; this artifact only recommends it and proposes the cheaper retrospective form.
 - It does not file the workflow-modification proposals as upgrade entries. Those are recommendations only; the operator decides whether to file.
 - It does not invoke any subagent. A meta-review of a workflow run is not itself a workflow run; the recursion the brief asks us to escape would be re-introduced if we panel-reviewed a panel verdict.

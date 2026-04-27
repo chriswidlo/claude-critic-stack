@@ -1,0 +1,42 @@
+# Scope-map — item 4: stale top-level workflow docs
+
+**Session id.** `2026-04-27-item-04-stale-workflow-docs`
+**Proposal in scope.** Option (a) — delete [workflows/architecture-review.md](../../../workflows/architecture-review.md), rewrite [README.md](../../../README.md) lines 7–13 and line 29 to describe the 12-step / 10-agent reality and re-point readers at [CLAUDE.md](../../../CLAUDE.md) and [.claude/session-artifacts/README.md](../../README.md). Defer (b) and (c).
+
+## Existing primitives touched
+
+| primitive | source (where it was named) | relationship | one-line rationale |
+|-----------|-----------------------------|--------------|--------------------|
+| [workflows/architecture-review.md](../../../workflows/architecture-review.md) | Explore §1, §5; plan §"What's broken" | replace | The 7-step + singular-`critic` doc is actively wrong; option (a) deletes it and re-points readers at the authoritative docs that already exist, so the routing job is replaced by an existing mechanism, not absorbed. |
+| [README.md](../../../README.md) (lines 7–13 "three subagents" framing) | Explore §3; plan step 2 | replace | The Phase-1 three-subagents framing is replaced wholesale with the 12-step / 10-agent / three-lens-panel framing; same front-door file, but the contents of that section are a different mechanism (current shape, not legacy shape). |
+| [README.md](../../../README.md) (line 29 routing pointer) | Explore §1; plan step 3 | replace | Point-to-stale-workflow is replaced by point-to-CLAUDE.md + point-to-session-artifacts/README.md. Same role (front-door routing), different target. |
+| [CLAUDE.md](../../../CLAUDE.md) | Explore §4; canon-librarian fact #3; frame.md Alt-A | extend | Authoritative 12-step contract; option (a) does not modify it but elevates it to "the workflow doc the README points at." Its responsibility surface grows by one inbound link; its content is unchanged. Extension, not preservation-by-default — the cost of *not* extending it is creating a parallel doc that drifts (option b). |
+| [.claude/session-artifacts/README.md](../../README.md) | Explore §7, §9; plan step 3 | extend | Layout-only doc gains a new inbound link from README.md as the "per-session artifact layout" reference. Charter unchanged; audience widens slightly. Option (c) would `subsume` more of the workflow-doc job into it, but option (a) does not. |
+| [.claude/agents/](../../../.claude/agents/) (per-agent contracts) | Explore §4; CLAUDE.md §"Agents available" | extend | Untouched by option (a). Listed because the README rewrite implicitly references the 10 agents that live here; the directory's role as the per-agent source of truth is unchanged but more visible. |
+| `workflows/` directory itself | Explore §5; plan step 4 | replace | After deletion of the only file, the empty directory is deleted (per plan step 4). The directory's role — "home for workflow-shape docs" — is replaced by CLAUDE.md as the de facto home. Not preserved as a placeholder; preservation-as-placeholder is the anti-pattern Anthropic's tool-bloat / minimal-context warning targets (canon-librarian facts #4, #5). |
+| Implicit "unified workflow doc" primitive (option b's `workflows/12-step-workflow.md` or option c's expanded session-artifacts README) | plan §"Three options"; frame.md Alt-A | conflict | Does not exist yet. Option (a) deliberately does not create it; options (b) and (c) would. The question of whether to create it conflicts with Alt-frame-A's claim that minimum surface is structurally better. Flagged below under "Requires decision." |
+
+## Deletion cost (for subsume/replace rows)
+
+- **[workflows/architecture-review.md](../../../workflows/architecture-review.md):** callers = 1 (only [README.md](../../../README.md):29 — Explore §1 verified zero other internal references); data migrations = none; config surface = none; external link risk = unknown (Explore gap §5: no external-link audit performed). Blast radius is a single README line edit + one file deletion.
+- **[README.md](../../../README.md) lines 7–13 ("three subagents" framing):** callers = the README is the front door; the framing is read by every new human reader and by any agentic loop that reads README.md as part of context. Replacement content = a paragraph naming 12 steps, three agent categories (orchestration / retrieval / critique), and the minority-veto panel. No data migration. Config surface = none.
+- **[README.md](../../../README.md) line 29 routing pointer:** callers = same readership as above; replacement is a one-line edit pointing at two existing docs. No migration cost.
+- **`workflows/` directory:** callers = none after the file is deleted; deletion cost is one `rmdir`. Risk: future workflow docs would need to either recreate the directory or live elsewhere — this is a minor decision deferred to whoever ships option (b) or (c).
+
+## Requires decision (conflicts)
+
+- **Implicit "unified workflow doc" primitive vs. option (a) deferral.** Option (a) ships *without* creating a unified human-readable workflow doc and points readers at [CLAUDE.md](../../../CLAUDE.md) (agent-facing) + [.claude/session-artifacts/README.md](../../README.md) (layout-only) instead. The canon-librarian surfaced an unresolved tension (contradictions A vs. B and E vs. F): is collapse-to-canonical the right move, or is a dedicated first-class onboarding artifact required? The outside-view assigned the "deferral actually completed" rate at 20–35% and flagged the absence of a trigger condition. The user has chosen "ship (a) now, defer (b)/(c)" *as a candidate*, but the workflow has not yet ratified that choice — the frame-challenger is explicitly tasked (per frame.md §"Where this lands the workflow") with stress-testing it. **User has not chosen between "minimum is sufficient" and "minimum is partial — bundle (b) or (c) now."** Flag for frame-challenger and synthesis.
+
+## Preserved primitives with stated reason (non-default)
+
+- **[CLAUDE.md](../../../CLAUDE.md):** preserved (relationship: extend, not subsume) because the user's plan explicitly designates it as one of the two re-pointed-to authorities, and because canon-librarian fact #3 (Anthropic on CLAUDE.md as up-front context) names it as the structurally-stable surface. Concrete cost of *not* preserving: would force creation of a parallel workflow doc (option b), which canon-librarian inference #2 and frame.md Alt-A both flag as a drift liability.
+- **[.claude/session-artifacts/README.md](../../README.md):** preserved (relationship: extend) because the plan step 3 explicitly re-points to it for artifact layout, and Explore §9 verified its current content is accurate. Concrete cost of *not* preserving: lose the only correct-and-current layout reference; would have to fold layout into README.md or CLAUDE.md, expanding their charters.
+- **[.claude/agents/](../../../.claude/agents/) (per-agent contracts):** preserved (relationship: extend) because they are the per-agent source of truth and are out of scope for item 4. No user constraint required; option (a) does not touch them.
+
+## Primitives the distillations did not name but the query implies
+
+- **External links / forks pointing at `workflows/architecture-review.md`.** Explore §5 (gap) flagged this was not audited. If any exist, deletion-vs-redirect-stub becomes a live sub-decision inside the replace. The classifier's gap-list (gap #3) named the same.
+- **Any `prompts/` or upgrade-entry references to the singular `critic` agent or three-subagent framing.** Explore §gap-2 and §gap-3 flagged these were not checked. If any exist, the replace's blast radius widens beyond the README.
+- **Any agent definition under [.claude/agents/](../../../.claude/agents/) that internally references the singular `critic`.** Explore §gap-1 flagged this was not checked. If any exist, the replace bleeds into agent-contract edits, which is out of scope for option (a) as currently described.
+- **A potential `CONTRIBUTING.md` / `AGENTS.md` / `docs/`.** Explore §6 confirmed none exist; flagged here only because option (b) or (c) would plausibly create one, which would be a *new* primitive — out of scope for option (a) but on the horizon for the deferred upgrade.
+- **The README's framing voice ("structural compensator for known LLM failure modes").** Plan step 2 says "keep the framing voice; only update the count and shape." This is an editorial constraint on the replace, not a primitive, but worth naming so the generator does not rewrite the voice.

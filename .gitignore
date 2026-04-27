@@ -18,7 +18,6 @@
 
 # ---- Step 3: root-level files ----
 !CLAUDE.md
-!AGENTS.md
 !README.md
 
 # ---- Step 4: .claude/ — agents, commands, session-artifacts, shared settings ----
@@ -82,10 +81,6 @@ upgrades/*
 !plans/
 !plans/**
 
-# ---- Step 9: tests/ — regression tests ----
-!tests/
-!tests/**
-
 # ---- Step 10: workflows/ — workflow templates ----
 !workflows/
 !workflows/**
@@ -93,6 +88,12 @@ upgrades/*
 # ---- Step 11: prompts/ — prompt templates ----
 !prompts/
 !prompts/**
+
+# ---- Step 12: .genesis/ — founding documents (initial-commit material) ----
+# Hidden by .-prefix; not active workflow surface; preserved as historical seed.
+# See .genesis/README.md.
+!.genesis/
+!.genesis/**
 
 # ---- macOS noise: explicit (already covered by Step 1, but explicit for clarity) ----
 .DS_Store

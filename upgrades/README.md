@@ -285,4 +285,4 @@ If using a shape helps you write, mention it in the body or as a tag. The shape 
 - **Not a backlog.** Entries don't have priority fields. The state lifecycle tracks progress, not urgency.
 - **Not a roadmap.** No ordering by sequence. The state of one entry has no relationship to the state of another.
 - **Not the workflow's institutional memory.** Memory has a separate home (`memory/`).
-- **Not a place for routine notes.** A passing thought from a phone call goes in `pages/`. The lab is for thoughts profound enough to deserve a TOC, the seven meta fields, and the state spine.
+- **Not a place for routine notes.** The lab is for thoughts profound enough to deserve a TOC, the seven meta fields, and the state spine.

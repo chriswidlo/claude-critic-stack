@@ -68,7 +68,7 @@ Upgrade #14 ("Hard gates as harness hooks") names this as a future need. Upgrade
 
 ## 7. Upgrade Entry Plan section
 
-(Quoted verbatim — see entry at [`upgrades/no-brainer/2026-04-26-critics-get-write-tool.md`](../../upgrades/no-brainer/2026-04-26-critics-get-write-tool.md), lines 65–79.)
+(Quoted verbatim — see entry at [`upgrades/no-brainer/2026-04-26-critics-get-write-tool/README.md`](../../upgrades/no-brainer/2026-04-26-critics-get-write-tool/README.md), lines 65–79.)
 
 ## 8. Related Upgrade Entries
 
