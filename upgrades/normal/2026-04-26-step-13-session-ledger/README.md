@@ -136,4 +136,4 @@ The ledger schema is unambiguous: definitions for "decision" and "agent call" ar
 
 ## Committed
 
-See commit SHA in the trailing line below once committed (this section is filled in at commit time by the agent that performed the implementation).
+Commit `3ecc59a` on branch `worktree-agent-a3a9d5fb`: *"Land step-13-session-ledger: workflow-cost ledger after synthesis"*. Staged via the per-session changes list at [.claude/session-artifacts/2026-04-27-step13-ledger-impl/changes.md](.claude/session-artifacts/2026-04-27-step13-ledger-impl/changes.md) — concurrent-session work on the same worktree was excluded from staging.
