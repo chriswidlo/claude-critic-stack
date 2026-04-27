@@ -163,9 +163,39 @@ forecasting_and_judgment:
     kind: book
     topics: [calibration, forecasting, judgment]
 
+research_and_innovation:
+  # R&D lab management, innovation portfolio frameworks, and the published-thesis
+  # tradition. Added 2026-04-27 as a new category — load-bearing for the
+  # upgrades/ R&D lab and its graduation gates. See
+  # upgrades/profound/2026-04-27-r-and-d-lab-thesis/ for the entry that
+  # motivated this expansion.
+  - author: "George Heilmeier (DARPA)"
+    title: "The Heilmeier Catechism"
+    year: 1975
+    kind: essay
+    topics: [research-evaluation, proposal-critique, decision-questions, r-and-d-management, frame-challenge]
+    notes: "Eight questions every DARPA program proposal must answer. Scale-invariant: the same questions work for a multi-billion-dollar agency and a one-person lab. Useful as a checklist for frame-challenger and as a verbatim alternative to the upgrades-lab gate criterion 'belongingness in this repo specifically.'"
+
+  - author: "James G. March"
+    title: "Exploration and Exploitation in Organizational Learning"
+    year: 1991
+    kind: paper
+    topics: [organizational-learning, exploration-exploitation, portfolio-management, decision-making, r-and-d-management]
+    notes: "Foundational paper. Establishes the structural finding that adaptive processes refine exploitation faster than exploration and become 'effective in the short run but self-destructive in the long run.' Every R&D portfolio framework — Three Horizons, Stage-Gate, DARPA's program-manager model — exists as counter-pressure against this gradient. Org Science 2(1): 71–87."
+
+  - author: "Anthropic"
+    title: "Core Views on AI Safety: When, Why, What, and How"
+    year: 2023
+    kind: essay
+    topics: [research-thesis, ai-safety, lab-strategy, scenario-portfolio, mission, alignment]
+    notes: "Cleanest contemporary example of a research thesis as published artifact: mission + scenario portfolio (optimistic / intermediate / pessimistic) + research category split + named research directions + method commitment. Useful as canonical reference when drafting the upgrades/ lab's THESIS.md."
+
 # Topics not yet well-covered in this manifest. Candidates for extension:
 # - Frontend architecture (Adam Silver, Kent Dodds, etc.)
 # - Security engineering (Ross Anderson, NIST SSDF)
 # - Data platform / lakehouse (Databricks, Snowflake whitepapers)
 # - AI/ML system design (Chip Huyen, Andrej Karpathy essays)
 # - Organizational: Team Topologies, Accelerate
+# - Further R&D-lab management: Gertner *The Idea Factory* (2012), Cooper Stage-Gate,
+#   Baghai/Coley/White *The Alchemy of Growth* (1999, Three Horizons), Stokes
+#   *Pasteur's Quadrant* (1997). See upgrades entry on deferred library expansion.

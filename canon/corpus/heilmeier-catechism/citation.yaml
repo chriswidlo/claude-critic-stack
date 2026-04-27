@@ -1,0 +1,16 @@
+slug: heilmeier-catechism
+author: "George Heilmeier (DARPA)"
+title: "The Heilmeier Catechism"
+year: 1975
+kind: essay
+topics: [research-evaluation, proposal-critique, decision-questions, r-and-d-management, frame-challenge]
+source_url: "https://www.darpa.mil/about/heilmeier-catechism"
+fetched_at: "2026-04-27T02:39:54.075Z"
+sha256: "b7069e4c0e50921d93e00aefaf2d539cb4ba8d3f0345366e178428745c50bfb6"
+license: "publisher-open-access"
+body_completeness: full
+chapter_offsets: []
+stale: false
+notes: |
+  Fetched by bin/ingest-canon.mjs (html mode).
+  DARPA's official page hosting the eight catechism questions. Government-published, public domain in practice.

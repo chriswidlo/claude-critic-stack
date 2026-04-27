@@ -1,0 +1,15 @@
+slug: anthropic-core-views-on-ai-safety
+author: "Anthropic"
+title: "Core Views on AI Safety: When, Why, What, and How"
+year: 2023
+kind: essay
+topics: [research-thesis, ai-safety, lab-strategy, scenario-portfolio, mission, alignment]
+source_url: "https://www.anthropic.com/news/core-views-on-ai-safety"
+fetched_at: "2026-04-27T02:39:57.514Z"
+sha256: "c525f89069fdfa6471ae4254fe886ad0a869283c0118c8682892f5e9db73b868"
+license: "publisher-published-essay"
+body_completeness: full
+chapter_offsets: []
+stale: false
+notes: |
+  Fetched by bin/ingest-canon.mjs (html mode).

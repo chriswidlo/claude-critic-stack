@@ -90,3 +90,27 @@ sources:
   # existed — a hallucinated citation I (Claude) introduced when seeding this
   # manifest. The entry is gone; if a real paper with this title appears,
   # re-add with the correct arxiv ID. See Phase-2 plan C1 for the audit trail.
+
+  # ---- research_and_innovation (added 2026-04-27) ----
+  - slug: heilmeier-catechism
+    manifest_ref: { author: "George Heilmeier (DARPA)", title: "The Heilmeier Catechism", year: 1975 }
+    url: "https://www.darpa.mil/about/heilmeier-catechism"
+    fetch: html
+    license: "publisher-open-access"
+    topics: [research-evaluation, proposal-critique, decision-questions, r-and-d-management, frame-challenge]
+    notes: "DARPA's official page hosting the eight catechism questions. Government-published, public domain in practice."
+
+  - slug: anthropic-core-views-on-ai-safety
+    manifest_ref: { author: "Anthropic", title: "Core Views on AI Safety: When, Why, What, and How", year: 2023 }
+    url: "https://www.anthropic.com/news/core-views-on-ai-safety"
+    fetch: html
+    license: "publisher-published-essay"
+    topics: [research-thesis, ai-safety, lab-strategy, scenario-portfolio, mission, alignment]
+
+  - slug: march-exploration-exploitation-1991
+    manifest_ref: { author: "James G. March", title: "Exploration and Exploitation in Organizational Learning", year: 1991 }
+    url: "http://www.iot.ntnu.no/innovation/norsi-pims-courses/Levinthal/March%20(1991).pdf"
+    fetch: pdf-manual
+    license: "author-published-open-access"
+    topics: [organizational-learning, exploration-exploitation, portfolio-management, decision-making, r-and-d-management]
+    notes: "Organization Science 2(1): 71–87. PDF distributed via NTNU course mirror; INFORMS canonical version is paywalled. Stays as stub until a curator runs pdftotext + bin/ingest-owned-book.mjs."
