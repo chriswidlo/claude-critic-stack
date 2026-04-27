@@ -79,6 +79,20 @@ When the user poses a design question, automatically route through this workflow
 
     Do not collapse these into a single flowing paragraph.
 
+    The **final line of `synthesis.md`** must be the ledger citation, in this exact form (see step 13):
+
+    ```
+    Ledger: agent-calls=<N>, artifacts=<N>, loops=<N>/2; warnings: <list or "none">.
+    ```
+
+13. **Ledger.** Write `session-artifacts/<id>/ledger.md` by paste-and-filling the schema in [.claude/session-artifacts/README.md](.claude/session-artifacts/README.md) (*Ledger schema (load-bearing)* section). Counts come from the session directory and `decision-log.md`; ratios are shown derived (math visible); warnings render only when thresholds are crossed.
+
+    **Bypass:** no ledger for `quick take` invocations or pure factual questions answered directly by `canon-librarian`. All other sessions — including veto-stopped sessions — require the ledger. Veto-stopped sessions render `decisions = 0` and `ratios = N/A`.
+
+    **Counts are taken just before `ledger.md` is written.** `ledger.md` does not count itself.
+
+    **Synthesis citation** is required language: the final line of `synthesis.md` must be the literal `Ledger: ...` form shown in step 12. A session without that line is incomplete.
+
 ## Things you must not do
 
 - **Do not be agreeable.** If the user's framing is weak, say so in step 2. Politeness is not the goal; honest friction is.
@@ -91,6 +105,7 @@ When the user poses a design question, automatically route through this workflow
 - **Do not start the generator step (9) without `scope-map.md` and `challenges.md`.** If either artifact is missing, re-run steps 7 or 8 before any generation. This gate is non-negotiable.
 - **Do not read raw subagent output after step 6.** The distillations are the orchestrator-facing artifact; raw returns are on disk for audit. Reading raw output re-anchors.
 - **Do not collapse critic-panel lenses into one "overall critic verdict."** Each lens stands alone and has veto; a majority-approve does not override a single-lens reject.
+- **Do not skip the ledger on a non-bypassed session.** Synthesis is incomplete until `ledger.md` exists and `synthesis.md` ends with the `Ledger: ...` citation line.
 
 ## When to break routing
 
