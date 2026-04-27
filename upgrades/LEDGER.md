@@ -13,11 +13,11 @@ This is the single ranked queue across all four tier folders. Entries are ordere
 | **#** | Implementation priority (1 = do first). Re-rank when adding. |
 | **Title** | Linked to the entry file. |
 | **Tier** | 💎 profound · 🚀 outlandish · ✅ no-brainer · 🌿 normal |
-| **State** | 🌱 created · 🔬 spiked · 📋 prepared · ✅ accepted · ⚙️ run-through-repo · 🔨 implemented · 💎 value-proved · 🏁 completed |
+| **State** | 🌱 created · 🔬 spiked · 📋 prepared · ✅ accepted · ⚙️ run-through-repo · 🔨 implemented · 💎 value-proved · 🏁 completed · ⏸️ paused (modifier — applied alongside the highest reached state when an entry is deliberately not advancing pending an external condition; resume conditions live in the entry body) |
 | **Effort** | XS (≤30 min) · S (≤3 h) · M (≤8 h) · L (≤2 d) · XL (weeks–months) |
 | **Implement as** | One-line concrete shape. The entry body has the full plan. |
 
-State emoji `🌱` = not finalised (just captured). Anything past `🌱` = work has begun. Anything `🔨` or beyond = finalised.
+State emoji `🌱` = not finalised (just captured). Anything past `🌱` = work has begun. Anything `🔨` or beyond = finalised. ⏸️ next to a state = entry is paused at that state pending a named condition.
 
 ## How to add a new entry
 
@@ -31,7 +31,7 @@ These either close audit-chain gaps that compromise the stack's value prop, or d
 
 | # | Title | Tier | State | Effort | Implement as |
 |---|---|---|---|---|---|
-| 1 | [Critics get the Write tool](no-brainer/2026-04-26-critics-get-write-tool.md) | ✅ | 🌱 | XS | Add `Write` to three critic frontmatters; one body line each; one CLAUDE.md sentence. |
+| 1 | [Critics get the Write tool](no-brainer/2026-04-26-critics-get-write-tool.md) | ✅ | ⚙️ ⏸️ | XS→? | **Paused 2026-04-27** after run-through-repo: convergent panel veto on the original plan; loop-2 candidate v2-C also reworked. Motive (orchestrator paraphrase loss) has no measured incident on file — frame-challenger named `do nothing` as legitimate null. **Resume when** (a) cheap experiment (4 sessions of manual transcript-vs-file diff) returns a measured paraphrase incident, or (b) [#3](profound/2026-04-26-subagents-claim-writes-not-on-disk.md) lands. Four candidate shapes (v2-A / v2-C / v2-C+ / v2-D) recorded in entry body. |
 | 2 | [`limitations.md` as first-class artifact](no-brainer/2026-04-26-limitations-md-as-first-class-artifact.md) | ✅ | 🌱 | S | New CLAUDE.md "things you must do, in flight" section; per-session `limitations.md` path convention; optional Stop hook. |
 | 3 | [Subagents claim writes not on disk](profound/2026-04-26-subagents-claim-writes-not-on-disk.md) | 💎 | 🌱 | S | `PostToolUse` hook on Agent calls that greps the return for claimed paths and verifies they exist. Pairs with #2. |
 | 4 | [Constitutional layer — GOALS / MODULES / per-module READMEs](no-brainer/2026-04-26-constitutional-layer-goals-modules.md) | ✅ | 🌱 | S | Three docs at root + READMEs per module. The seven-capability taxonomy lives here. |
