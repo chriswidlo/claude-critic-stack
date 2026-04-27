@@ -19,3 +19,8 @@ One line per file touched as the session progresses. Verb is `created` / `modifi
 - created .claude/agents/critic-comparator.md
 - modified CLAUDE.md
 - modified upgrades/profound/2026-04-26-critic-panel-correlated-by-default/README.md
+
+## Commits
+
+- `d89e898` — initial implementation (15 files); commit message references entry slug.
+- follow-up — back-fills the SHA into the entry body so the 🔖 committed regex is satisfied.

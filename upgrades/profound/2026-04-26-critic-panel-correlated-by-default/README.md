@@ -168,7 +168,5 @@ Coherence verification done before commit:
 
 ## Committed
 
-Commit SHA recorded after `git commit` — see [changes.md](.claude/session-artifacts/2026-04-27-shadow-comparator-impl/changes.md) for the full diff scope. The commit message references the slug `2026-04-26-critic-panel-correlated-by-default`.
-
-<!-- Commit SHA appended after commit completes -->
+Commit `d89e898` on the worktree's `main` branch. See [changes.md](.claude/session-artifacts/2026-04-27-shadow-comparator-impl/changes.md) for the full diff scope. The commit message references the slug `2026-04-26-critic-panel-correlated-by-default`. A follow-up amendment records this SHA back into the entry body so the lifecycle's 🔖 committed regex (`\b[a-f0-9]{7,40}\b`) is satisfied on disk.
 
