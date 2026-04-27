@@ -71,7 +71,7 @@ The lab is **deliberately permissive** about *how* an idea is captured. Discipli
 - **Any length.** A paragraph is fine. Thirty pages is fine. The idea decides.
 - **Any body shape.** Prose, tables, mermaid diagrams, ASCII art, lists, fenced code-for-illustration, embedded images, transcripts, multi-perspective debates, raw thinking. Mix and match. Use what serves the idea.
 - **Any content type.** Observations, manifestos, half-baked sketches, fully-formed designs, speculative fiction about the system's future, retrospective notes about why something failed, questions answered by future entries, contradictions left unresolved.
-- **Folder-shaped entries.** When a single `.md` isn't enough — when an idea wants supporting data, draft notes, example outputs, screenshots, transcripts, working files — promote the entry to a folder named with the entry's slug. The canonical entry doc lives inside as `<slug>.md`. (Mechanics still being settled — see open lab entries on folder migration.)
+- **Folder-shaped entries (the canonical shape).** Every entry is a folder named with its slug; the canonical doc inside is `README.md`. Supporting artifacts (transcripts, prototypes, sample outputs, draft notes, working files, sub-folders) live alongside — the entry's `README.md` documents what's there. The folder is yours to organize.
 - **Wrong, half-baked, speculative, theoretical, embarrassing.** All welcome. Mark wrongness in prose at the top when it surfaces; the entry stays as historical record.
 - **Creativity, vision, exploration, novelty.** The lab's purpose. If an idea would feel awkward in a Jira ticket but you'd defend it over a beer, it belongs here.
 
@@ -176,19 +176,19 @@ Optional rows (append when they help):
 | 🔗 **relates_to** | <slug>, <slug> |
 ```
 
-**State table** — eight states, all listed, horizontal (states as columns, single date row underneath):
+**State table** — ten states, all listed, horizontal (states as columns, single date row underneath):
 
 ```markdown
-| 🌱 created | 🔬 spiked | 📋 prepared | ✅ accepted | ⚙️ run-through-repo | 🔨 implemented | 💎 value-proved | 🏁 completed |
-|---|---|---|---|---|---|---|---|
-| YYYY-MM-DD | — | — | — | — | — | — | — |
+| 🌱 created | 🔬 spiked | 📋 prepared | ✅ accepted | ⚙️ run-through-repo | 🔨 implemented | 🩺 verified | 🔖 committed | 💎 value-proved | 🏁 completed |
+|---|---|---|---|---|---|---|---|---|---|
+| YYYY-MM-DD | — | — | — | — | — | — | — | — | — |
 ```
 
 The current state is the **rightmost filled-in column**. Un-reached states show em-dash (`—`). The visual progression reads left-to-right: filled cells are reached states, em-dashes are not yet. You can see from across the room how far along an entry is.
 
 ## The state lifecycle
 
-Eight states, each with a color that resembles the state. Most entries never reach `completed`; that's fine. Some entries stop at `created` and stay there; that's also fine. The lifecycle is a *spine* the entry can climb, not a *requirement* it must fulfill.
+Ten states, each with a color that resembles the state. Most entries never reach `completed`; that's fine. Some entries stop at `created` and stay there; that's also fine. The lifecycle is a *spine* the entry can climb, not a *requirement* it must fulfill.
 
 | Color | State | Meaning |
 |---|---|---|
@@ -197,9 +197,22 @@ Eight states, each with a color that resembles the state. Most entries never rea
 | 📋 | **prepared** | Detailed enough that next steps are clear. Ready to be acted on or formally proposed. |
 | ✅ | **accepted** | Operator has agreed: this is worth pursuing. |
 | ⚙️ | **run-through-repo** | The idea was put through the 12-step adversarial-review workflow as a design question. |
-| 🔨 | **implemented** | The change is live in the repo (commits, agent updates, schema changes — whatever it took). |
+| 🔨 | **implemented** | The work is done — code edits, agent updates, schema changes complete in the working tree. Not yet verified globally, not yet in git. |
+| 🩺 | **verified** | The implementation has been globally checked: no broken refs, no stale paths, no doc-implementation drift, no contradictions with sibling artifacts. Coherence verified before commit. |
+| 🔖 | **committed** | The implementation is in git: commit SHA(s) recorded in entry body or `committed_in:` meta field; commit message references the entry's slug; the agent's per-session change list (see [Per-session change tracking](#per-session-change-tracking) below) was scoped to own-session work only. |
 | 💎 | **value-proved** | The implementation has demonstrated value in real sessions. Not just shipped — *worked*. |
 | 🏁 | **completed** | Closed. No more action expected. The entry stays as historical record. |
+
+### Per-session change tracking
+
+Before advancing to 🔖 committed, the session that performed the implementation maintains an explicit running list at `.claude/session-artifacts/<id>/changes.md`. One line per file touched: `<verb> <path>` where verb is `created` / `modified` / `renamed` / `deleted`. Updated by the agent as it works — not at the end. Reasons:
+
+- **File-based, not memory-based** — context can be cleared, compacted, or rerouted; a list that lives only in conversation context vanishes mid-work.
+- **Auditable** — the list can be diffed against `git status` to verify "I claim I touched these paths; let's see if reality agrees."
+- **Hookable** — a `PreToolUse` or `PostToolUse` hook can append to it automatically when files are written.
+- **Scopes `git add`** — the discipline at 🔖 committed is `git add` only paths from this list. Never `git add -A` or `git add .`. This prevents accidentally committing concurrent-session work.
+
+The convention is named here as part of the lab's lifecycle. It naturally extends to any session that commits, not just lab-modifying sessions; promotion to a workflow-wide CLAUDE.md instruction is a separate future entry.
 
 A state is reached by editing the table to fill in the date. There is no automation; it's a manual act of "yes, this happened." If a state is reached out of order (e.g., `implemented` before `accepted` because the operator just did it), fill in both dates honestly — the lifecycle is descriptive, not prescriptive.
 
@@ -209,7 +222,7 @@ If an idea turns out to be wrong or no longer worth pursuing, mark this in prose
 
 The (forthcoming) `/upgrade advance` subcommand reads this table to know what to check before suggesting advancement to a new state. Each row names one state; the regex is a tolerant pattern matched (case-insensitive, multiline) against the entry body. The check is **advisory, not blocking** — the lifecycle remains descriptive (manual edit always allowed). False positives are friction; false negatives are corruption — patterns intentionally lean tolerant.
 
-<!-- machine-read by the upgrade-transition gate (see upgrades/normal/2026-04-26-format-only-state-transition-gate.md). do not change column count or order. -->
+<!-- machine-read by the upgrade-transition gate (see upgrades/normal/2026-04-26-format-only-state-transition-gate/README.md). do not change column count or order. -->
 
 | State | Required body element | Regex |
 |---|---|---|
@@ -217,7 +230,9 @@ The (forthcoming) `/upgrade advance` subcommand reads this table to know what to
 | 📋 prepared | A heading naming the plan (e.g. `## Plan`, `## Next steps`, `## Implementation plan`). | `^#+\s+.*(plan\|next steps\|implementation)` |
 | ✅ accepted | A line stating "accepted by" with a date. | `accepted by.*\d{4}-\d{2}-\d{2}` |
 | ⚙️ run-through-repo | A session-id reference (matching `YYYY-MM-DD-slug`). | `\d{4}-\d{2}-\d{2}-[a-z0-9-]+` |
-| 🔨 implemented | A git short-SHA in the body OR an `implemented_by:` row in the meta table. | `\b[a-f0-9]{7,40}\b\|implemented_by:` |
+| 🔨 implemented | A heading naming the implementation work (e.g. `## Implementation`, `## Implemented`, `## What was done`). | `^#+\s+.*(implementation\|implemented\|what was done\|what changed)` |
+| 🩺 verified | A heading naming the verification (e.g. `## Verified`, `## Pre-commit review`, `## Coherence check`, `## Global review`). | `^#+\s+.*(verified\|verification\|pre-commit review\|coherence check\|global review)` |
+| 🔖 committed | A git short-SHA in the body OR a `committed_in:` row in the meta table. | `\b[a-f0-9]{7,40}\b\|committed_in:` |
 | 💎 value-proved | A heading naming the evidence (e.g. `## Value evidence`, `## Outcome`, `## Demonstrated`). | `^#+\s+.*(value (proved\|evidence)\|outcome\|demonstrated)` |
 | 🏁 completed | A heading naming closure (e.g. `## Closure`, `## Closed`, `## Completed`). | `^#+\s+.*(closure\|closed\|completed)` |
 
@@ -226,11 +241,13 @@ This table is the single source of truth for the gate's checks. To change what a
 ## How to add an entry
 
 1. Pick the tier using the decision rule.
-2. Create `upgrades/<tier>/<YYYY-MM-DD>-<short-kebab-slug>.md`. Create the subfolder if it doesn't exist.
-3. Add H1 title, meta table, state table (with `created` filled in), TOC, body.
+2. Create `upgrades/<tier>/<YYYY-MM-DD>-<short-kebab-slug>/README.md`. The entry is a folder named with the slug; the canonical doc inside is `README.md`. Create the tier subfolder if it doesn't exist.
+3. Add H1 title, meta table, state table (with `created` filled in), TOC, body to that `README.md`.
 4. Commit.
 
 That's it. No INDEX to update, no lint to run, no schema to ratify, no review to schedule.
+
+**Why folder + README.md.** Every entry is a folder so it has room to grow supporting artifacts (transcripts, prototypes, sample outputs, draft notes — see [Principles](#principles--encourage-freedom-mind-only-security)). The doc inside is named `README.md` so GitHub auto-renders it when the folder is opened on the web, and so `find` / autocomplete behave predictably. Other files in the entry's folder are supporting material, organized however the entry decides — the entry's `README.md` documents what's there.
 
 ## The `/upgrade` slash command
 

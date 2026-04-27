@@ -10,7 +10,7 @@
 | 💡 **essence** | The state lifecycle was designed for entries that mature *over time* — a 🔬 spiked done in week 1, a 📋 prepared in week 3, a 🔨 implemented in week 8. When all transitions happen in one session, the state column compresses time-spread events into a single date and loses the signal it was supposed to carry ("how long has this idea been brewing"). The discipline question: should rapid same-session transitions be marked differently? Or should the state table be supplemented with something that preserves temporal structure? |
 | 🚀 **upgrade** | The state column regains its signal when entries mature genuinely over time. The lab gains a vocabulary for "this entry advanced rapidly through states because the work was done in one session" vs "this entry has been on a multi-month journey." Without this discipline, every entry will end up looking like every other entry once the dates are filled — the visual progression flattens. |
 | 🏷️ **tags** | lab, lifecycle, state-table, honesty, time-compression |
-| 🔗 **relates_to** | normal/2026-04-26-format-only-state-transition-gate, profound/2026-04-26-workflow-overdesigns-when-told-to-underdesign |
+| 🔗 **relates_to** | 2026-04-26-format-only-state-transition-gate, 2026-04-26-workflow-overdesigns-when-told-to-underdesign |
 
 | 🌱 created | 🔬 spiked | 📋 prepared | ✅ accepted | ⚙️ run-through-repo | 🔨 implemented | 💎 value-proved | 🏁 completed |
 |---|---|---|---|---|---|---|---|

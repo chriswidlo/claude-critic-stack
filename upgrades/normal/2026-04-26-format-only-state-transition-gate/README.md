@@ -10,7 +10,7 @@
 | 💡 **essence** | A **format-only, warning-only** validator invoked at advancement time as a subcommand of `/upgrade`. Reads its schema from a table in `upgrades/README.md` (single source of truth), checks the entry body for the required regex element of the requested new state, and prints a one-screen line-cited report. It does **not** evaluate idea quality, context, or judgment. It does **not** block the advancement — the lab's lifecycle remains descriptive, and manual editing of the state table is always allowed. The warning's only job is to name what's missing at the moment the operator (or AI) is paying attention to the entry. |
 | 🚀 **upgrade** | False advancement (claiming `🔨 implemented` against an entry with no commit reference) becomes visible at the moment of advancement, not weeks later. AI agents handling upgrades get a deterministic, opt-in surface that says "this is what the lab's lifecycle expects for state X." Format consistency emerges from the warning being specific (regex + suggested heading text) rather than from enforcement. **Fails to safe:** if the gate is ignored or never invoked, the lab continues exactly as it does today. |
 | 🏷️ **tags** | lab, lifecycle, gate, format-validation, drift-prevention |
-| 🔗 **relates_to** | profound/2026-04-26-subagents-claim-writes-not-on-disk |
+| 🔗 **relates_to** | 2026-04-26-subagents-claim-writes-not-on-disk |
 
 | 🌱 created | 🔬 spiked | 📋 prepared | ✅ accepted | ⚙️ run-through-repo | 🔨 implemented | 💎 value-proved | 🏁 completed |
 |---|---|---|---|---|---|---|---|

@@ -10,7 +10,7 @@
 | 💡 **essence** | Adopt a single visible convention for marking README sections that document a contract whose enforcement does not yet exist. A short blockquote at the top of the section: `> **Draft contract — gate not yet productionized. See [<entry>](path).**` Generalizes to any future "we're committing to this convention before the tool exists" surface. |
 | 🚀 **upgrade** | Readers (operator, AI agents, future-self) see at a glance which README sections describe shipping behavior versus which describe intended-but-not-yet-enforced behavior. The lab gains a vocabulary for "this is what we want to be true" vs "this is what is true today" without requiring the tool to ship before the contract is documented. |
 | 🏷️ **tags** | readme, conventions, documentation, draft-state, lab-hygiene |
-| 🔗 **relates_to** | normal/2026-04-26-format-only-state-transition-gate |
+| 🔗 **relates_to** | 2026-04-26-format-only-state-transition-gate |
 
 | 🌱 created | 🔬 spiked | 📋 prepared | ✅ accepted | ⚙️ run-through-repo | 🔨 implemented | 💎 value-proved | 🏁 completed |
 |---|---|---|---|---|---|---|---|

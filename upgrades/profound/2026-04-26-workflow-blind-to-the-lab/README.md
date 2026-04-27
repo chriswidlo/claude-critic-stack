@@ -10,7 +10,7 @@
 | 💡 **essence** | CLAUDE.md treats the orchestrator's only outputs as session-artifacts. But sessions also generate ideas about the workflow itself — exactly what the lab exists to catch. The orchestrator has no instruction to recognize lab-shaped utterances ("submit as upgrade", "we should add", "the workflow could", "I noticed"), no pointer to `upgrades/README.md`, no concept that the lab is a peer-named persistent surface alongside `canon/`, `session-artifacts/`, and `memory/`. The lab sits *beside* the workflow rather than *connected to* it. |
 | 🚀 **upgrade** | The workflow becomes a *generator* of lab entries rather than a parallel system. Lab-shaped signal stops evaporating between sessions. The operator's conversational submission ("submit as upgrade") routes to the same disciplined capture as explicit `/upgrade` invocation. The seeing is profound; the implementation is no-brainer (3–5 sentences in CLAUDE.md). |
 | 🏷️ **tags** | claude-md, lab, workflow, orchestrator, mental-model, persistent-surfaces, architectural-gap |
-| 🔗 **relates_to** | profound/2026-04-26-memory-and-lab-are-the-same-primitive, no-brainer/2026-04-26-rnd-lab |
+| 🔗 **relates_to** | 2026-04-26-memory-and-lab-are-the-same-primitive, 2026-04-26-rnd-lab |
 
 | 🌱 created | 🔬 spiked | 📋 prepared | ✅ accepted | ⚙️ run-through-repo | 🔨 implemented | 💎 value-proved | 🏁 completed |
 |---|---|---|---|---|---|---|---|

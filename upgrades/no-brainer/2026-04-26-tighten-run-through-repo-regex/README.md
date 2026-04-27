@@ -10,7 +10,7 @@
 | 💡 **essence** | The regex should not just match a session-id-shaped string; it should require the matched string to correspond to a real `.claude/session-artifacts/<slug>/` directory. The check is a cheap shell call (the existence of a directory). Honest semantics: `⚙️ run-through-repo` literally means "this entry was put through the workflow, and the workflow's session artifacts are on disk." |
 | 🚀 **upgrade** | Closes the most concrete false-positive surfaced in the spike. Eliminates the class of failure where `relates_to:` cross-references to other entries' session ids accidentally pass the gate. Makes `⚙️ run-through-repo` semantically anchored to a filesystem fact, not a regex match. |
 | 🏷️ **tags** | gate, regex, false-positive, schema, run-through-repo |
-| 🔗 **relates_to** | normal/2026-04-26-format-only-state-transition-gate |
+| 🔗 **relates_to** | 2026-04-26-format-only-state-transition-gate |
 
 | 🌱 created | 🔬 spiked | 📋 prepared | ✅ accepted | ⚙️ run-through-repo | 🔨 implemented | 💎 value-proved | 🏁 completed |
 |---|---|---|---|---|---|---|---|

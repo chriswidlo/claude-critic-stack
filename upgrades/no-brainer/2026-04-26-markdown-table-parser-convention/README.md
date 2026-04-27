@@ -10,7 +10,7 @@
 | 💡 **essence** | Any script in this repo that parses markdown tables must split on `(?<!\\)\|` (negative lookbehind: pipe not preceded by backslash), then `replace(r"\|", "|")` to restore literal pipes inside cells. This is a five-line pattern that should land in any future repo script + a one-paragraph note in whichever doc captures repo scripting conventions (`GIT.md`? `MODULES.md`? open question). |
 | 🚀 **upgrade** | The next script-writer doesn't repeat the bug. The lab's convention of putting regexes (which contain `|` for alternation) inside markdown tables remains viable — without the convention, every script-writer has to rediscover that `\|` escapes break naive parsers, debug it, fix it, and probably break a different way. |
 | 🏷️ **tags** | scripting, markdown, parsing, conventions, lab-hygiene |
-| 🔗 **relates_to** | normal/2026-04-26-format-only-state-transition-gate |
+| 🔗 **relates_to** | 2026-04-26-format-only-state-transition-gate |
 
 | 🌱 created | 🔬 spiked | 📋 prepared | ✅ accepted | ⚙️ run-through-repo | 🔨 implemented | 💎 value-proved | 🏁 completed |
 |---|---|---|---|---|---|---|---|

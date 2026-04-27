@@ -26,7 +26,8 @@ README = REPO / "upgrades" / "README.md"
 
 STATES = [
     "🌱 created", "🔬 spiked", "📋 prepared", "✅ accepted",
-    "⚙️ run-through-repo", "🔨 implemented", "💎 value-proved", "🏁 completed",
+    "⚙️ run-through-repo", "🔨 implemented", "🩺 verified", "🔖 committed",
+    "💎 value-proved", "🏁 completed",
 ]
 
 
@@ -61,7 +62,12 @@ def find_current_state(entry_text: str):
         if "🌱 created" in line and "🏁 completed" in line and i + 2 < len(lines):
             date_row = lines[i + 2]
             cells = [c.strip() for c in date_row.split("|")[1:-1]]
-            if len(cells) == len(STATES):
+            # Accept any cell count up to len(STATES). Backward-compatible with
+            # entries written before lifecycle additions (8-column tables) AND
+            # forward-compatible with new entries (10-column tables). zip()
+            # truncates to the shorter sequence; canonical state ordering is
+            # preserved so first-N states always align with first-N cells.
+            if 1 <= len(cells) <= len(STATES):
                 rightmost = "🌱 created"
                 for state, cell in zip(STATES, cells):
                     if cell and cell != "—":

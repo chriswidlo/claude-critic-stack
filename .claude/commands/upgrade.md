@@ -11,7 +11,7 @@ The user's input: $ARGUMENTS
 
 ## Your task
 
-1. **Read the lab spec.** Read `upgrades/README.md` for the tier definitions, required format, meta table fields, and state lifecycle. Read `upgrades/no-brainer/2026-04-26-rnd-lab.md` for the canonical example of a well-formed entry.
+1. **Read the lab spec.** Read `upgrades/README.md` for the tier definitions, required format, meta table fields, and state lifecycle. Read `upgrades/no-brainer/2026-04-26-rnd-lab/README.md` for the canonical example of a well-formed entry.
 
 2. **Decide the tier.** Use the decision rule:
    - 💎 **profound** — revolutionary insight, would fundamentally change the system, novel
@@ -29,28 +29,21 @@ The user's input: $ARGUMENTS
    - `essence` — the punchline. What's profound, novel, or valuable about this idea, in 1–2 sentences.
    - `upgrade` — how this elevates the AI system in this repo, in 1–2 sentences.
 
-4. **Pick a slug.** Format: `<YYYY-MM-DD>-<short-kebab-slug>`. The slug should be 2–5 words capturing the entry's identity. Filename will be `<slug>.md`.
+4. **Pick a slug.** Format: `<YYYY-MM-DD>-<short-kebab-slug>`. The slug should be 2–5 words capturing the entry's identity. The slug becomes the entry's folder name; the doc inside is named `README.md`.
 
-5. **Generate the state table.** All eight states listed; only `🌱 created` has a date (today); all others show `—`:
+5. **Generate the state table.** All ten states listed horizontally as columns, with a single date row underneath; only `🌱 created` has a date (today); all others show `—`:
 
    ```markdown
-   | State | Reached |
-   |---|---|
-   | 🌱 created | YYYY-MM-DD |
-   | 🔬 spiked | — |
-   | 📋 prepared | — |
-   | ✅ accepted | — |
-   | ⚙️ run-through-repo | — |
-   | 🔨 implemented | — |
-   | 💎 value-proved | — |
-   | 🏁 completed | — |
+   | 🌱 created | 🔬 spiked | 📋 prepared | ✅ accepted | ⚙️ run-through-repo | 🔨 implemented | 🩺 verified | 🔖 committed | 💎 value-proved | 🏁 completed |
+   |---|---|---|---|---|---|---|---|---|---|
+   | YYYY-MM-DD | — | — | — | — | — | — | — | — | — |
    ```
 
 6. **Generate a TOC.** Even short entries get one. The TOC names the sections, which forces the entry to be structured enough to be re-read.
 
 7. **Write the entry body.** Beautifully written prose. Real sentences, not bullet outlines. Tables, mermaid diagrams, ASCII diagrams, or emoji-color when they genuinely help. Honest about confidence — hedge in words, not in structure. Length is whatever the idea earns.
 
-8. **Write the file.** Create `upgrades/<tier>/<slug>.md`. Create the tier subfolder if it doesn't exist.
+8. **Write the file.** Create `upgrades/<tier>/<slug>/README.md`. The entry is a folder named with the slug; the canonical doc inside is `README.md`. Create the tier subfolder and the entry folder if they don't exist.
 
 9. **Report back.** Tell the user: the path written, the tier chosen (and why if non-obvious), the title, and one-sentence essence. Keep this under 100 words.
 
@@ -73,9 +66,9 @@ Every entry must follow this exact skeleton, in this exact order:
 
 (Append optional rows 🏷️ **tags** and/or 🔗 **relates_to** below the meta table when they help.)
 
-| 🌱 created | 🔬 spiked | 📋 prepared | ✅ accepted | ⚙️ run-through-repo | 🔨 implemented | 💎 value-proved | 🏁 completed |
-|---|---|---|---|---|---|---|---|
-| YYYY-MM-DD | — | — | — | — | — | — | — |
+| 🌱 created | 🔬 spiked | 📋 prepared | ✅ accepted | ⚙️ run-through-repo | 🔨 implemented | 🩺 verified | 🔖 committed | 💎 value-proved | 🏁 completed |
+|---|---|---|---|---|---|---|---|---|---|
+| YYYY-MM-DD | — | — | — | — | — | — | — | — | — |
 
 ## Table of contents
 
@@ -97,10 +90,10 @@ Every entry must follow this exact skeleton, in this exact order:
 - **Do not invoke other agents.** This is a one-shot capture, not a workflow. Read the spec, format, write, report.
 - **Do not over-engineer the entry.** Match length to input depth. If the operator wanted a 5,000-word position paper, they would have written it themselves.
 - **Do not use YAML frontmatter.** The lab uses visible markdown tables. Do not prepend a `---` block.
-- **Do not invent additional state values.** The eight states are fixed: `created`, `spiked`, `prepared`, `accepted`, `run-through-repo`, `implemented`, `value-proved`, `completed`. New entries always start at `created` only.
+- **Do not invent additional state values.** The ten states are fixed: `created`, `spiked`, `prepared`, `accepted`, `run-through-repo`, `implemented`, `verified`, `committed`, `value-proved`, `completed`. New entries always start at `created` only.
 - **Do not skip the TOC** even for short entries. Three sections is fine; zero sections is not.
 - **Do not file in the wrong tier just because it's the easier folder.** If the entry is genuinely profound, file it as profound.
-- **Do not write the entry to anywhere other than `upgrades/<tier>/`.** Not to session-artifacts, not to memory, not to canon. The lab is the lab.
+- **Do not write the entry to anywhere other than `upgrades/<tier>/<slug>/README.md`.** Not to session-artifacts, not to memory, not to canon. The lab is the lab. Folder shape is the canonical convention; do not write flat `<slug>.md` files.
 
 ## When the input is ambiguous
 
