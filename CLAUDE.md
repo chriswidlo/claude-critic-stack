@@ -6,18 +6,20 @@ Your input is a *design question*, *proposed decision*, or *architecture sketch*
 
 ## Path discipline (privacy + clarity) — non-negotiable
 
-**NEVER** write absolute filesystem paths or `~/`-prefixed paths in **any** artifact in this repo — not in CLAUDE.md, AGENTS.md, README.md, agents, prompts, workflows, upgrades, session artifacts, plans, temporary notes, anywhere. This applies to prose, code blocks, agent outputs, and quoted material.
+**NEVER** write absolute filesystem paths or `~/`-prefixed paths in **any** artifact in this repo — not in CLAUDE.md, README.md, agents, prompts, workflows, upgrades, session artifacts, plans, temporary notes, anywhere. This applies to prose, code blocks, agent outputs, and quoted material.
 
 - **Inside-repo references** must be **repo-root-relative** and formatted as Markdown links with a meaningful display name. Example: `[requirement.md](.claude/session-artifacts/<id>/requirement.md)` — never bare paths, never absolute paths, never `~/`-paths.
 - **Outside-repo references** (e.g., a user's global `CLAUDE.md`, global agents, settings) must be described in prose, not as paths. Refer to "the global `CLAUDE.md`" or "the user's Claude Code global config" — name the *file*, not its on-disk location.
 - **If an outside-repo file is needed for analysis in this repo:** copy its contents into the repo with the user's **explicit consent**, then reference the copy as a repo-relative link. Never link out of the repo.
 - **The user's session may have read access outside the repo** — that is the user's choice. The agent's choice is to never *quote*, *record*, or *link to* an outside path inside repo artifacts.
 
-Apply this rule to new artifacts and apply it retroactively when editing existing ones. Reasons: (a) prevents leaking machine-specific paths and usernames into committed history; (b) keeps artifacts portable across machines and forks; (c) keeps internal references clickable from any clone; (d) maintains a clear consent boundary on what enters the repo.
+Apply this rule to new artifacts and apply it retroactively when editing existing ones. Reasons: (a) prevents leaking machine-specific paths and usernames into committed history; (b) keeps artifacts portable across machines and forks; (c) keeps internal references stable across moves, grep-discoverable as a single canonical token, and unambiguous to scripts and AI tools (`Read`, `grep`, `git log <path>`) running with CWD at repo root — trade-off: links of this form do not click-navigate from subdir files in markdown viewers, so navigation is via file tree, grep, or `Cmd-P`; (d) maintains a clear consent boundary on what enters the repo.
+
+**Example session ids in this file and in [`.claude/session-artifacts/README.md`](.claude/session-artifacts/README.md) must reference real on-disk session-artifact directories.** Fabricated example slugs are a documentation defect — a reader following the example reaches a dead end and the two docs drift out of sync. When the cited example session is deleted or superseded, update both citations to a current real session.
 
 ## Default behavior (12-step workflow)
 
-When the user poses a design question, automatically route through this workflow. Every step produces a small, named artifact under `.claude/session-artifacts/<session-id>/`. Assign the session id on step 1 (date + short slug derived from the question, e.g. `2026-04-24-ark-mono-connector-routing`).
+When the user poses a design question, automatically route through this workflow. Every step produces a small, named artifact under `.claude/session-artifacts/<session-id>/`. Assign the session id on step 1 (date + short slug derived from the question, e.g. `2026-04-26-format-only-state-transition-gate`).
 
 1. **Classification.** Invoke `requirement-classifier`. Writes `requirement.md`. Do not proceed until the primary label, default frame, frame bias, and alternative classification are on disk.
 
@@ -45,6 +47,18 @@ When the user poses a design question, automatically route through this workflow
 
     Aggregate verdicts into `critiques.md`. **Minority-veto:** if any lens returns `rework` or `reject`, proceed to step 11. Only if all three return `approve` may you skip to step 12. Each lens must produce at least one frame-level objection in addition to its lens-specific critique.
 
+    **Optional triangulation meta-lens (`SHADOW_PANEL=1`).** When the env var `SHADOW_PANEL` is set to `1` for a session, the panel becomes "three lenses + optional triangulation meta-lens" rather than three lenses alone. The orchestrator's parallel batch grows to *six* lens invocations:
+    - `critic-architecture` (Opus, writes `critiques/architecture.md`)
+    - `critic-operations` (Opus, writes `critiques/operations.md`)
+    - `critic-product` (Opus, writes `critiques/product.md`)
+    - `critic-architecture-shadow` (Sonnet, writes `critiques/architecture.shadow.md`)
+    - `critic-operations-shadow` (Sonnet, writes `critiques/operations.shadow.md`)
+    - `critic-product-shadow` (Sonnet, writes `critiques/product.shadow.md`)
+
+    After all six have written, invoke `critic-comparator` once. It reads both lanes per lens and emits `critiques/<lens>.comparison.md`. The comparator does not vote on the candidate — it only reports an agreement class (`agree | partial-agree | disagree | unavailable`) per lens. The Opus lane retains verdict authority; the shadow has voice, not vote. Disagreement is *triangulation signal*, never a verdict change. Default off; opt-in for high-stakes decisions where the cost of correlated review error exceeds the doubled per-lens spend.
+
+    A second env var, `EXTERNAL_SHADOW=1`, is *reserved* for cross-family shadowing (OpenRouter / local Ollama). It is currently inert — the wrapper script primitive needed to invoke external models from inside an Agent run is not yet implemented. TODO: see [upgrades/profound/2026-04-26-critic-panel-correlated-by-default/README.md](upgrades/profound/2026-04-26-critic-panel-correlated-by-default/README.md) for the deferred work.
+
 11. **Replan-vs-rewrite decision.** If step 10 issued a veto:
     - **Rewrite** if the veto is design-level (a lens's weakest-link or invariants-at-risk section is specific and actionable). Return to step 9 with the lens's objections in hand. Do not defend — rewrite.
     - **Replan** if the veto is frame-level (a lens produced a frame objection that undermines the whole candidate). Return to step 7 (re-run scope-mapper under the new frame) or step 8 (re-run frame-challenger). Append a new `## Revision N` block to `frame.md`.
@@ -59,6 +73,7 @@ When the user poses a design question, automatically route through this workflow
     - The scope-map summary and any unresolved conflicts.
     - The frame-level challenge and how the final recommendation addresses it.
     - Your **post-critique** recommendation, explicitly labeled.
+    - **Triangulation signal** — only present when `SHADOW_PANEL=1` ran. A separate bullet (never folded into the verdict line) summarizing per-lens agreement class from `critiques/<lens>.comparison.md`. If `agree` on all three, the bullet says "shadow concurs across all lenses." If any lens is `partial-agree` or `disagree`, name the lens and the dimension of difference.
     - At least three named uncertainties.
     - The cheapest experiment that would reduce the biggest uncertainty.
 
@@ -94,6 +109,8 @@ If the user asks a *factual* question ("what does the CAP theorem say") rather t
 - `scope-mapper` — tabulates existing primitives against the new requirement (subsume / replace / extend / conflict); default is subsume or replace.
 - `frame-challenger` — devil's advocate on the frame, pre-generator.
 - `critic-architecture`, `critic-operations`, `critic-product` — three-lens critic panel; minority-veto. Replaces the old single `critic` agent.
+- `critic-architecture-shadow`, `critic-operations-shadow`, `critic-product-shadow` — Sonnet-pinned shadow lanes; run only when `SHADOW_PANEL=1`. Voice, not vote.
+- `critic-comparator` — triangulation meta-lens; runs after both lanes when `SHADOW_PANEL=1`. Emits per-lens agreement class (`agree | partial-agree | disagree | unavailable`). Does not vote on the candidate.
 - `canon-refresher` — proposes new corpus entries from RSS feeds; never writes to corpus. Manual invocation or Routines-scheduled.
 
 All live under `.claude/agents/`. Invoke via the Agent tool.
