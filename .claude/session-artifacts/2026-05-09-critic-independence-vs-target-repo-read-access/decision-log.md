@@ -1,0 +1,5 @@
+# Decision log
+
+Step 10 verdict (loop 1) was architecture = rework, operations = rework, product = rework (unanimous). Architecture and product issued frame-level objections; operations issued a design-level objection convergent with both frames. Routing to step 9 (rewrite, not replan): the frame-level objection is "the candidate picks the architecturally weakest of three positions" — addressable by picking a different position rather than re-running scope-mapper. Loop count after rewrite: 1/2.
+
+Step 10 verdict (loop 2) was architecture = approve-with-residual, operations = approve, product = approve. Architecture residual: move 3's mechanism upgrade entry should include "(d) remove minority-veto, accept role-orthogonality as the only claim" as a fourth designed-but-not-chosen alternative; synthesis names this as a carry-forward. Product approve is conditional on synthesis naming the deferral as a deferral — not as a closed answer. Both conditions tracked in synthesis.md. Loop count: 2/2 cap reached; proceeding to step 12.
