@@ -21,6 +21,15 @@ Apply this rule to new artifacts and apply it retroactively when editing existin
 
 When the user poses a design question, automatically route through this workflow. Every step produces a small, named artifact under `.claude/session-artifacts/<session-id>/`. Assign the session id on step 1 (date + short slug derived from the question, e.g. `2026-04-26-format-only-state-transition-gate`).
 
+**Diagnostics handoff (one-time, at step 1).** When you assign the session id, also write it for the diagnostics pipeline so end-of-session metrics route into the correct workflow-session dir. Run this once, silently:
+
+```bash
+SID=$(cat .claude/.metrics/current-session-uuid 2>/dev/null)
+[ -n "$SID" ] && echo "<assigned-session-id>" > ".claude/.metrics/staging/$SID/workflow-id.txt"
+```
+
+The hooks under [`.claude/hooks/`](.claude/hooks/) handle the rest — capturing tool events, end timestamp, and on stop, moving metrics into [`diagnostics/`](.claude/session-artifacts/) under the workflow session dir. Silent, AI-blind otherwise.
+
 1. **Classification.** Invoke `requirement-classifier`. Writes `requirement.md`. Do not proceed until the primary label, default frame, frame bias, and alternative classification are on disk.
 
 2. **Reframe-before-answer.** *You* (the orchestrator) restate the question in at least one framing the user did not use, biased by the classifier's default frame but not bound by it. Write `frame.md` with a `## Revision 1` block. Name what the user is implicitly optimizing for and one alternative optimization. Do not answer yet.

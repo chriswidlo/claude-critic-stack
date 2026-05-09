@@ -35,8 +35,17 @@
 !.claude/agents/**
 !.claude/commands/
 !.claude/commands/**
+!.claude/skills/
+!.claude/skills/**
+!.claude/hooks/
+!.claude/hooks/**
 !.claude/session-artifacts/
 !.claude/session-artifacts/**
+# Per-session local-only files (e.g. absolute target-repo path written by `critique-prep`).
+# Re-ignored after the broad allow above — committed artifacts must never contain
+# absolute paths (path discipline per CLAUDE.md). The .local/ subdir is the only
+# place an absolute path is allowed to live, and only on the operator's machine.
+.claude/session-artifacts/*/.local/
 !.claude/settings.json
 # .claude/settings.local.json deliberately NOT allowed (per-developer override
 # — domain allowlist, Bash permissions, etc.). The shared settings.json IS tracked.

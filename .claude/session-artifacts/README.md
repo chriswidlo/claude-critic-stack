@@ -17,7 +17,12 @@ session:
 ├── critiques.md            # critic-panel aggregate (step 10)
 ├── decision-log.md         # replan-vs-rewrite decisions (step 11)
 ├── synthesis.md            # operator-facing synthesis (step 12)
-└── ledger.md               # workflow-cost ledger (step 13) — see Ledger schema below
+├── ledger.md               # workflow-cost ledger (step 13) — see Ledger schema below
+└── diagnostics/            # OPTIONAL — per-session metrics, see Diagnostics schema below
+    ├── start.ts            # SessionStart hook: unix epoch
+    ├── end.ts              # Stop hook: unix epoch
+    ├── events.jsonl        # PostToolUse hook: one line per tool call
+    └── metrics.json        # post-session parser output: tokens by agent, etc.
 ```
 
 The orchestrator assigns the session id on step 1 — typically
@@ -126,7 +131,7 @@ Absence of `ledger.md` from a non-bypassed session is a workflow defect.
 
 - **"Decision"** — one bulleted item under either the `Recommendation`
   heading or the `Uncertainties` heading in `synthesis.md`. Mechanically
-  countable. If [CLAUDE.md](../../CLAUDE.md) step 12's synthesis structure
+  countable. If [CLAUDE.md](CLAUDE.md) step 12's synthesis structure
   is edited, update this definition in the same commit.
 - **"Agent call"** — one invocation of a subagent via the `Agent`/`Task`
   tool, counted at the orchestrator level. Sub-tool calls inside an agent
@@ -154,6 +159,70 @@ incomplete.
 
 A worked example lives at
 [.claude/session-artifacts/exemplars/ledger-example.md](.claude/session-artifacts/exemplars/ledger-example.md).
+
+## Diagnostics schema (additive, optional)
+
+<!-- additive layer over the load-bearing ledger schema. Existing ledgers
+     without the `## Metrics` block remain valid. The `diagnostics/` subdir
+     is captured by the hook chain in `.claude/hooks/` and the parser at
+     `bin/parse-session-metrics.py`. AI-blind: hooks suppress output. -->
+
+Per-session diagnostics live in a dedicated `diagnostics/` subfolder, separated
+from business artifacts. Capture is **AI-blind**: bash hooks under
+[.claude/hooks/](.claude/hooks/) write silently; the orchestrator never sees
+their output, and critics at step 10 are not affected.
+
+### Files in `diagnostics/`
+
+| File | Producer | Purpose |
+|---|---|---|
+| `start.ts` | `SessionStart` hook | unix epoch when Claude session began |
+| `end.ts` | `Stop` hook | unix epoch when Claude session ended |
+| `events.jsonl` | `PostToolUse` hook | `{ts, tool}` per tool call (audit trail) |
+| `metrics.json` | [bin/parse-session-metrics.py](bin/parse-session-metrics.py) | derived: tokens by agent, tool counts, verdicts, loops |
+
+### `metrics.json` schema
+
+```json
+{
+  "duration_seconds": 562,
+  "tokens": {
+    "total": { "input": 124530, "output": 18920 },
+    "by_agent": {
+      "main":                { "input": 1344,  "output": 1243758, "calls": 0 },
+      "canon-librarian":     { "input": 22000, "output": 3200,    "calls": 1 },
+      "critic-architecture": { "input": 15000, "output": 4500,    "calls": 1 }
+    },
+    "source": "transcript-parsed"
+  },
+  "tool_calls": { "total": 23, "by_type": { "Read": 8, "Bash": 7, "Agent": 5 } },
+  "verdicts":   { "architecture": "approve", "operations": "approve", "product": "rework" },
+  "loops": 1
+}
+```
+
+### `## Metrics` block in `ledger.md`
+
+When `diagnostics/metrics.json` exists, the [ledger-render skill](.claude/skills/ledger-render/SKILL.md)
+appends a `## Metrics` block to `ledger.md` after `## Notes`. The block
+heading is **additive, not load-bearing** — older ledgers without the block
+remain valid. The block content is the YAML rendering of `metrics.json`,
+preserving the same keys.
+
+### Bridge between Claude session UUID → workflow id
+
+Hooks fire on `SessionStart` (Claude UUID is known) but the workflow id isn't
+assigned until step 1 of [CLAUDE.md](CLAUDE.md). The bridge is a small handoff:
+
+1. Hooks initially stage to `.claude/.metrics/staging/<claude-uuid>/`.
+2. Step 1 of the workflow writes the workflow id to
+   `.claude/.metrics/staging/<claude-uuid>/workflow-id.txt`.
+3. The `Stop` hook reads that file, moves staged data into
+   `<workflow-id>/diagnostics/`, removes staging, and triggers the parser.
+4. If `workflow-id.txt` is missing (session aborted before step 1, quick-take
+   bypass, etc.), the Stop hook archives staged data to
+   `.claude/.metrics/orphan/<claude-uuid>/` so nothing is lost and nothing
+   pollutes session-artifacts.
 
 ## `.gitignore` choice (documented)
 
