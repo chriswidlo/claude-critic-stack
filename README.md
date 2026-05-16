@@ -2,6 +2,11 @@
 
 *Rigorous second opinions for important decisions.*
 
+> **Rename shortlist** — `claude-critic-stack` is a placeholder. Candidates under consideration (pick one when ready):
+>
+> Purvapaksha | Sugya | Machloket | Resection | Trutina | Stretto | Mondo | Mu-mon | Rashnu
+> Crux | Foil | Hossen | Kintsugi | Witan | Elenchus | Krisis | Aporia
+
 A solo, closed-world adversarial-design-review harness. You bring a design question; the stack runs a 12-step workflow with a three-lens critic panel, a canon librarian over a curated corpus, and an outside-view forecaster. Runs from this directory — never inside the target repo, deliberately, so Claude's default frame is "the industry" rather than "your codebase."
 
 ## Quickstart
@@ -56,8 +61,8 @@ Slash commands (zero-friction utilities):
 
 - **`/explain`** — this menu, on demand, without leaving chat.
 - **`/upgrade`** — capture a creative R&D idea into [`upgrades/`](upgrades/).
-- **`/session-bootstrap`** or **`/critique-prep`** — mint a session manually for staged inputs.
-- **`/critique-start`** — in a fresh session, runs the 12-step workflow against an input prepared by `/critique-prep`. The two skills are a pair: `prep` collects the design doc + target repo + grounding strategy, `start` runs the workflow against frozen inputs in a clean context window.
+- **`/critique <doc-path>`** — one-shot adversarial review. Mints a session, freezes the doc as `question.md` + `inputs.md`, then runs the full 12-step workflow against it in the same chat. Synthesis is presented at the end (~5–15 min). Slug auto-derived from the doc's H1; target defaults to current repo; grounding defaults to follow-AI-docs. No questionnaire.
+- **`/session-bootstrap`** — mint an empty session-dir skeleton by hand (rare; use `/critique` when you have a doc).
 
 [`CLAUDE.md`](CLAUDE.md) is the operating manual — the 12-step workflow, the hard gates, the must-nots, and the agent inventory all live there. Read it.
 
