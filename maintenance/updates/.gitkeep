@@ -1,0 +1,3 @@
+# This file exists to track the empty maintenance/updates/ directory in git.
+# Freshness reports land here when /repo-update runs. Each report is timestamped:
+# maintenance/updates/<YYYY-MM-DD>-<short-slug>.md

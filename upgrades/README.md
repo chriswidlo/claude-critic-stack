@@ -17,13 +17,16 @@ What an entry is **not**:
 
 ### What turns a seed into a real upgrade
 
-An entry may graduate into a real change to this repo *if and only if* it earns the graduation through the [state lifecycle](#the-state-lifecycle). Each state is an **epistemic checkpoint** that filters a class of failure the prior state cannot see:
+An entry may graduate into a real change to this repo *if and only if* it earns the graduation through the [state lifecycle](#the-state-lifecycle). Each of the ten states is an **epistemic checkpoint** that filters a class of failure the prior state cannot see:
 
+- 🌱 **created** marks the entry's existence — captured before it can be lost.
 - 🔬 **spiked** filters infeasible ideas — does the basic mechanism even work?
 - 📋 **prepared** filters misfit, duplication, and wrong-shape implementations — does this entry survive contact with the rest of this repo's primitives, principles, and existing capability?
 - ✅ **accepted** filters *"operator does not actually want this as designed"* — an explicit operator decision on the entry as it stands, not on the original idea.
-- ⚙️ **run-through-repo** filters design-level critique on the *implementation choices* — the original 12-step (if any) judged the adoption decision; this state judges the implementation.
+- ⚙️ **run-through-repo** filters design-level critique on the *implementation choices* — the original 13-step (if any) judged the adoption decision; this state judges the implementation.
 - 🔨 **implemented** filters bugs and broken builds via real code plus a smoke test.
+- 🩺 **verified** filters local-OK-but-globally-broken — no broken refs, no stale paths, no doc-implementation drift, no contradictions with sibling artifacts.
+- 🔖 **committed** filters work-on-disk-but-not-in-git — commit SHA recorded; the implementation is reproducible.
 - 💎 **value-proved** filters *"looked good in design, did not survive contact with use"* — evidence from real workflow runs.
 - 🏁 **completed** filters tech-debt-by-omission — residual disagreements either resolved or explicitly closed.
 
@@ -196,7 +199,7 @@ Ten states, each with a color that resembles the state. Most entries never reach
 | 🔬 | **spiked** | Someone did exploratory or prototype work — quick probe to see if the idea is viable. |
 | 📋 | **prepared** | Detailed enough that next steps are clear. Ready to be acted on or formally proposed. |
 | ✅ | **accepted** | Operator has agreed: this is worth pursuing. |
-| ⚙️ | **run-through-repo** | The idea was put through the 12-step adversarial-review workflow as a design question. |
+| ⚙️ | **run-through-repo** | The idea was put through the 13-step adversarial-review workflow as a design question. |
 | 🔨 | **implemented** | The work is done — code edits, agent updates, schema changes complete in the working tree. Not yet verified globally, not yet in git. |
 | 🩺 | **verified** | The implementation has been globally checked: no broken refs, no stale paths, no doc-implementation drift, no contradictions with sibling artifacts. Coherence verified before commit. |
 | 🔖 | **committed** | The implementation is in git: commit SHA(s) recorded in entry body or `committed_in:` meta field; commit message references the entry's slug; the agent's per-session change list (see [Per-session change tracking](#per-session-change-tracking) below) was scoped to own-session work only. |
@@ -284,5 +287,5 @@ If using a shape helps you write, mention it in the body or as a tag. The shape 
 
 - **Not a backlog.** Entries don't have priority fields. The state lifecycle tracks progress, not urgency.
 - **Not a roadmap.** No ordering by sequence. The state of one entry has no relationship to the state of another.
-- **Not the workflow's institutional memory.** Memory has a separate home (`memory/`).
+- **Not the workflow's institutional memory.** Cross-session memory lives in the user's machine-local Claude Code auto-memory store (described in prose, not as a path, per the path-discipline rule in [CLAUDE.md](CLAUDE.md) §"Path discipline").
 - **Not a place for routine notes.** The lab is for thoughts profound enough to deserve a TOC, the seven meta fields, and the state spine.

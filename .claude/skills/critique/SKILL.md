@@ -1,6 +1,6 @@
 ---
 name: critique
-description: One-shot adversarial review of a design document. Invoke as `/critique <doc-path>` — the skill mints a session-artifacts directory, freezes the doc as `question.md` + `inputs.md`, then begins step 1 of the 12-step workflow defined in CLAUDE.md. Synthesis is presented in the same session, typically 5–15 minutes later. Slug auto-derived from the doc's H1; target defaults to current repo (self-target); grounding defaults to follow-AI-docs. No questionnaire, no fresh-session split. SKIP for `quick take` requests, pure factual questions answered by canon-librarian, or when the user has already minted the session manually.
+description: One-shot adversarial review of a design document. Invoke as `/critique <doc-path>` — the skill mints a session-artifacts directory, freezes the doc as `question.md` + `inputs.md`, then begins step 1 of the 13-step workflow defined in CLAUDE.md. Synthesis is presented in the same session, typically 5–15 minutes later. Slug auto-derived from the doc's H1; target defaults to current repo (self-target); grounding defaults to follow-AI-docs. No questionnaire, no fresh-session split. SKIP for `quick take` requests, pure factual questions answered by canon-librarian, or when the user has already minted the session manually.
 argument-hint: <doc-path — repo-relative path to the doc you want critiqued>
 allowed-tools: Bash(date:*) Bash(mkdir:*) Bash(ls:*) Bash(grep:*) Bash(shasum:*) Bash(printf:*) Bash(test:*) Bash(head:*) Bash(sed:*) Bash(tr:*) Bash(cat:*) Bash(awk:*) Read Write Edit AskUserQuestion
 ---
@@ -17,7 +17,7 @@ The user's input: $ARGUMENTS
 /critique upgrades/normal/2026-05-09-foo/README.md
 ```
 
-One argument, the repo-relative doc path. The skill auto-derives the slug from the doc's first H1, defaults target=`current repo` and grounding=`follow-AI-docs`, mints the session, writes the input artifacts, and **immediately begins step 1 of the 12-step workflow** per [CLAUDE.md](CLAUDE.md). You read the synthesis at the end. No questions asked unless `$ARGUMENTS` is empty.
+One argument, the repo-relative doc path. The skill auto-derives the slug from the doc's first H1, defaults target=`current repo` and grounding=`follow-AI-docs`, mints the session, writes the input artifacts, and **immediately begins step 1 of the 13-step workflow** per [CLAUDE.md](CLAUDE.md). You read the synthesis at the end. No questions asked unless `$ARGUMENTS` is empty.
 
 A user who needs a non-default target or grounding can hand-edit `inputs.md` between Phase A and Phase B — but the skill body runs through both automatically, so this is only possible by interrupting the skill manually. For routine use, the defaults suffice.
 
@@ -113,12 +113,12 @@ SID=$(cat .claude/.metrics/current-session-uuid 2>/dev/null)
 
 Silent, AI-blind otherwise.
 
-## Phase B — Run the 12-step workflow
+## Phase B — Run the 13-step workflow
 
 After Phase A completes, **print a single short ack line** (≤ 25 words):
 
 ```
-▶ Session minted: <id>. Beginning 12-step review.
+▶ Session minted: <id>. Beginning 13-step review.
 ```
 
 Then **begin step 1 of the workflow** per [CLAUDE.md](CLAUDE.md). From here on, follow the workflow exactly:

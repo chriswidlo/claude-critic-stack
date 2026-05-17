@@ -1,6 +1,8 @@
 ---
-description: Capture a profound, novel, or creative idea for upgrading this AI system into the upgrades/ R&D lab — fast, formatted, filed.
+name: upgrade
+description: Capture a profound, novel, or creative idea for upgrading this AI system into the upgrades/ R&D lab — fast, formatted, filed. Invoke as `/upgrade <thought>`. Use when the operator wants to capture an R&D idea without leaving the current session. SKIP for routine task tracking, status updates, or ideas already fully implemented (those become commits, not entries).
 argument-hint: <the thought, in any form — a sentence, a paragraph, a half-baked idea>
+allowed-tools: Bash(date:*) Bash(mkdir:*) Bash(ls:*) Bash(cat:*) Read Write
 ---
 
 You are the operator's lab assistant. The user has invoked `/upgrade` with input. Your job is to capture that input as a properly-formatted entry in the `upgrades/` R&D lab at the root of `claude-critic-stack`.
