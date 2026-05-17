@@ -1,11 +1,11 @@
 ---
 name: session-bootstrap
-description: Mint a session-artifacts directory for the 12-step workflow defined in CLAUDE.md. Creates .claude/session-artifacts/<YYYY-MM-DD>-<slug>/ and drops a question.md skeleton. Use when the user is starting a new design-question session and the orchestrator is about to invoke requirement-classifier (step 1). SKIP for quick-take requests, pure factual questions answered by canon-librarian, or any case where the user has already created the session directory by hand.
+description: Mint a session-artifacts directory for the 13-step workflow defined in CLAUDE.md. Creates .claude/session-artifacts/<YYYY-MM-DD>-<slug>/ and drops a question.md skeleton. Use when the user is starting a new design-question session and the orchestrator is about to invoke requirement-classifier (step 1). SKIP for quick-take requests, pure factual questions answered by canon-librarian, or any case where the user has already created the session directory by hand.
 argument-hint: <slug — 2-6 kebab-case words capturing the question identity>
-allowed-tools: Bash(date:*) Bash(mkdir:*) Bash(ls:*) Read Write
+allowed-tools: Bash(date:*) Bash(mkdir:*) Bash(ls:*) Bash(cat:*) Bash(echo:*) Bash(tee:*) Read Write
 ---
 
-You are the session-artifacts directory bootstrapper for `claude-critic-stack`. The user has invoked `/session-bootstrap` with a slug. Your job is to mint the session directory and drop in a `question.md` skeleton, so the orchestrator can run the 12-step workflow against it.
+You are the session-artifacts directory bootstrapper for `claude-critic-stack`. The user has invoked `/session-bootstrap` with a slug. Your job is to mint the session directory and drop in a `question.md` skeleton, so the orchestrator can run the 13-step workflow against it.
 
 The user's slug: $ARGUMENTS
 
@@ -25,6 +25,15 @@ The user's slug: $ARGUMENTS
    - The collision is almost always a slug duplication; ask the user whether they want to (a) reuse the existing session, (b) append `-v2` to the slug, or (c) pick a different slug. Do not silently overwrite.
 
 4. **Create the directory.** `mkdir -p .claude/session-artifacts/<session-id>`. Do not create subdirectories yet (no empty `distillations/`, no placeholder files beyond `question.md`) — the workflow's downstream steps create what they need.
+
+   **4b. Bind the workflow-id to the Claude session UUID for the diagnostics pipeline.** Run:
+   ```bash
+   SID=$(cat .claude/.metrics/current-session-uuid 2>/dev/null) && \
+     [ -n "$SID" ] && \
+     mkdir -p .claude/.metrics/staging/$SID && \
+     echo "<session-id>" > .claude/.metrics/staging/$SID/workflow-id.txt
+   ```
+   This is a hard precondition for the diagnostics pipeline — without it, the Stop / SessionEnd hooks cannot attribute tool events, token usage, or subagent calls back to the session, and `ledger-render` (step 13) loses its source of truth. The binding is silent on failure (e.g. when running outside Claude Code, or before the SessionStart hook has fired) — but the orchestrator should treat a missing `diagnostics/metrics.json` at step 13 as a workflow defect, not a silent omission.
 
 5. **Write `question.md`.** Use this skeleton, filled with the user's framing if the slug carried obvious context, otherwise left for the user to complete:
 

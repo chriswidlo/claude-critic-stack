@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Session report — 2026-05-09-review-diagnostics-impl</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+       max-width: 1100px; margin: 1rem auto; padding: 0 1rem; color: #1a1a1a; line-height: 1.5; }
+h1 { font-size: 1.6rem; margin: 0.5rem 0 0.2rem; }
+h2 { font-size: 1.2rem; margin: 1.8rem 0 0.4rem; padding-bottom: 0.2rem; border-bottom: 1px solid #ddd; }
+h3 { font-size: 1.0rem; margin: 1.2rem 0 0.3rem; color: #555; }
+.meta { color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 0.5rem; margin: 1rem 0; }
+.kpi { padding: 0.7rem 0.9rem; background: #f5f5f7; border-radius: 6px; border-left: 3px solid #4a90e2; }
+.kpi-label { color: #666; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.kpi-value { font-size: 1.3rem; font-weight: 600; margin-top: 0.1rem; }
+.kpi-warn { border-left-color: #d97706; background: #fef3c7; }
+.kpi-good { border-left-color: #059669; }
+.kpi-bad  { border-left-color: #dc2626; background: #fee2e2; }
+table { width: 100%; border-collapse: collapse; margin: 0.4rem 0 1rem; font-size: 0.9rem; }
+th, td { padding: 0.35rem 0.55rem; text-align: left; border-bottom: 1px solid #eee; }
+th { background: #f5f5f7; font-weight: 600; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.verdict-approve { color: #059669; font-weight: 600; }
+.verdict-rework  { color: #d97706; font-weight: 600; }
+.verdict-reject  { color: #dc2626; font-weight: 600; }
+.verdict-refused { color: #6b21a8; font-weight: 600; }
+.verdict-unavailable { color: #6b7280; font-style: italic; }
+.agree { color: #059669; }
+.partial-agree { color: #d97706; }
+.disagree { color: #dc2626; }
+.unavailable { color: #6b7280; font-style: italic; }
+details { margin: 0.5rem 0; }
+summary { cursor: pointer; padding: 0.3rem 0; font-weight: 500; color: #444; }
+pre { background: #f5f5f7; padding: 0.7rem; border-radius: 4px; overflow-x: auto; font-size: 0.85rem; }
+.footer { color: #999; font-size: 0.8rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #eee; }
+</style>
+</head>
+<body>
+<h1>2026-05-09-review-diagnostics-impl</h1>
+<div class="meta">
+  Generated 2026-05-17 01:44:21 ·
+  Schema version: <code>diagnostics-2026-05</code> ·
+  Event schema: <code>legacy-ts-tool</code>
+</div>
+
+<div class="kpi-grid"><div class="kpi"><div class="kpi-label">Duration</div><div class="kpi-value">32h 37m</div></div><div class="kpi kpi-bad"><div class="kpi-label">Loops</div><div class="kpi-value">3/2</div></div><div class="kpi"><div class="kpi-label">Total input tokens</div><div class="kpi-value">0</div></div><div class="kpi"><div class="kpi-label">Total output tokens</div><div class="kpi-value">0</div></div><div class="kpi"><div class="kpi-label">Cache hit</div><div class="kpi-value">0.0%</div></div><div class="kpi"><div class="kpi-label">Artifacts</div><div class="kpi-value">23</div></div><div class="kpi"><div class="kpi-label">Decisions</div><div class="kpi-value">14</div></div><div class="kpi"><div class="kpi-label">Tool calls</div><div class="kpi-value">0</div></div></div>
+
+<h2>Tokens by agent</h2>
+<p><em>No token data.</em></p>
+
+<h2>Tool calls</h2>
+<p><em>No tool call data.</em></p>
+
+<h2>Critic panel verdicts</h2>
+<table><thead><tr><th>Lens</th><th>Opus verdict</th><th>Sonnet shadow verdict</th><th>Comparator agreement</th></tr></thead><tbody><tr><td>product</td><td><span class='verdict-replace'>replace</span></td><td><span class='verdict-—'>—</span></td><td>—</td></tr></tbody></table>
+
+<h3>Models seen (response models)</h3>
+<p style="font-family: monospace; font-size: 0.85rem;">—</p>
+
+<h3>Error summary</h3>
+<p><em>No tool errors recorded.</em></p>
+
+<details>
+<summary>Raw metrics.json</summary>
+<pre>{
+  &quot;claude_session_uuid&quot;: &quot;junk-uuid-no-transcript&quot;,
+  &quot;comparator_agreements&quot;: {},
+  &quot;counts&quot;: {
+    &quot;artifacts&quot;: 23,
+    &quot;decisions&quot;: 14
+  },
+  &quot;duration_seconds&quot;: 117450,
+  &quot;events&quot;: {
+    &quot;error_types&quot;: {},
+    &quot;errors_by_tool&quot;: {},
+    &quot;events_by_type&quot;: {
+      &quot;tool_end_legacy&quot;: 21
+    },
+    &quot;latency_summary&quot;: {},
+    &quot;schema_version&quot;: &quot;legacy-ts-tool&quot;,
+    &quot;tools_by_status&quot;: {
+      &quot;Agent&quot;: 1,
+      &quot;AskUserQuestion&quot;: 1,
+      &quot;Bash&quot;: 11,
+      &quot;ExitPlanMode&quot;: 1,
+      &quot;Read&quot;: 5,
+      &quot;Write&quot;: 2
+    }
+  },
+  &quot;loops&quot;: 3,
+  &quot;schema&quot;: &quot;diagnostics-2026-05&quot;,
+  &quot;shadow_verdicts&quot;: {},
+  &quot;tokens&quot;: {
+    &quot;by_agent&quot;: {},
+    &quot;source&quot;: &quot;transcript-missing&quot;,
+    &quot;total&quot;: {
+      &quot;input&quot;: 0,
+      &quot;output&quot;: 0
+    }
+  },
+  &quot;tool_calls&quot;: {
+    &quot;by_type&quot;: {},
+    &quot;total&quot;: 0
+  },
+  &quot;verdicts&quot;: {
+    &quot;product&quot;: {
+      &quot;verdict&quot;: &quot;replace&quot;
+    }
+  },
+  &quot;workflow_id&quot;: &quot;2026-05-09-review-diagnostics-impl&quot;
+}</pre>
+</details>
+
+<div class="footer">
+Rendered by <code>bin/diagnostics/render-html-report.py</code> · session-end hook ·
+data from <code>diagnostics/metrics.json</code> + <code>diagnostics/events.jsonl</code>
+</div>
+</body>
+</html>

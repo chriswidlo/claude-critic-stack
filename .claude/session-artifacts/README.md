@@ -14,16 +14,36 @@ session:
 │   └── explore.md          # only if Explore ran
 ├── scope-map.md            # scope-mapper output (step 7)
 ├── challenges.md           # frame-challenger output (step 8)
-├── critiques.md            # critic-panel aggregate (step 10)
+├── critiques.md            # critic-panel aggregate (step 10) — see Critiques layout below
+├── critiques/              # ONLY under SHADOW_PANEL=1 — per-lens files
+│   ├── architecture.md          # critic-architecture (Opus)
+│   ├── operations.md            # critic-operations (Opus)
+│   ├── product.md               # critic-product (Opus)
+│   ├── architecture.shadow.md   # critic-architecture-shadow (Sonnet)
+│   ├── operations.shadow.md     # critic-operations-shadow (Sonnet)
+│   ├── product.shadow.md        # critic-product-shadow (Sonnet)
+│   ├── architecture.comparison.md   # critic-comparator: per-lens agreement class
+│   ├── operations.comparison.md
+│   └── product.comparison.md
 ├── decision-log.md         # replan-vs-rewrite decisions (step 11)
-├── synthesis.md            # operator-facing synthesis (step 12)
+├── synthesis.md            # operator-facing synthesis (step 12) — see Synthesis schema below
 ├── ledger.md               # workflow-cost ledger (step 13) — see Ledger schema below
 └── diagnostics/            # OPTIONAL — per-session metrics, see Diagnostics schema below
     ├── start.ts            # SessionStart hook: unix epoch
-    ├── end.ts              # Stop hook: unix epoch
-    ├── events.jsonl        # PostToolUse hook: one line per tool call
+    ├── end.ts              # SessionEnd hook: unix epoch
+    ├── events.jsonl        # PreToolUse/PostToolUse/SubagentStop hooks: events per tool call
+    ├── workflow-id.txt     # binding sigil written by session-bootstrap at step 4b
     └── metrics.json        # post-session parser output: tokens by agent, etc.
 ```
+
+### Critiques layout — default mode vs SHADOW_PANEL mode
+
+| Mode | What gets written |
+|---|---|
+| **Default** (3 lenses) | Single aggregate file `critiques.md` containing each lens's verdict. No `critiques/` subdir. |
+| **`SHADOW_PANEL=1`** (6 lenses + comparator) | Aggregate `critiques.md` PLUS the `critiques/` subdir holding the 9 per-lens files (3 Opus + 3 Sonnet shadow + 3 comparison). Comparator does not modify `critiques.md` — it only emits the `.comparison.md` files. |
+
+The aggregate `critiques.md` is the load-bearing artifact (consumed at step 11 routing). The `critiques/` subdir is the audit trail under shadow mode.
 
 The orchestrator assigns the session id on step 1 — typically
 `<YYYY-MM-DD>-<first-4-to-6-words-of-question>`, e.g.
@@ -72,6 +92,62 @@ The Claude Code user-level memory directory is machine-local. Putting
 artifacts there would scatter them across machines and make `exemplars/`
 promotion awkward. Keeping them in the repo means (a) they are versioned
 when promoted, (b) `.gitignore` governs ephemera with one line.
+
+## Synthesis schema (load-bearing — referenced from CLAUDE.md step 12)
+
+<!-- machine-read source for synthesis.md structure. CLAUDE.md step 12 points
+     here. The ordered bullet list below is the canonical template — adding,
+     removing, or reordering bullets requires updating CLAUDE.md in the same
+     commit. The literal `Ledger:` citation line at the end is enforced. -->
+
+Every non-bypassed session writes `synthesis.md` per the structure below. The orchestrator (not an agent) authors this file at step 12, AFTER critic-panel verdicts in step 10 and any replan/rewrite loops in step 11 have concluded.
+
+### Required structure (in order)
+
+`synthesis.md` MUST present these elements in this order. Do not collapse into a single flowing paragraph; the operator skims by section.
+
+1. **Classifier label and the alternative classification.** From `requirement.md`. Surfaces the framing bias the classifier carried in.
+2. **The reframe (current revision).** From `frame.md`'s latest `## Revision N` block. If multiple revisions exist (loops happened), cite the current one and note the revision count.
+3. **Reference-class forecast.** From `distillations/outside-view.md`. The base rate, the position relative to it, and the typical failure mode.
+4. **Canon passages — supporting AND contradicting.** From `distillations/canon-librarian.md`. Both kinds. Contradicting passages are non-optional per the librarian's mandatory contract.
+5. **Scope-map summary and any unresolved conflicts.** From `scope-map.md`. Name preserved primitives and the reason for preservation.
+6. **Frame-level challenge and how the recommendation addresses it.** From `challenges.md` cross-referenced with the candidate. The candidate that ignores the challenge is a defect.
+7. **Post-critique recommendation, explicitly labeled.** The orchestrator's final candidate after step 10/11 loops. Label as "Post-critique recommendation:" — operator must be able to find it by grep.
+8. **Named failure modes flagged.** Separate bullet enumerating any anchor risks that `outside-view`, `canon-librarian`, or any critic lens flagged (e.g., "inaccessible-comparator anchoring"). Empty bullet ("none flagged") is acceptable but the bullet itself is required.
+9. **Triangulation signal** *(only when `SHADOW_PANEL=1` ran)*. Per-lens agreement class from `critiques/<lens>.comparison.md`. If `agree` on all three lenses: "shadow concurs across all lenses." Otherwise name the lens and the dimension of difference. **If any Opus lens returned no verdict file (refused / unavailable) and the session is safety-flavored, add a sub-bullet "refusal as triangulation signal"** — a missing verdict on safety-flavored work is itself signal.
+10. **At least three named uncertainties.** Each uncertainty stated with what would make it more or less concerning.
+11. **The cheapest experiment that would reduce the biggest uncertainty.** One concrete action with a stated success criterion.
+
+### Final line (literal, required)
+
+`synthesis.md` MUST end with the ledger citation line — verbatim format:
+
+```
+Ledger: agent-calls=<N>, artifacts=<N>, loops=<N>/2; warnings: <list or "none">.
+```
+
+A session whose `synthesis.md` does not end with this exact line is incomplete. The `/ledger-render` skill at step 13 enforces this (Edit-in-place if missing).
+
+### Bypass cases (no synthesis written)
+
+- `quick take` invocations: synthesis bypassed (single paragraph reply with a one-line bypass flag).
+- Pure factual questions answered by `canon-librarian`: no synthesis.
+
+### Why the structure is rigid
+
+Step 12 is the **only operator-facing surface**. The 11 elements are calibrated against named LLM failure modes (see [.genesis/five-pressures.md](.genesis/five-pressures.md)):
+- Element 1 (classifier + alternative) defends against single-frame anchoring.
+- Element 2 (reframe revision) defends against accepting the user's framing uncritically.
+- Element 3 (reference-class) defends against inside-view detail-reasoning.
+- Element 4 (supporting + contradicting) defends against confirmation bias.
+- Element 8 (named failure modes flagged) defends against silent anchor adoption.
+- Element 9 (triangulation signal) defends against correlated review error.
+- Element 10 (three uncertainties) defends against equally-confident prose.
+- Element 11 (cheapest experiment) defends against recommendations-without-falsifiability.
+
+Collapsing the structure is not a stylistic choice; it dismantles the failure-mode defenses.
+
+---
 
 ## Ledger schema (load-bearing)
 
@@ -165,7 +241,7 @@ A worked example lives at
 <!-- additive layer over the load-bearing ledger schema. Existing ledgers
      without the `## Metrics` block remain valid. The `diagnostics/` subdir
      is captured by the hook chain in `.claude/hooks/` and the parser at
-     `bin/parse-session-metrics.py`. AI-blind: hooks suppress output. -->
+     `bin/diagnostics/aggregate-session.py`. AI-blind: hooks suppress output. -->
 
 Per-session diagnostics live in a dedicated `diagnostics/` subfolder, separated
 from business artifacts. Capture is **AI-blind**: bash hooks under
@@ -179,7 +255,7 @@ their output, and critics at step 10 are not affected.
 | `start.ts` | `SessionStart` hook | unix epoch when Claude session began |
 | `end.ts` | `Stop` hook | unix epoch when Claude session ended |
 | `events.jsonl` | `PostToolUse` hook | `{ts, tool}` per tool call (audit trail) |
-| `metrics.json` | [bin/parse-session-metrics.py](bin/parse-session-metrics.py) | derived: tokens by agent, tool counts, verdicts, loops |
+| `metrics.json` | [bin/diagnostics/aggregate-session.py](bin/diagnostics/aggregate-session.py) | derived: tokens by agent, tool counts, verdicts, loops |
 
 ### `metrics.json` schema
 

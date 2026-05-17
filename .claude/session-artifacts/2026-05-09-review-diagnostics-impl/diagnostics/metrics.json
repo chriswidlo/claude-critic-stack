@@ -1,0 +1,47 @@
+{
+  "claude_session_uuid": "junk-uuid",
+  "comparator_agreements": {},
+  "counts": {
+    "artifacts": 23,
+    "decisions": 14
+  },
+  "duration_seconds": 117450,
+  "events": {
+    "error_types": {},
+    "errors_by_tool": {},
+    "events_by_type": {
+      "tool_end_legacy": 21
+    },
+    "latency_summary": {},
+    "schema_version": "legacy-ts-tool",
+    "tools_by_status": {
+      "Agent": 1,
+      "AskUserQuestion": 1,
+      "Bash": 11,
+      "ExitPlanMode": 1,
+      "Read": 5,
+      "Write": 2
+    }
+  },
+  "loops": 3,
+  "schema": "diagnostics-2026-05",
+  "shadow_verdicts": {},
+  "tokens": {
+    "by_agent": {},
+    "source": "transcript-missing",
+    "total": {
+      "input": 0,
+      "output": 0
+    }
+  },
+  "tool_calls": {
+    "by_type": {},
+    "total": 0
+  },
+  "verdicts": {
+    "product": {
+      "verdict": "replace"
+    }
+  },
+  "workflow_id": "2026-05-09-review-diagnostics-impl"
+}
