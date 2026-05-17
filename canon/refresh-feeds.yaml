@@ -6,7 +6,8 @@
 # least one term for the item to be considered.
 #
 # The refresher NEVER writes to canon/corpus/. It emits proposed
-# sources.ingest.yaml blocks that the human curator accepts or discards.
+# canon/sources.yaml entry blocks (schema_version 2) that the human curator
+# accepts (by pasting into canon/sources.yaml under entries:) or discards.
 
 feeds:
 

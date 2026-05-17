@@ -1,201 +1,680 @@
-# Canon sources — ingestion manifest
+# canon/sources.yaml — single source of truth for the canon manifest.
 #
-# This file lists the works that should be in canon/corpus/ for the
-# canon-librarian agent to retrieve from. You are responsible for the licensing
-# of whatever you ingest. Prefer: books you own, open-access papers, author-published
-# essays, conference talks with published transcripts.
+# This file is the ONE registry for every work the canon-librarian may surface.
+# bin/ingest-canon.mjs reads this file directly (no separate ingest queue).
+# bin/check-canon-schema.sh validates the schema (deferred; not yet shipped).
 #
-# For each entry:
-#   author:    primary author(s)
-#   title:     work title
-#   year:      publication year (most recent edition if multiple)
-#   kind:      book | paper | essay | talk | standard
-#   topics:    tags used by canon-librarian for retrieval
-#   notes:     provenance, edition notes, caveats
+# Full field documentation lives in canon/README.md. This header is a
+# quick-reference; canon/README.md is authoritative.
 #
-# Grouped roughly by topic. This is a starting set — extend liberally.
+# REQUIRED FIELDS (every entry):
+#   slug            kebab-case identifier; matches canon/corpus/<slug>/ if any
+#   author          string (primary author or org)
+#   title           string (work title)
+#   year            4-digit integer (publication year)
+#   category        kebab-case grouping tag (for display only; does not affect retrieval)
+#   kind            enum: book | paper | essay | talk | standard | docs
+#   topics          list of kebab-case strings; min 1; used by canon-librarian for retrieval
+#   source_url      https URL (canonical location)
+#   license         enum (see canon/README.md §License values)
+#   lifecycle       enum: snapshot-only | snapshot+refresh | live-only
+#   volatility      enum: durable | slow | fast | volatile
+#   last_verified   ISO 8601 date (YYYY-MM-DD); when the curator last checked this entry
+#   fetch_mode      enum: html | html-multi | arxiv-abs | aws-docs | pdf-manual | owned-book | none
+#                   (use `none` ONLY when lifecycle is `live-only`)
+#
+# OPTIONAL FIELDS:
+#   notes           multi-line string; the only free-form field; provenance / caveats / edition notes
+#
+# DERIVED (not stored; computed at read time):
+#   next_review_by = last_verified + cadence(volatility)
+#     where cadence(durable) = ∞   (no review timer)
+#           cadence(slow)    = 365 days
+#           cadence(fast)    = 90 days
+#           cadence(volatile)= 30 days
+#
+# DO NOT add fields not documented in canon/README.md. Schema bloat is the named
+# failure mode of unified registries (Confluent/Solace schema-registry literature).
+# Add a field only via a rationale entry in upgrades/ and an explicit doc update.
 
-distributed_systems:
-  - author: "Martin Kleppmann"
+schema_version: 2
+
+entries:
+
+  # ============================================================
+  # category: distributed-systems
+  # ============================================================
+
+  - slug: kleppmann-ddia
+    author: "Martin Kleppmann"
     title: "Designing Data-Intensive Applications"
     year: 2017
+    category: distributed-systems
     kind: book
     topics: [replication, consistency, consensus, stream-processing, batch]
-    notes: "The single most load-bearing work for modern data architecture."
+    source_url: "https://dataintensive.net"
+    license: paywalled-no-open-edition
+    lifecycle: snapshot-only
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: owned-book
+    notes: "Single most load-bearing work for modern data architecture. Stub awaiting owned-book ingestion."
 
-  - author: "Leslie Lamport"
+  - slug: lamport-time-clocks
+    author: "Leslie Lamport"
     title: "Time, Clocks, and the Ordering of Events in a Distributed System"
     year: 1978
+    category: distributed-systems
     kind: paper
     topics: [time, causality, logical-clocks]
+    source_url: "https://lamport.azurewebsites.net/pubs/time-clocks.pdf"
+    license: author-published-open-access
+    lifecycle: snapshot-only
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: pdf-manual
+    notes: "Foundational. PDF on author's site; stub awaiting pdftotext + ingest-owned-book.mjs."
 
-  - author: "Pat Helland"
-    title: "Life Beyond Distributed Transactions"
+  - slug: helland-life-beyond-distributed-transactions
+    author: "Pat Helland"
+    title: "Life Beyond Distributed Transactions: an Apostate's Opinion"
     year: 2007
+    category: distributed-systems
     kind: paper
-    topics: [sagas, entities, eventual-consistency]
+    topics: [sagas, entities, eventual-consistency, distributed-systems]
+    source_url: "https://ics.uci.edu/~cs223/papers/cidr07p15.pdf"
+    license: author-published-open-access
+    lifecycle: snapshot-only
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: pdf-manual
+    notes: "CIDR 2007 PDF hosted at UCI. Stub until curator runs pdftotext + ingest-owned-book.mjs. ACM Queue version blocks bots."
 
-  - author: "Peter Bailis et al."
+  - slug: bailis-hat-2013
+    author: "Peter Bailis et al."
     title: "Highly Available Transactions: Virtues and Limitations"
     year: 2013
+    category: distributed-systems
     kind: paper
     topics: [isolation, availability, cap]
+    source_url: "https://www.vldb.org/pvldb/vol7/p181-bailis.pdf"
+    license: author-published-open-access
+    lifecycle: snapshot-only
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: pdf-manual
+    notes: "VLDB 2014 PDF. Stub awaiting pdftotext + ingest-owned-book.mjs."
 
-domain_driven_design:
-  - author: "Eric Evans"
-    title: "Domain-Driven Design"
+  # ============================================================
+  # category: domain-driven-design
+  # ============================================================
+
+  - slug: evans-ddd
+    author: "Eric Evans"
+    title: "Domain-Driven Design: Tackling Complexity in the Heart of Software"
     year: 2003
+    category: domain-driven-design
     kind: book
     topics: [bounded-context, ubiquitous-language, aggregate, anti-corruption]
+    source_url: "https://www.domainlanguage.com/ddd/"
+    license: paywalled-no-open-edition
+    lifecycle: snapshot-only
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: owned-book
+    notes: "Stub awaiting owned-book ingestion."
 
-  - author: "Vaughn Vernon"
+  - slug: vernon-iddd
+    author: "Vaughn Vernon"
     title: "Implementing Domain-Driven Design"
     year: 2013
+    category: domain-driven-design
     kind: book
     topics: [aggregate-design, event-sourcing, cqrs]
+    source_url: "https://vaughnvernon.com/?page_id=168"
+    license: paywalled-no-open-edition
+    lifecycle: snapshot-only
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: owned-book
+    notes: "Stub awaiting owned-book ingestion."
 
-  - author: "Vaughn Vernon"
-    title: "Strategic Monoliths and Microservices"
+  - slug: vernon-strategic-monoliths
+    author: "Vaughn Vernon, Tomasz Jaskuła"
+    title: "Strategic Monoliths and Microservices: Driving Innovation Using Purposeful Architecture"
     year: 2021
+    category: domain-driven-design
     kind: book
     topics: [modulith, decomposition, readiness]
-    notes: "Essential counterweight to microservices enthusiasm."
+    source_url: "https://www.informit.com/store/strategic-monoliths-and-microservices-driving-innovation-9780137355464"
+    license: paywalled-no-open-edition
+    lifecycle: snapshot-only
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: owned-book
+    notes: "Essential counterweight to microservices enthusiasm. Stub awaiting owned-book ingestion."
 
-refactoring_and_evolution:
-  - author: "Martin Fowler"
-    title: "Refactoring: Improving the Design of Existing Code"
+  # ============================================================
+  # category: refactoring-and-evolution
+  # ============================================================
+
+  - slug: fowler-refactoring
+    author: "Martin Fowler"
+    title: "Refactoring: Improving the Design of Existing Code (2nd Edition)"
     year: 2018
+    category: refactoring-and-evolution
     kind: book
     topics: [refactoring, code-smells, evolutionary-design]
-    notes: "Second edition; JavaScript examples."
+    source_url: "https://martinfowler.com/books/refactoring.html"
+    license: paywalled-no-open-edition
+    lifecycle: snapshot-only
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: owned-book
+    notes: "Second edition; JavaScript examples. Stub awaiting owned-book ingestion."
 
-  - author: "Michael Feathers"
+  - slug: feathers-legacy-code
+    author: "Michael Feathers"
     title: "Working Effectively with Legacy Code"
     year: 2004
+    category: refactoring-and-evolution
     kind: book
     topics: [legacy, seams, characterization-tests]
+    source_url: "https://www.informit.com/store/working-effectively-with-legacy-code-9780131177055"
+    license: paywalled-no-open-edition
+    lifecycle: snapshot-only
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: owned-book
+    notes: "Stub awaiting owned-book ingestion."
 
-  - author: "Martin Fowler"
+  - slug: fowler-poeaa
+    author: "Martin Fowler"
+    title: "Patterns of Enterprise Application Architecture"
+    year: 2002
+    category: refactoring-and-evolution
+    kind: book
+    topics: [patterns, enterprise, architecture]
+    source_url: "https://martinfowler.com/books/eaa.html"
+    license: paywalled-no-open-edition
+    lifecycle: snapshot-only
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: owned-book
+    notes: "Stub awaiting owned-book ingestion. Adopted from orphaned corpus dir 2026-05-17."
+
+  - slug: fowler-strangler-fig
+    author: "Martin Fowler"
     title: "StranglerFigApplication"
     year: 2004
+    category: refactoring-and-evolution
     kind: essay
     topics: [migration, incremental]
+    source_url: "https://martinfowler.com/bliki/StranglerFigApplication.html"
+    license: author-published-essay
+    lifecycle: snapshot+refresh
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: html
+    notes: "Author's bliki entry. Not yet ingested."
 
-integration_and_messaging:
-  - author: "Gregor Hohpe, Bobby Woolf"
+  # ============================================================
+  # category: integration-and-messaging
+  # ============================================================
+
+  - slug: hohpe-eip
+    author: "Gregor Hohpe, Bobby Woolf"
     title: "Enterprise Integration Patterns"
     year: 2003
+    category: integration-and-messaging
     kind: book
     topics: [messaging, routing, transformation]
+    source_url: "https://www.enterpriseintegrationpatterns.com"
+    license: paywalled-no-open-edition
+    lifecycle: snapshot-only
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: owned-book
+    notes: "Stub awaiting owned-book ingestion."
 
-event_driven:
-  - author: "Martin Fowler"
+  # ============================================================
+  # category: event-driven
+  # ============================================================
+
+  - slug: fowler-event-driven
+    author: "Martin Fowler"
     title: "What do you mean by Event-Driven?"
     year: 2017
+    category: event-driven
     kind: essay
     topics: [event-notification, event-sourced-state, cqrs]
-    notes: "Critical taxonomy — four distinct things often conflated as 'event-driven'."
+    source_url: "https://martinfowler.com/articles/201701-event-driven.html"
+    license: author-published-essay
+    lifecycle: snapshot+refresh
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: html
+    notes: "Critical taxonomy — four distinct things often conflated as 'event-driven'. Not yet ingested."
 
-resilience_and_operations:
-  - author: "Michael Nygard"
-    title: "Release It!"
+  # ============================================================
+  # category: resilience-and-operations
+  # ============================================================
+
+  - slug: nygard-release-it
+    author: "Michael Nygard"
+    title: "Release It! Design and Deploy Production-Ready Software (2nd Edition)"
     year: 2018
+    category: resilience-and-operations
     kind: book
     topics: [stability-patterns, circuit-breaker, bulkhead, operations]
-    notes: "Second edition."
+    source_url: "https://pragprog.com/titles/mnee2/release-it-second-edition/"
+    license: paywalled-no-open-edition
+    lifecycle: snapshot-only
+    volatility: slow
+    last_verified: 2026-05-17
+    fetch_mode: owned-book
+    notes: "Second edition. Stub awaiting owned-book ingestion."
 
-  - author: "Google SRE team"
+  - slug: google-sre-book
+    author: "Google SRE team"
     title: "Site Reliability Engineering"
     year: 2016
+    category: resilience-and-operations
     kind: book
-    topics: [slo, error-budget, toil, incident-response]
-    notes: "Free online: sre.google/books"
+    topics: [slo, error-budget, toil, incident-response, on-call]
+    source_url: "https://sre.google/sre-book/table-of-contents/"
+    license: publisher-open-access
+    lifecycle: snapshot+refresh
+    volatility: slow
+    last_verified: 2026-04-23
+    fetch_mode: html-multi
+    notes: "TOC page; ingester walks linked chapters. Body completeness toc_plus_chapters."
 
-  - author: "John Allspaw"
+  - slug: allspaw-infinite-hows
+    author: "John Allspaw"
     title: "The Infinite Hows (instead of Five Whys)"
     year: 2014
+    category: resilience-and-operations
     kind: essay
     topics: [incident-review, post-mortem]
+    source_url: "https://www.kitchensoap.com/2014/11/14/the-infinite-hows-or-the-dangers-of-the-five-whys/"
+    license: author-published-essay
+    lifecycle: snapshot+refresh
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: html
+    notes: "Author's blog. Not yet ingested."
 
-architecture_decisions:
-  - author: "Michael Nygard"
+  # ============================================================
+  # category: architecture-decisions
+  # ============================================================
+
+  - slug: nygard-adr
+    author: "Michael Nygard"
     title: "Documenting Architecture Decisions"
     year: 2011
+    category: architecture-decisions
     kind: essay
     topics: [adr, decision-records]
+    source_url: "https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions"
+    license: author-published-essay
+    lifecycle: snapshot+refresh
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: html
+    notes: "Original ADR essay. Not yet ingested."
 
-  - author: "Gregor Hohpe"
+  - slug: hohpe-architect-elevator
+    author: "Gregor Hohpe"
     title: "The Software Architect Elevator"
     year: 2020
+    category: architecture-decisions
     kind: book
     topics: [architecture-role, communication, stakeholders]
+    source_url: "https://architectelevator.com/book/"
+    license: paywalled-no-open-edition
+    lifecycle: snapshot-only
+    volatility: slow
+    last_verified: 2026-05-17
+    fetch_mode: owned-book
+    notes: "Stub awaiting owned-book ingestion."
 
-testing:
-  - author: "Gerard Meszaros"
-    title: "xUnit Test Patterns"
+  - slug: cockburn-hexagonal-architecture
+    author: "Alistair Cockburn"
+    title: "Hexagonal Architecture"
+    year: 2005
+    category: architecture-decisions
+    kind: essay
+    topics: [hexagonal, ports-and-adapters, architecture, anti-corruption]
+    source_url: "https://web.archive.org/web/20170506170237id_/http://alistair.cockburn.us/Hexagonal+architecture"
+    license: author-published-essay
+    lifecycle: snapshot+refresh
+    volatility: durable
+    last_verified: 2026-04-23
+    fetch_mode: html
+    notes: "Author's site serves 'coming soon' and SSL cert expired. URL is Web Archive snapshot (May 2017) via id_ flag (no archive chrome). If author's site returns, update URL."
+
+  # ============================================================
+  # category: testing
+  # ============================================================
+
+  - slug: meszaros-xunit
+    author: "Gerard Meszaros"
+    title: "xUnit Test Patterns: Refactoring Test Code"
     year: 2007
+    category: testing
     kind: book
     topics: [test-design, test-smells, fixtures]
+    source_url: "http://xunitpatterns.com"
+    license: paywalled-no-open-edition
+    lifecycle: snapshot-only
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: owned-book
+    notes: "Stub awaiting owned-book ingestion. Companion site at xunitpatterns.com."
 
-  - author: "Kent Beck"
+  - slug: beck-tdd
+    author: "Kent Beck"
     title: "Test-Driven Development: By Example"
     year: 2002
+    category: testing
     kind: book
     topics: [tdd, red-green-refactor]
+    source_url: "https://www.informit.com/store/test-driven-development-by-example-9780321146533"
+    license: paywalled-no-open-edition
+    lifecycle: snapshot-only
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: owned-book
+    notes: "Stub awaiting owned-book ingestion."
 
-forecasting_and_judgment:
-  - author: "Daniel Kahneman, Dan Lovallo"
+  # ============================================================
+  # category: forecasting-and-judgment
+  # ============================================================
+
+  - slug: kahneman-lovallo-1993
+    author: "Daniel Kahneman, Dan Lovallo"
     title: "Timid Choices and Bold Forecasts: A Cognitive Perspective on Risk Taking"
     year: 1993
+    category: forecasting-and-judgment
     kind: paper
     topics: [outside-view, base-rate, forecasting]
-    notes: "Foundational for the outside-view technique."
+    source_url: "https://pubsonline.informs.org/doi/abs/10.1287/mnsc.39.1.17"
+    license: paywalled-no-open-edition
+    lifecycle: snapshot-only
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: pdf-manual
+    notes: "Foundational for the outside-view technique. Management Science 39(1). Paywalled at INFORMS; stub awaiting owned-PDF ingestion."
 
-  - author: "Bent Flyvbjerg"
+  - slug: flyvbjerg-2006
+    author: "Bent Flyvbjerg"
     title: "From Nobel Prize to Project Management: Getting Risks Right"
     year: 2006
+    category: forecasting-and-judgment
     kind: paper
     topics: [reference-class-forecasting, megaprojects, estimation]
+    source_url: "https://arxiv.org/abs/1302.3642"
+    license: arxiv-open-access
+    lifecycle: snapshot-only
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: arxiv-abs
+    notes: "arXiv mirror of PMJ 37(3). Not yet ingested."
 
-  - author: "Philip Tetlock"
-    title: "Superforecasting"
+  - slug: tetlock-superforecasting
+    author: "Philip Tetlock"
+    title: "Superforecasting: The Art and Science of Prediction"
     year: 2015
+    category: forecasting-and-judgment
     kind: book
     topics: [calibration, forecasting, judgment]
+    source_url: "https://goodjudgment.com/superforecasting/"
+    license: paywalled-no-open-edition
+    lifecycle: snapshot-only
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: owned-book
+    notes: "Stub awaiting owned-book ingestion."
 
-research_and_innovation:
-  # R&D lab management, innovation portfolio frameworks, and the published-thesis
-  # tradition. Added 2026-04-27 as a new category — load-bearing for the
-  # upgrades/ R&D lab and its graduation gates. See
-  # upgrades/profound/2026-04-27-r-and-d-lab-thesis/ for the entry that
-  # motivated this expansion.
-  - author: "George Heilmeier (DARPA)"
+  # ============================================================
+  # category: research-and-innovation
+  # ============================================================
+
+  - slug: heilmeier-catechism
+    author: "George Heilmeier (DARPA)"
     title: "The Heilmeier Catechism"
     year: 1975
+    category: research-and-innovation
     kind: essay
     topics: [research-evaluation, proposal-critique, decision-questions, r-and-d-management, frame-challenge]
-    notes: "Eight questions every DARPA program proposal must answer. Scale-invariant: the same questions work for a multi-billion-dollar agency and a one-person lab. Useful as a checklist for frame-challenger and as a verbatim alternative to the upgrades-lab gate criterion 'belongingness in this repo specifically.'"
+    source_url: "https://www.darpa.mil/about/heilmeier-catechism"
+    license: publisher-open-access
+    lifecycle: snapshot+refresh
+    volatility: durable
+    last_verified: 2026-04-27
+    fetch_mode: html
+    notes: "DARPA's official page hosting the eight catechism questions. Government-published, public domain in practice. Scale-invariant: same questions work for a multi-billion-dollar agency and a one-person lab."
 
-  - author: "James G. March"
+  - slug: march-exploration-exploitation-1991
+    author: "James G. March"
     title: "Exploration and Exploitation in Organizational Learning"
     year: 1991
+    category: research-and-innovation
     kind: paper
     topics: [organizational-learning, exploration-exploitation, portfolio-management, decision-making, r-and-d-management]
-    notes: "Foundational paper. Establishes the structural finding that adaptive processes refine exploitation faster than exploration and become 'effective in the short run but self-destructive in the long run.' Every R&D portfolio framework — Three Horizons, Stage-Gate, DARPA's program-manager model — exists as counter-pressure against this gradient. Org Science 2(1): 71–87."
+    source_url: "http://www.iot.ntnu.no/innovation/norsi-pims-courses/Levinthal/March%20(1991).pdf"
+    license: author-published-open-access
+    lifecycle: snapshot-only
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: pdf-manual
+    notes: "Organization Science 2(1): 71-87. NTNU course mirror; INFORMS canonical is paywalled. Stub until curator runs pdftotext + ingest-owned-book.mjs."
 
-  - author: "Anthropic"
+  # ============================================================
+  # category: ai-agents-and-evaluation (research papers)
+  # ============================================================
+
+  - slug: shinn-reflexion-2023
+    author: "Noah Shinn et al."
+    title: "Reflexion: Language Agents with Verbal Reinforcement Learning"
+    year: 2023
+    category: ai-agents-and-evaluation
+    kind: paper
+    topics: [agents, reflection, self-critique, verbal-reinforcement]
+    source_url: "https://arxiv.org/abs/2303.11366"
+    license: arxiv-open-access
+    lifecycle: snapshot-only
+    volatility: slow
+    last_verified: 2026-04-23
+    fetch_mode: arxiv-abs
+    notes: "Abstract + metadata only (arxiv-abs fetch mode)."
+
+  - slug: chen-devils-advocate-2024
+    author: "Chen et al."
+    title: "Devil's Advocate: Anticipatory Reflection for LLM Agents"
+    year: 2024
+    category: ai-agents-and-evaluation
+    kind: paper
+    topics: [multi-agent, devils-advocate, anticipatory-reflection, critic]
+    source_url: "https://aclanthology.org/2024.findings-emnlp.53/"
+    license: acl-open-access
+    lifecycle: snapshot-only
+    volatility: slow
+    last_verified: 2026-04-23
+    fetch_mode: html
+    notes: "ACL Anthology HTML landing page; abstract + metadata."
+
+  # ============================================================
+  # category: anthropic-engineering-essays (snapshotted + refresh)
+  # ============================================================
+
+  - slug: anthropic-building-effective-agents
+    author: "Anthropic"
+    title: "Building Effective Agents"
+    year: 2024
+    category: anthropic-engineering-essays
+    kind: essay
+    topics: [agents, orchestration, tool-use, workflows, evaluator-optimizer]
+    source_url: "https://www.anthropic.com/research/building-effective-agents"
+    license: publisher-published-essay
+    lifecycle: snapshot+refresh
+    volatility: fast
+    last_verified: 2026-04-23
+    fetch_mode: html
+
+  - slug: anthropic-multi-agent-research-system
+    author: "Anthropic"
+    title: "How we built our multi-agent research system"
+    year: 2025
+    category: anthropic-engineering-essays
+    kind: essay
+    topics: [multi-agent, orchestration, evaluation, subagent]
+    source_url: "https://www.anthropic.com/engineering/multi-agent-research-system"
+    license: publisher-published-essay
+    lifecycle: snapshot+refresh
+    volatility: fast
+    last_verified: 2026-04-23
+    fetch_mode: html
+
+  - slug: anthropic-effective-context-engineering
+    author: "Anthropic"
+    title: "Effective Context Engineering for AI Agents"
+    year: 2025
+    category: anthropic-engineering-essays
+    kind: essay
+    topics: [context-engineering, prompting, agents, compaction]
+    source_url: "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
+    license: publisher-published-essay
+    lifecycle: snapshot+refresh
+    volatility: fast
+    last_verified: 2026-04-23
+    fetch_mode: html
+
+  - slug: anthropic-core-views-on-ai-safety
+    author: "Anthropic"
     title: "Core Views on AI Safety: When, Why, What, and How"
     year: 2023
+    category: anthropic-engineering-essays
     kind: essay
     topics: [research-thesis, ai-safety, lab-strategy, scenario-portfolio, mission, alignment]
-    notes: "Cleanest contemporary example of a research thesis as published artifact: mission + scenario portfolio (optimistic / intermediate / pessimistic) + research category split + named research directions + method commitment. Useful as canonical reference when drafting the upgrades/ lab's THESIS.md."
+    source_url: "https://www.anthropic.com/news/core-views-on-ai-safety"
+    license: publisher-published-essay
+    lifecycle: snapshot+refresh
+    volatility: slow
+    last_verified: 2026-04-27
+    fetch_mode: html
+    notes: "Cleanest contemporary example of a research thesis as published artifact. Useful canonical reference when drafting the upgrades/ lab's THESIS.md."
 
-# Topics not yet well-covered in this manifest. Candidates for extension:
-# - Frontend architecture (Adam Silver, Kent Dodds, etc.)
+  # ============================================================
+  # category: cloud-and-saas-docs (vendor documentation)
+  # ============================================================
+
+  - slug: aws-saas-lens
+    author: "AWS"
+    title: "SaaS Lens — AWS Well-Architected"
+    year: 2024
+    category: cloud-and-saas-docs
+    kind: docs
+    topics: [multi-tenancy, saas, well-architected, isolation]
+    source_url: "https://docs.aws.amazon.com/wellarchitected/latest/saas-lens/toc-contents.json"
+    license: publisher-open-access
+    lifecycle: snapshot+refresh
+    volatility: fast
+    last_verified: 2026-04-23
+    fetch_mode: aws-docs
+    notes: "TOC is a JSON index; aws-docs mode walks it recursively."
+
+  # ============================================================
+  # category: claude-code-and-agent-tooling (live-only references)
+  # No corpus dirs — these are too volatile to snapshot.
+  # canon-librarian routes queries on these topics to WebFetch.
+  # ============================================================
+
+  - slug: anthropic-claude-code-best-practices
+    author: "Anthropic"
+    title: "Best Practices for Claude Code"
+    year: 2026
+    category: claude-code-and-agent-tooling
+    kind: docs
+    topics: [claude-code, hooks, skills, settings, claude-md, memory]
+    source_url: "https://code.claude.com/docs/en/best-practices"
+    license: publisher-published-essay
+    lifecycle: live-only
+    volatility: fast
+    last_verified: 2026-05-17
+    fetch_mode: none
+    notes: "Anthropic ships frequent updates. Snapshotting would go stale within weeks. WebFetch at query time."
+
+  - slug: anthropic-claude-code-memory
+    author: "Anthropic"
+    title: "How Claude remembers your project (memory hierarchy)"
+    year: 2026
+    category: claude-code-and-agent-tooling
+    kind: docs
+    topics: [claude-code, memory, claude-md, agents-md, auto-load, skills]
+    source_url: "https://code.claude.com/docs/en/memory"
+    license: publisher-published-essay
+    lifecycle: live-only
+    volatility: fast
+    last_verified: 2026-05-17
+    fetch_mode: none
+    notes: "Memory hierarchy and CLAUDE.md authoring guidance. Updates with each Claude Code release."
+
+  - slug: agents-md-spec
+    author: "Agentic AI Foundation"
+    title: "AGENTS.md specification"
+    year: 2025
+    category: claude-code-and-agent-tooling
+    kind: standard
+    topics: [agents-md, cross-tool, agent-instructions, project-instructions]
+    source_url: "https://agents.md"
+    license: publisher-open-access
+    lifecycle: live-only
+    volatility: fast
+    last_verified: 2026-05-17
+    fetch_mode: none
+    notes: "Stewarded by Agentic AI Foundation (Linux Foundation) as of Nov 2025. Active proposal: v1.1 progressive disclosure (GH issue #135)."
+
+  - slug: humanlayer-writing-good-claude-md
+    author: "HumanLayer"
+    title: "Writing a good CLAUDE.md"
+    year: 2025
+    category: claude-code-and-agent-tooling
+    kind: essay
+    topics: [claude-md, project-instructions, conciseness, anti-bloat]
+    source_url: "https://www.humanlayer.dev/blog/writing-a-good-claude-md"
+    license: publisher-published-essay
+    lifecycle: snapshot+refresh
+    volatility: slow
+    last_verified: 2026-05-17
+    fetch_mode: html
+    notes: "Published Nov 25 2025. HumanLayer's house style: aggressive trimming (<60 lines as aspirational)."
+
+  - slug: eugene-yan-prompting-fundamentals
+    author: "Eugene Yan"
+    title: "Prompting Fundamentals and How to Apply Them Effectively"
+    year: 2024
+    category: claude-code-and-agent-tooling
+    kind: essay
+    topics: [prompting, xml-vs-markdown, claude, structured-output]
+    source_url: "https://eugeneyan.com/writing/prompting/"
+    license: author-published-essay
+    lifecycle: snapshot+refresh
+    volatility: durable
+    last_verified: 2026-05-17
+    fetch_mode: html
+    notes: "Published May 2024. Foundational reference for prompt structure; Claude-specific guidance on XML tags."
+
+# ============================================================
+# Topics not yet covered. Candidates for extension:
+# - Frontend architecture (Adam Silver, Kent Dodds)
 # - Security engineering (Ross Anderson, NIST SSDF)
 # - Data platform / lakehouse (Databricks, Snowflake whitepapers)
 # - AI/ML system design (Chip Huyen, Andrej Karpathy essays)
 # - Organizational: Team Topologies, Accelerate
-# - Further R&D-lab management: Gertner *The Idea Factory* (2012), Cooper Stage-Gate,
-#   Baghai/Coley/White *The Alchemy of Growth* (1999, Three Horizons), Stokes
-#   *Pasteur's Quadrant* (1997). See upgrades entry on deferred library expansion.
+# - Further R&D-lab management: Gertner *The Idea Factory* (2012),
+#   Cooper Stage-Gate, Baghai/Coley/White *The Alchemy of Growth* (1999,
+#   Three Horizons), Stokes *Pasteur's Quadrant* (1997).
+#   See upgrades entry on deferred library expansion.
+# ============================================================
