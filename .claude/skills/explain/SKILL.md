@@ -1,6 +1,8 @@
 ---
 name: explain
 description: On-demand orientation for `claude-critic-stack`. Runs `bin/explain-render.sh` and emits the bordered ASCII card it prints, wrapped in a plain code fence. Use when the user types `/explain` or asks a what-is-this / what-can-I-do-here question without naming a specific design problem. SKIP when the user is mid-session, asked a specific design question (route through the 13-step workflow), or asked a factual question (route to canon-librarian). For the 24-bit ANSI terminal-art version, use `/explain-pretty`.
+model: claude-haiku-4-5
+effort: low
 allowed-tools: Bash(bin/explain-render.sh:*)
 ---
 
