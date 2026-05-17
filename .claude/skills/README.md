@@ -56,6 +56,39 @@ The [.claude/commands/](.claude/commands/) folder is **legacy** (per Anthropic: 
 
 ---
 
+## Frontmatter reference — all supported fields
+
+Source of truth: [Claude Code skills docs](https://code.claude.com/docs/en/skills.md). Verified 2026-05-17 against the official reference. Unknown fields are silently ignored by the harness — adding `category:`, `version:`, or `tags:` does nothing.
+
+### Fields currently used in this repo
+
+| Field | Type | Effect |
+|---|---|---|
+| `name` | string | Display name. Defaults to the directory name if omitted. |
+| `description` | string | One-line "what + when." Used by Claude to decide auto-invocation; surfaced in the `/`-menu. |
+| `argument-hint` | string | Placeholder shown in the slash-command autocomplete. Mandatory for argument-taking skills. |
+| `allowed-tools` | string | Tool allowlist for the skill's body — no permission prompt for these. Bash subset uses the form `Bash(<cmd>:*)`. |
+| `model` | string | Override the model for the skill's turn only. Accepts `claude-haiku-4-5`, `claude-sonnet-4-6`, `claude-opus-4-7`, or `inherit`. **Real lever** — pinning `claude-haiku-4-5` on a deterministic skill like `/explain` makes it run in ~14s vs. session-default Opus. |
+| `effort` | enum | Reasoning effort: `low` \| `medium` \| `high` \| `xhigh` \| `max`. Availability depends on the model. Pair with `model:` on deterministic skills. |
+| `disable-model-invocation` | bool | `true` → user-only; Claude cannot auto-invoke. Use for DRAFT skills or destructive operations. |
+
+### Fields available but not currently used
+
+| Field | Purpose |
+|---|---|
+| `when_to_use` | Extra discovery context appended to `description`. Useful when `description` is full but more invocation hints are needed. |
+| `arguments` | Named positional args (richer `$name` substitution in the body than the catch-all `$ARGUMENTS`). |
+| `user-invocable` | `false` → hide from the `/`-menu; Claude-only invocation. Inverse axis to `disable-model-invocation`. |
+| `context` | `fork` → run skill body in a forked subagent context (anti-anchoring; the skill cannot see the main session's history). |
+| `agent` | When `context: fork`, names which subagent type to fork into. |
+| `hooks` | Skill-scoped lifecycle hooks (separate from repo-level [.claude/hooks/](.claude/hooks/)). |
+| `paths` | Glob patterns limiting auto-activation by the working-tree path. |
+| `shell` | Shell for `` !`command` `` and ` ```! ` exec blocks inside the skill body — `bash` or `powershell`. |
+
+**Cost lever to remember:** read-only / deterministic skills (renderers, lookups, formatters) should pin `model: claude-haiku-4-5` + `effort: low`. The body is doing zero reasoning; you're paying Opus rates for a string forwarder otherwise. Reasoning-heavy skills (`/critique`, `/upgrade`) should inherit session defaults.
+
+---
+
 ## Conventions specific to this folder
 
 These rules apply to skill files and do not appear in root [CLAUDE.md](CLAUDE.md):
