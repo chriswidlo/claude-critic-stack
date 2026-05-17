@@ -1,13 +1,13 @@
 # maintenance/
 
-**The third zone of this repo.** Sibling to [upgrades/](upgrades/), equally separated from the workflow.
+**The third zone of this repo.** Sibling to [garden/](garden/), equally separated from the workflow.
 
 ## The three-zone model
 
 | Zone | Lives in | Purpose | Workflow knows about it? |
 |---|---|---|---|
 | **Workflow** | [CLAUDE.md](CLAUDE.md) + [.claude/](.claude/) | The running adversarial-review system | — (workflow IS this) |
-| **Upgrades** | [upgrades/](upgrades/) | R&D backlog: profound, novel, creative ideas for elevating the system | **No** — workflow is blind to the lab |
+| **Garden** | [garden/](garden/) | R&D backlog: profound, novel, creative ideas for elevating the system | **No** — workflow is blind to the garden |
 | **Maintenance** | `maintenance/` (this folder) | Repo hygiene: rule-conformance checks, orphan detection, freshness audits, drift catches, cleanup tasks | **No** — workflow is blind to maintenance too |
 
 The separation is deliberate. The workflow's job is to do adversarial design review. Polluting it with hygiene chores or research backlog leaks attention into the wrong tier. Maintenance is the layer that keeps the workflow's primitives correct, but it runs *on* the workflow, never *as part of* it.
@@ -88,7 +88,7 @@ The recommended cadence mirrors `brew doctor` → `brew update` → `brew outdat
 
 ## What does NOT go here
 
-- **R&D ideas** — those go to [upgrades/](upgrades/).
+- **R&D ideas** — those go to [garden/](garden/).
 - **Workflow primitives** (agents, skills, hooks) — those go under [.claude/](.claude/).
 - **Per-session reasoning** — that goes under `.claude/session-artifacts/<session-id>/`.
 - **Ephemeral planning notes** — those go to [plans/](plans/).
@@ -96,6 +96,6 @@ The recommended cadence mirrors `brew doctor` → `brew update` → `brew outdat
 
 ## See also
 
-- [upgrades/README.md](upgrades/README.md) — the R&D lab (sibling zone)
+- [garden/README.md](garden/README.md) — the R&D garden (sibling zone)
 - [README.md](README.md) §"Operating principle — ratchet forward" — the discipline that maintenance enforces
 - [research/sota-2026-v2/16-ai-readable-docs.md](research/sota-2026-v2/16-ai-readable-docs.md) — the README authoring standard maintenance audits against

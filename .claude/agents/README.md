@@ -116,7 +116,7 @@ flowchart TB
 
 When to enable `SHADOW_PANEL=1`: high-stakes decisions where the cost of *correlated review error* (one model family's blindspot) exceeds the doubled per-lens spend. Default is off.
 
-A second env var `EXTERNAL_SHADOW=1` is *reserved* for cross-family shadowing (OpenRouter / local Ollama) — currently inert; see [upgrades/profound/2026-04-26-critic-panel-correlated-by-default/](upgrades/profound/2026-04-26-critic-panel-correlated-by-default/) for deferred work.
+A second env var `EXTERNAL_SHADOW=1` is *reserved* for cross-family shadowing (OpenRouter / local Ollama) — currently inert; see [garden/heirloom/2026-04-26-critic-panel-correlated-by-default/](garden/heirloom/2026-04-26-critic-panel-correlated-by-default/) for deferred work.
 
 ---
 

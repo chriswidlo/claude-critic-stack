@@ -12,9 +12,9 @@ A `.claude/plugins/<plugin-name>/` directory per installed or bundled plugin, ea
 
 ## Why this is on the radar for this repo
 
-Two upgrades-lab entries already consider plugin packaging:
-- [upgrades/normal/2026-04-26-author-attribution-for-community-plugins/](upgrades/normal/2026-04-26-author-attribution-for-community-plugins/)
-- [upgrades/outlandish/2026-04-26-critic-stack-as-installable-marketplace-plugin/](upgrades/outlandish/2026-04-26-critic-stack-as-installable-marketplace-plugin/)
+Two garden entries already consider plugin packaging:
+- [garden/perennial/2026-04-26-author-attribution-for-community-plugins/](garden/perennial/2026-04-26-author-attribution-for-community-plugins/)
+- [garden/specimen/2026-04-26-critic-stack-as-installable-marketplace-plugin/](garden/specimen/2026-04-26-critic-stack-as-installable-marketplace-plugin/)
 
 If either lands — packaging this stack as a community plugin, or consuming external plugins for ancillary capabilities — populate this folder. The placeholder ensures the slot is discoverable to anyone (AI or human) thinking about plugin packaging without forcing the question now.
 

@@ -11,11 +11,11 @@ SESSIONS=$(ls -1 "$ROOT/.claude/session-artifacts/" 2>/dev/null | grep -Ev '^(RE
 EXEMPLARS=$(ls -1 "$ROOT/.claude/session-artifacts/exemplars/" 2>/dev/null | grep -v '^README' | wc -l | tr -d ' ')
 LAST_DATE=$(ls -1t "$ROOT/.claude/session-artifacts/" 2>/dev/null | grep -Ev '^(README|exemplars)' | head -1 | grep -oE '^[0-9]{4}-[0-9]{2}-[0-9]{2}' || echo '—')
 CANON_TOTAL=$(ls -1 "$ROOT/canon/corpus/" 2>/dev/null | wc -l | tr -d ' ')
-NB=$(ls -1d "$ROOT/upgrades/no-brainer/"*/ 2>/dev/null | wc -l | tr -d ' ')
-NM=$(ls -1d "$ROOT/upgrades/normal/"*/ 2>/dev/null | wc -l | tr -d ' ')
-PR=$(ls -1d "$ROOT/upgrades/profound/"*/ 2>/dev/null | wc -l | tr -d ' ')
-OL=$(ls -1d "$ROOT/upgrades/outlandish/"*/ 2>/dev/null | wc -l | tr -d ' ')
-UP_TOTAL=$((NB + NM + PR + OL))
+HEI=$(ls -1d "$ROOT/garden/heirloom/"*/ 2>/dev/null | wc -l | tr -d ' ')
+SPE=$(ls -1d "$ROOT/garden/specimen/"*/ 2>/dev/null | wc -l | tr -d ' ')
+VOL=$(ls -1d "$ROOT/garden/volunteer/"*/ 2>/dev/null | wc -l | tr -d ' ')
+PER=$(ls -1d "$ROOT/garden/perennial/"*/ 2>/dev/null | wc -l | tr -d ' ')
+UP_TOTAL=$((HEI + SPE + VOL + PER))
 
 FULL_REVIEW_AVG=$(python3 - "$ROOT" <<'PYEOF' 2>/dev/null
 import json, os, glob, sys
@@ -32,5 +32,5 @@ PYEOF
 )
 FULL_REVIEW_AVG="${FULL_REVIEW_AVG:-~10 min}"
 
-printf 'SESSIONS=%s\nEXEMPLARS=%s\nLAST_DATE=%s\nCANON_TOTAL=%s\nNB=%s\nNM=%s\nPR=%s\nOL=%s\nUP_TOTAL=%s\nFULL_REVIEW_AVG=%s\n' \
-    "$SESSIONS" "$EXEMPLARS" "$LAST_DATE" "$CANON_TOTAL" "$NB" "$NM" "$PR" "$OL" "$UP_TOTAL" "$FULL_REVIEW_AVG"
+printf 'SESSIONS=%s\nEXEMPLARS=%s\nLAST_DATE=%s\nCANON_TOTAL=%s\nHEI=%s\nSPE=%s\nVOL=%s\nPER=%s\nUP_TOTAL=%s\nFULL_REVIEW_AVG=%s\n' \
+    "$SESSIONS" "$EXEMPLARS" "$LAST_DATE" "$CANON_TOTAL" "$HEI" "$SPE" "$VOL" "$PER" "$UP_TOTAL" "$FULL_REVIEW_AVG"

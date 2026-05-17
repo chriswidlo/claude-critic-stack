@@ -31,7 +31,7 @@ The script enforces this in three modes; you orchestrate the right combination p
 
 1. **Resolve the file list.**
    - If `$ARGUMENTS` names files or globs, expand them with `find` or shell globbing relative to the repo root.
-   - If `$ARGUMENTS` is empty, default to: every markdown file under [.claude/](.claude/), [upgrades/](upgrades/), [canon/](canon/), [plans/](plans/), and the repo-root markdown files. Use `find` with `-name '*.md'` and exclude `.git/`, `node_modules/`, and `canon/corpus/` (which is gitignored license-bearing material).
+   - If `$ARGUMENTS` is empty, default to: every markdown file under [.claude/](.claude/), [garden/](garden/), [canon/](canon/), [plans/](plans/), and the repo-root markdown files. Use `find` with `-name '*.md'` and exclude `.git/`, `node_modules/`, and `canon/corpus/` (which is gitignored license-bearing material).
    - If `$ARGUMENTS` contains `--mode <name>`, honor that mode. Otherwise default mode is `style` + `resolve` (run both, report combined).
 
 2. **Run the script.** Invoke `./bin/check-path-discipline.sh <mode> <files...>` for each requested mode. Capture stdout and exit code.
@@ -53,7 +53,7 @@ The script enforces this in three modes; you orchestrate the right combination p
 
 - **Never invoke the script with a path that escapes the repo root.** The script uses `git rev-parse --show-toplevel` for `$REPO_ROOT`; passing files outside the repo will produce confusing relative paths in its output. Reject such requests with a one-line explanation.
 - **Never modify files in [.claude/session-artifacts/](.claude/session-artifacts/) prose.** Per the user's feedback memory, dead navigational links in session artifacts may be repaired but **prose mentions of past paths must be left alone** — they are historical record.
-- **Never silently apply `--style` fixes to lab entries in [upgrades/](upgrades/) entry bodies.** Per the lab-is-creative-hub feedback memory, cleanup tasks must not edit entry bodies even when they reference deleted primitives. Surface the violation, propose the fix, but require explicit user confirmation before touching an entry under [upgrades/](upgrades/).
+- **Never silently apply `--style` fixes to lab entries in [garden/](garden/) entry bodies.** Per the lab-is-creative-hub feedback memory, cleanup tasks must not edit entry bodies even when they reference deleted primitives. Surface the violation, propose the fix, but require explicit user confirmation before touching an entry under [garden/](garden/).
 - **Never run the script on `canon/corpus/`.** That directory is gitignored license-bearing material and may contain absolute paths in its source-of-truth form that are not repo artifacts.
 
 ## When `$ARGUMENTS` is ambiguous

@@ -60,7 +60,7 @@ Explicit trigger phrases (type them literally to force a path):
 Slash commands (zero-friction utilities):
 
 - **`/explain`** — this menu, on demand, without leaving chat.
-- **`/upgrade`** — capture a creative R&D idea into [`upgrades/`](upgrades/).
+- **`/upgrade`** — capture a creative R&D idea into [`garden/`](garden/).
 - **`/critique <doc-path>`** — one-shot adversarial review. Mints a session, freezes the doc as `question.md` + `inputs.md`, then runs the full 13-step workflow against it in the same chat. Synthesis is presented at the end (~5–15 min). Slug auto-derived from the doc's H1; target defaults to current repo; grounding defaults to follow-AI-docs. No questionnaire.
 - **`/session-bootstrap`** — mint an empty session-dir skeleton by hand (rare; use `/critique` when you have a doc).
 
@@ -106,7 +106,7 @@ It is built against five named LLM failure modes (see [`.genesis/five-pressures.
 4. **Name-your-uncertainty** — equally-confident prose regardless of actual confidence.
 5. **Consequence-imagine** — recommending patterns without modelling failure modes.
 
-It is **not** a code reviewer, **not** a post-hoc output grader, **not** an RFP/contract/document review tool. Those slices are well-served elsewhere (CodeRabbit, Greptile, Qodo, Prometheus, G-Eval, FACTS Grounding, Vijayaraghavan et al.'s "Team of Rivals" — [arXiv 2601.14351](https://arxiv.org/abs/2601.14351)). See [`upgrades/profound/2026-05-09-sota-survey-the-actual-gap/`](upgrades/profound/2026-05-09-sota-survey-the-actual-gap/) for the full SOTA comparison.
+It is **not** a code reviewer, **not** a post-hoc output grader, **not** an RFP/contract/document review tool. Those slices are well-served elsewhere (CodeRabbit, Greptile, Qodo, Prometheus, G-Eval, FACTS Grounding, Vijayaraghavan et al.'s "Team of Rivals" — [arXiv 2601.14351](https://arxiv.org/abs/2601.14351)). See [`garden/heirloom/2026-05-09-sota-survey-the-actual-gap/`](garden/heirloom/2026-05-09-sota-survey-the-actual-gap/) for the full SOTA comparison.
 
 **What it claims to be:**
 - A fixed adversarial-review workflow (13 steps), not a soft pattern.

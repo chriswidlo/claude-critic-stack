@@ -14,11 +14,11 @@ SESSIONS=$(ls -1 "$ROOT/.claude/session-artifacts/" 2>/dev/null | grep -Ev '^(RE
 EXEMPLARS=$(ls -1 "$ROOT/.claude/session-artifacts/exemplars/" 2>/dev/null | grep -v '^README' | wc -l | tr -d ' ')
 LAST_DATE=$(ls -1t "$ROOT/.claude/session-artifacts/" 2>/dev/null | grep -Ev '^(README|exemplars)' | head -1 | grep -oE '^[0-9]{4}-[0-9]{2}-[0-9]{2}' || echo '—')
 CANON_TOTAL=$(ls -1 "$ROOT/canon/corpus/" 2>/dev/null | wc -l | tr -d ' ')
-NB=$(ls -1d "$ROOT/upgrades/no-brainer/"*/ 2>/dev/null | wc -l | tr -d ' ')
-NM=$(ls -1d "$ROOT/upgrades/normal/"*/ 2>/dev/null | wc -l | tr -d ' ')
-PR=$(ls -1d "$ROOT/upgrades/profound/"*/ 2>/dev/null | wc -l | tr -d ' ')
-OL=$(ls -1d "$ROOT/upgrades/outlandish/"*/ 2>/dev/null | wc -l | tr -d ' ')
-UP_TOTAL=$((NB + NM + PR + OL))
+HEI=$(ls -1d "$ROOT/garden/heirloom/"*/ 2>/dev/null | wc -l | tr -d ' ')
+SPE=$(ls -1d "$ROOT/garden/specimen/"*/ 2>/dev/null | wc -l | tr -d ' ')
+VOL=$(ls -1d "$ROOT/garden/volunteer/"*/ 2>/dev/null | wc -l | tr -d ' ')
+PER=$(ls -1d "$ROOT/garden/perennial/"*/ 2>/dev/null | wc -l | tr -d ' ')
+UP_TOTAL=$((HEI + SPE + VOL + PER))
 
 FULL_REVIEW_AVG=$(python3 - "$ROOT" <<'PYEOF' 2>/dev/null
 import json, os, glob, sys
@@ -36,10 +36,10 @@ PYEOF
 FULL_REVIEW_AVG="${FULL_REVIEW_AVG:-~10 min}"
 
 # Use Python for precise width-padding with Unicode awareness.
-python3 - "$SESSIONS" "$EXEMPLARS" "$LAST_DATE" "$CANON_TOTAL" "$NB" "$NM" "$PR" "$OL" "$UP_TOTAL" "$FULL_REVIEW_AVG" <<'PYEOF'
+python3 - "$SESSIONS" "$EXEMPLARS" "$LAST_DATE" "$CANON_TOTAL" "$HEI" "$SPE" "$VOL" "$PER" "$UP_TOTAL" "$FULL_REVIEW_AVG" <<'PYEOF'
 import sys, unicodedata
 
-SESSIONS, EXEMPLARS, LAST_DATE, CANON_TOTAL, NB, NM, PR, OL, UP_TOTAL, FULL_REVIEW_AVG = sys.argv[1:11]
+SESSIONS, EXEMPLARS, LAST_DATE, CANON_TOTAL, HEI, SPE, VOL, PER, UP_TOTAL, FULL_REVIEW_AVG = sys.argv[1:11]
 
 W = 96            # inner box width (chars between │ borders) — fills typical wide terminals
 INDENT = ""       # no left indent — let the code-fence left edge be the box left edge
@@ -121,8 +121,8 @@ empty()
 line(f"     canon entries  {CANON_TOTAL}")
 line( "                    distributed systems · DDD · refactoring · ops")
 empty()
-line(f"     upgrades       {UP_TOTAL} total")
-line(f"                    {NB} no-brainer · {NM} normal · {PR} profound · {OL} outlandish")
+line(f"     garden         {UP_TOTAL} total")
+line(f"                    {HEI} heirloom · {SPE} specimen · {VOL} volunteer · {PER} perennial")
 empty()
 
 # ── RENAME SHORTLIST ──────────────────────────────────────

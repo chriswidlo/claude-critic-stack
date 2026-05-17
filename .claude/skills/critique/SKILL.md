@@ -14,7 +14,7 @@ The user's input: $ARGUMENTS
 ## How to use
 
 ```
-/critique upgrades/normal/2026-05-09-foo/README.md
+/critique garden/perennial/2026-05-09-foo/README.md
 ```
 
 One argument, the repo-relative doc path. The skill auto-derives the slug from the doc's first H1, defaults target=`current repo` and grounding=`follow-AI-docs`, mints the session, writes the input artifacts, and **immediately begins step 1 of the 13-step workflow** per [CLAUDE.md](CLAUDE.md). You read the synthesis at the end. No questions asked unless `$ARGUMENTS` is empty.

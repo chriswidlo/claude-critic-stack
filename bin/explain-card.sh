@@ -13,11 +13,11 @@ SESSIONS=$(ls -1 "$ROOT/.claude/session-artifacts/" 2>/dev/null | grep -Ev '^(RE
 EXEMPLARS=$(ls -1 "$ROOT/.claude/session-artifacts/exemplars/" 2>/dev/null | grep -v '^README' | wc -l | tr -d ' ')
 LAST_DATE=$(ls -1t "$ROOT/.claude/session-artifacts/" 2>/dev/null | grep -Ev '^(README|exemplars)' | head -1 | grep -oE '^[0-9]{4}-[0-9]{2}-[0-9]{2}' || echo '—')
 CANON_TOTAL=$(ls -1 "$ROOT/canon/corpus/" 2>/dev/null | wc -l | tr -d ' ')
-NB=$(ls -1d "$ROOT/upgrades/no-brainer/"*/ 2>/dev/null | wc -l | tr -d ' ')
-NM=$(ls -1d "$ROOT/upgrades/normal/"*/ 2>/dev/null | wc -l | tr -d ' ')
-PR=$(ls -1d "$ROOT/upgrades/profound/"*/ 2>/dev/null | wc -l | tr -d ' ')
-OL=$(ls -1d "$ROOT/upgrades/outlandish/"*/ 2>/dev/null | wc -l | tr -d ' ')
-UP_TOTAL=$((NB + NM + PR + OL))
+HEI=$(ls -1d "$ROOT/garden/heirloom/"*/ 2>/dev/null | wc -l | tr -d ' ')
+SPE=$(ls -1d "$ROOT/garden/specimen/"*/ 2>/dev/null | wc -l | tr -d ' ')
+VOL=$(ls -1d "$ROOT/garden/volunteer/"*/ 2>/dev/null | wc -l | tr -d ' ')
+PER=$(ls -1d "$ROOT/garden/perennial/"*/ 2>/dev/null | wc -l | tr -d ' ')
+UP_TOTAL=$((HEI + SPE + VOL + PER))
 
 FULL_REVIEW_AVG=$(python3 - "$ROOT" <<'PYEOF' 2>/dev/null
 import json, os, glob, sys
@@ -78,7 +78,7 @@ printf "   ${VIOLET}▎${X}  ${FG}${B}what's loaded${X}\n"
 echo
 printf "      ${GREEN}${B}%2d${X}  ${DIM}past sessions${X}    ${FAINT}·${X}    ${GREEN}${B}%2d${X}  ${DIM}exemplars${X}    ${FAINT}·${X}    ${DIM}last${X}  ${FG}%s${X}\n" "$SESSIONS" "$EXEMPLARS" "$LAST_DATE"
 printf "      ${GREEN}${B}%2d${X}  ${DIM}canon entries${X}   ${FAINT}·${X}   ${DIM}expert writing on distributed systems, DDD, refactoring, ops${X}\n" "$CANON_TOTAL"
-printf "      ${GREEN}${B}%2d${X}  ${DIM}upgrades${X}        ${GREEN}✓ %d${X} ${DIM}no-brainer${X}   ${BLUE}● %d${X} ${DIM}normal${X}   ${VIOLET}◆ %d${X} ${DIM}profound${X}   ${YELLOW}★ %d${X} ${DIM}outlandish${X}\n" "$UP_TOTAL" "$NB" "$NM" "$PR" "$OL"
+printf "      ${GREEN}${B}%2d${X}  ${DIM}garden${X}          ${VIOLET}🌹 %d${X} ${DIM}heirloom${X}   ${YELLOW}🌳 %d${X} ${DIM}specimen${X}   ${GREEN}🍀 %d${X} ${DIM}volunteer${X}   ${BLUE}🌿 %d${X} ${DIM}perennial${X}\n" "$UP_TOTAL" "$HEI" "$SPE" "$VOL" "$PER"
 echo
 echo
 

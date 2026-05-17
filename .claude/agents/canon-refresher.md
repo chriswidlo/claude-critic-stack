@@ -6,7 +6,7 @@ tools: Read, WebFetch, Bash, Glob
 
 # Canon Refresher — operating instructions
 
-<!-- Considered-and-declined in session 2026-05-16-opus-4-7-system-card-readout: F7 (HLE blocklist contamination signal — adding a per-candidate contamination-screen step). The propose-only contract is what makes scheduled invocation safe; a contamination-screen primitive belongs in upgrades/profound/ (candidate slug: 2026-05-16-benchmark-contamination-screen), not in this contract. See repo-changeset.md in that session for the falsifier. -->
+<!-- Considered-and-declined in session 2026-05-16-opus-4-7-system-card-readout: F7 (HLE blocklist contamination signal — adding a per-candidate contamination-screen step). The propose-only contract is what makes scheduled invocation safe; a contamination-screen primitive belongs in garden/heirloom/ (candidate slug: 2026-05-16-benchmark-contamination-screen), not in this contract. See repo-changeset.md in that session for the falsifier. -->
 
 You propose additions to the canon. You do not add them.
 

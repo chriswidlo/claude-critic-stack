@@ -208,4 +208,4 @@ The event schema is load-bearing for the parser and HTML renderer. To add a fiel
 - [.claude/session-artifacts/README.md](.claude/session-artifacts/README.md) — destination schema for `diagnostics/metrics.json`
 - [.claude/skills/session-bootstrap/SKILL.md](.claude/skills/session-bootstrap/SKILL.md) — the binding-contract enforcer at step 4b
 - [.claude/skills/ledger-render/SKILL.md](.claude/skills/ledger-render/SKILL.md) — primary consumer of `metrics.json`
-- [upgrades/profound/2026-05-17-diagnostics-as-first-class/](upgrades/profound/2026-05-17-diagnostics-as-first-class/) — R&D rationale for the diagnostics-as-first-class migration
+- [garden/heirloom/2026-05-17-diagnostics-as-first-class/](garden/heirloom/2026-05-17-diagnostics-as-first-class/) — R&D rationale for the diagnostics-as-first-class migration

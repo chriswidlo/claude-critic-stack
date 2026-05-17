@@ -171,11 +171,11 @@ If `metrics.json` is missing (binding skipped at step 1), `/ledger-render` falls
 
 ## Known issues (open)
 
-1. **No test suite.** Adding one requires synthesizing realistic events.jsonl + transcript fixtures. Deferred — would be its own upgrades/ entry.
+1. **No test suite.** Adding one requires synthesizing realistic events.jsonl + transcript fixtures. Deferred — would be its own garden/ entry.
 
 ## See also
 
 - [.claude/hooks/README.md](.claude/hooks/README.md) — event schema, hook execution flow
 - [.claude/session-artifacts/README.md](.claude/session-artifacts/README.md) — `<session-id>/diagnostics/` layout, ledger schema
 - [.claude/skills/ledger-render/SKILL.md](.claude/skills/ledger-render/SKILL.md) — primary consumer of `metrics.json`
-- [upgrades/profound/2026-05-17-diagnostics-as-first-class/](upgrades/profound/2026-05-17-diagnostics-as-first-class/) — R&D rationale for the pipeline
+- [garden/heirloom/2026-05-17-diagnostics-as-first-class/](garden/heirloom/2026-05-17-diagnostics-as-first-class/) — R&D rationale for the pipeline
