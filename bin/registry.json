@@ -2,27 +2,28 @@
   "$schema_note": "Registry of executable scripts under bin/. AI agents and humans both read this to decide which script to invoke and whether confirmation is needed before running it. Update on every add/remove/rename.",
   "scripts": [
     {
-      "name": "ingest-canon.mjs",
-      "purpose": "Populate canon/corpus/<slug>/ from canon/sources.ingest.yaml entries (HTML / HTML-multi / PDF-manual fetch).",
+      "name": "ingest-canon.py",
+      "purpose": "Populate canon/corpus/<slug>/ from canon/sources.yaml entries (HTML / HTML-multi / arxiv-abs / aws-docs fetch). Schema_version 2; filters by lifecycle + fetch_mode.",
       "usage": [
-        "node ./bin/ingest-canon.mjs",
-        "node ./bin/ingest-canon.mjs --force",
-        "node ./bin/ingest-canon.mjs --only=<slug>"
+        "python3 ./bin/ingest-canon.py",
+        "python3 ./bin/ingest-canon.py --force",
+        "python3 ./bin/ingest-canon.py --only=<slug>"
       ],
       "modes": null,
       "read_only": false,
-      "writes": ["canon/corpus/<slug>/source.txt", "canon/corpus/<slug>/citation.yaml"],
-      "side_effects": ["network fetch (HTML, PDF)"],
+      "writes": ["canon/corpus/<slug>/source.txt", "canon/corpus/<slug>/citation.yaml", "canon/corpus/<slug>/README.md"],
+      "side_effects": ["network fetch (HTML, JSON TOC)"],
       "idempotent": true,
       "consumed_by": ["canon-librarian agent (indirect — reads the corpus this populates)", "canon-refresher agent (proposes new entries this script ingests)"],
       "tested": true,
       "added": "2026-04-24"
     },
     {
-      "name": "ingest-owned-book.mjs",
+      "name": "ingest-owned-book.py",
       "purpose": "Promote a paywalled-book stub at canon/corpus/<slug>/ from a LOCAL plaintext file the operator legitimately obtained (OCR of owned ebook, publisher plain-text export). Refuses if source.txt exists, file is <10 KB, or is empty; soft-warns on suspicious source paths.",
       "usage": [
-        "node ./bin/ingest-owned-book.mjs <slug> <path-to-text>"
+        "python3 ./bin/ingest-owned-book.py <slug> <path-to-text>",
+        "python3 ./bin/ingest-owned-book.py <slug> <path-to-text> --force"
       ],
       "modes": null,
       "read_only": false,
