@@ -40,6 +40,8 @@ For each lens, write `critiques/<lens>.comparison.md` with this exact structure:
 
 `agree | partial-agree | disagree | unavailable`
 
+(This exact label, on its own line, is parsed by [bin/diagnostics/aggregate-session.py](bin/diagnostics/aggregate-session.py) into a structured `comparator.agreement_class` field. Don't surround it with prose; emit it as a bare label as shown.)
+
 ## One-line gloss
 
 <single sentence explaining the agreement class — what the two lanes share, what they don't>

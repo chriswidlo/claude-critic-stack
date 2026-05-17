@@ -1,6 +1,6 @@
 ---
 name: requirement-classifier
-description: Labels the incoming design question as one of {new, replace, extend, migrate, refactor, investigation} and states the default frame that label carries. Runs first in the 12-step workflow. Output is short (<600 tokens) and lands at .claude/session-artifacts/<id>/requirement.md. The orchestrator uses the label to bias the reframe step — different labels default to different framings, and a misclassification here propagates downstream.
+description: Labels the incoming design question as one of {new, replace, extend, migrate, refactor, investigation} and states the default frame that label carries. Runs first in the 13-step workflow. Output is short (<600 tokens) and lands at .claude/session-artifacts/<id>/requirement.md. The orchestrator uses the label to bias the reframe step — different labels default to different framings, and a misclassification here propagates downstream.
 tools: Read
 ---
 

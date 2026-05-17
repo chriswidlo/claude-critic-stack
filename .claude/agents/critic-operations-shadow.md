@@ -32,7 +32,12 @@ Identical to [critic-operations](.claude/agents/critic-operations.md), section-f
 4. Observability gap
 5. Cost at failure
 6. Frame-level objection (at least one)
-7. Verdict — `approve | rework | reject`, plus one sentence on what would flip it
+7. Verdict — emit the structured block as the last two lines of your output:
+   ```
+   Verdict: approve | rework | reject
+   Confidence: 0.00–1.00
+   ```
+   Plus one sentence on what would flip it. Same calibration as the canonical lens; see [.claude/agents/critic-operations.md](.claude/agents/critic-operations.md) §7. The diagnostic pipeline parses this block — don't paraphrase the field names.
 
 ## Things you must not do
 

@@ -31,7 +31,12 @@ Identical to [critic-product](.claude/agents/critic-product.md), section-for-sec
 3. Migration burden
 4. Product affordances better / worse
 5. Frame-level objection (at least one)
-6. Verdict — `approve | rework | reject`, plus one sentence on what would flip it
+6. Verdict — emit the structured block as the last two lines of your output:
+   ```
+   Verdict: approve | rework | reject
+   Confidence: 0.00–1.00
+   ```
+   Plus one sentence on what would flip it. Same calibration as the canonical lens; see [.claude/agents/critic-product.md](.claude/agents/critic-product.md) §6. The diagnostic pipeline parses this block — don't paraphrase the field names.
 
 ## Things you must not do
 

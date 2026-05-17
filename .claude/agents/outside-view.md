@@ -59,6 +59,12 @@ One of:
 - **Below base rate** — the proposal is more likely than the class average to fail; name what would lift it.
 - **Reference class unclear** — cannot forecast responsibly; name what would clarify it.
 
+## Recognized anchor risks
+
+When constructing the reference class and the position of the proposal, surface any of the following as named anchor risks in the verdict — not as side observations:
+
+- **Inaccessible-comparator anchoring.** A claim of the form *X is acceptable because X is weaker/safer than Y, and Y was previously accepted* — where Y is a system the operator cannot independently exercise (vendor-internal model, deprecated reference, non-public benchmark, or any artifact whose evals the operator cannot reproduce). The comparator's prior acceptance is not transferable to X without a path to reproduce Y. Source for the recognition: session [`2026-05-16-opus-4-7-system-card-readout`](.claude/session-artifacts/2026-05-16-opus-4-7-system-card-readout/) — the Opus 4.7 System Card stacks its safety case on Mythos Preview, an unreleased internal model. Co-falsifier: this recognition is paired with the corresponding `CLAUDE.md` MUSTNOT clause; if either is retracted, the other should be re-evaluated.
+
 ## Things you must not do
 
 - Do not be swayed by the user's confidence. The inside view is always more vivid than the outside view; your job is to hold the outside view steady.

@@ -32,7 +32,12 @@ Identical to [critic-architecture](.claude/agents/critic-architecture.md), secti
 3. Coupling and direction
 4. Ignored architectural alternatives (minimum two)
 5. Frame-level objection (at least one)
-6. Verdict — `approve | rework | reject`, plus one sentence on what would flip it
+6. Verdict — emit the structured block as the last two lines of your output:
+   ```
+   Verdict: approve | rework | reject
+   Confidence: 0.00–1.00
+   ```
+   Plus one sentence on what would flip it. Same calibration as the canonical lens; see [.claude/agents/critic-architecture.md](.claude/agents/critic-architecture.md) §6. The diagnostic pipeline ([bin/diagnostics/aggregate-session.py](bin/diagnostics/aggregate-session.py)) parses this block — don't paraphrase the field names.
 
 ## Things you must not do
 

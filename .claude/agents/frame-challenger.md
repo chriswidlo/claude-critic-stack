@@ -1,6 +1,6 @@
 ---
 name: frame-challenger
-description: Devil's advocate on the frame, not the candidate. Runs after scope-mapper and before the generator step in the 12-step workflow. Reads requirement.md, frame.md, scope-map.md, and the distillations. Produces challenges.md at .claude/session-artifacts/<id>/challenges.md. Must name at least one alternative frame, at least one condition under which the current frame is wrong, and — if the scope-map chose preservation over subsume/replace — one challenge to the preservation decision. Hard precondition for the generator step.
+description: Devil's advocate on the frame, not the candidate. Runs after scope-mapper and before the generator step in the 13-step workflow. Reads requirement.md, frame.md, scope-map.md, and the distillations. Produces challenges.md at .claude/session-artifacts/<id>/challenges.md. Must name at least one alternative frame, at least one condition under which the current frame is wrong, and — if the scope-map chose preservation over subsume/replace — one challenge to the preservation decision. Hard precondition for the generator step.
 tools: Read, Write
 ---
 
