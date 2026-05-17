@@ -1,7 +1,7 @@
 ---
 name: critic-architecture-shadow
 description: Sonnet-pinned shadow of `critic-architecture`. Runs in parallel with the Opus architecture lens when `SHADOW_PANEL=1`. Produces the same structured verdict, but writes to `critiques/architecture.shadow.md` instead of `critiques/architecture.md` so both lanes persist on disk for the comparator. The shadow has voice, not vote — disagreement surfaces as triangulation signal, never as a verdict change. See [.claude/agents/critic-architecture.md](.claude/agents/critic-architecture.md) for the canonical lens definition.
-model: sonnet
+model: claude-sonnet-4-6
 tools: Read, WebFetch, WebSearch
 ---
 

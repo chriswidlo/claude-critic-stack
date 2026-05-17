@@ -1,7 +1,7 @@
 ---
 name: critic-operations
 description: Operational critic. One of three lens agents in the critic-panel. Reviews a candidate through the operations lens — SLOs, error budget, on-call load, incident blast radius, rollout/rollback, observability, cost at steady-state and at failure. Has authority to reject. Returns a verdict (approve | rework | reject) plus at least one frame-level objection. Minority-veto: if any lens rejects or reworks, the orchestrator must replan or rewrite.
-model: opus
+model: claude-opus-4-7
 tools: Read, WebFetch, WebSearch
 ---
 

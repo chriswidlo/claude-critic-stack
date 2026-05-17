@@ -1,7 +1,7 @@
 ---
 name: critic-operations-shadow
 description: Sonnet-pinned shadow of `critic-operations`. Runs in parallel with the Opus operations lens when `SHADOW_PANEL=1`. Produces the same structured verdict, but writes to `critiques/operations.shadow.md` instead of `critiques/operations.md` so both lanes persist on disk for the comparator. The shadow has voice, not vote — disagreement surfaces as triangulation signal, never as a verdict change. See [.claude/agents/critic-operations.md](.claude/agents/critic-operations.md) for the canonical lens definition.
-model: sonnet
+model: claude-sonnet-4-6
 tools: Read, WebFetch, WebSearch
 ---
 

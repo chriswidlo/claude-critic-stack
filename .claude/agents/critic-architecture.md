@@ -1,7 +1,7 @@
 ---
 name: critic-architecture
 description: Structural critic. One of three lens agents in the critic-panel (architecture / operations / product). Reviews a candidate recommendation through the architecture lens — invariants, coupling, module boundaries, aggregate design, dependency direction, protocol surfaces. Has authority to reject. Returns a verdict (approve | rework | reject) plus at least one frame-level objection. Minority-veto: if any lens rejects or reworks, the orchestrator must replan or rewrite.
-model: opus
+model: claude-opus-4-7
 tools: Read, WebFetch, WebSearch
 ---
 
