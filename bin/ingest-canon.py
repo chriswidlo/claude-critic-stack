@@ -512,16 +512,54 @@ def provenance_header(src, body):
     ])
 
 
-def completeness_for(fetch_mode):
+def completeness_for(fetch_mode, source_path):
+    """Decide body_completeness; refuse to claim 'full' unless source.txt is on disk.
+
+    Belt-and-suspenders against the silent-failure mode documented in
+    garden/volunteer/2026-05-05-canon-body-bytes-missing.md: a previous ingester
+    wrote citation.yaml with body_completeness=full while no body file ever
+    landed, leaving the librarian honoring its no-paraphrase rule against an
+    empty corpus and silently returning nothing. The gate here enforces the
+    invariant *in code*: the 'full' claim requires the bytes on disk.
+    """
     if fetch_mode == "arxiv-abs":
         return "abstract_only"
     if fetch_mode == "html-multi":
         return "toc_plus_chapters"
+    # html, aws-docs, owned-book, pdf-manual → 'full' must be backed by bytes
+    if not source_path.exists():
+        raise Exception(
+            "body_completeness=full refused: source.txt missing at {}. "
+            "fetch_mode={} requires bytes on disk before lockfile can claim full.".format(
+                source_path, fetch_mode
+            )
+        )
+    size = source_path.stat().st_size
+    if size == 0:
+        raise Exception(
+            "body_completeness=full refused: source.txt at {} is zero bytes. "
+            "Fetch returned empty content; refusing to record full completeness over nothing.".format(
+                source_path
+            )
+        )
     return "full"
 
 
-def build_citation_yaml(src, source_text):
+def build_citation_yaml(src, source_text, source_path):
     sha = hashlib.sha256(source_text.encode("utf-8")).hexdigest()
+    # Cross-check: the bytes we're hashing must match the bytes on disk. If
+    # they diverge, the write was partial or the file was tampered with between
+    # write and citation generation — fail loudly rather than record a lie.
+    on_disk = source_path.read_bytes()
+    on_disk_sha = hashlib.sha256(on_disk).hexdigest()
+    if on_disk_sha != sha:
+        raise Exception(
+            "sha256 drift: in-memory body hashes to {} but on-disk {} hashes to {}. "
+            "Refusing to write citation.yaml with a sha that does not match the file.".format(
+                sha[:16], source_path, on_disk_sha[:16]
+            )
+        )
+    completeness = completeness_for(src["fetch_mode"], source_path)
     notes_line = ""
     if src.get("notes"):
         notes_line = "  " + str(src["notes"]).replace("\n", "\n  ")
@@ -531,7 +569,7 @@ def build_citation_yaml(src, source_text):
         "slug: {}".format(src["slug"]),
         'fetched_at: "{}"'.format(_iso_now()),
         'sha256: "{}"'.format(sha),
-        "body_completeness: {}".format(completeness_for(src["fetch_mode"])),
+        "body_completeness: {}".format(completeness),
         "chapter_offsets: []",
         "stale: false",
         "fetch_notes: |",
@@ -713,7 +751,7 @@ def main():
             body = fetch_and_extract(src)
             full = provenance_header(src, body) + body + "\n"
             source_path.write_text(full, encoding="utf-8")
-            (slug_dir / "citation.yaml").write_text(build_citation_yaml(src, full), encoding="utf-8")
+            (slug_dir / "citation.yaml").write_text(build_citation_yaml(src, full, source_path), encoding="utf-8")
             (slug_dir / "README.md").write_text(build_readme(src), encoding="utf-8")
             print("ok ({} chars)".format(_fmt_int(len(full))))
             ok += 1

@@ -10,10 +10,11 @@
 | 💡 **essence** | The canon has a silent integrity gap: metadata claims completeness the filesystem does not back up. The librarian honored its no-paraphrase-from-memory rule and surfaced the gap, which means any prior session that quoted these essays was either reconstructing from training data or quoting the empty file (silently failing). |
 | 🚀 **upgrade** | Re-ingest the three entries so a body file lands on disk, OR fix the ingester (`bin/ingest-canon.mjs`) to refuse to mark `body_completeness: full` without writing a body, OR add a verifier that flags drift between `citation.yaml` and on-disk artifacts. The first restores the immediate value; the second prevents recurrence. |
 | 🏷️ **tags** | canon, integrity-bug, librarian, ingestion |
+| 🔖 **committed_in** | 19e73f9 (curative re-ingest), b36e40e (preventive gate + verifier) |
 
-| 🌱 created | 🔬 spiked | 📋 prepared | ✅ accepted | ⚙️ run-through-repo | 🔨 implemented | 💎 value-proved | 🏁 completed |
-|---|---|---|---|---|---|---|---|
-| 2026-05-05 | — | — | — | — | — | — | — |
+| 🌱 created | 🔬 spiked | 📋 prepared | ✅ accepted | ⚙️ run-through-repo | 🔨 implemented | 🩺 verified | 🔖 committed | 💎 value-proved | 🏁 completed |
+|---|---|---|---|---|---|---|---|---|---|
+| 2026-05-05 | — | — | — | — | 2026-05-17 | 2026-05-17 | 2026-05-17 | — | — |
 
 ## Table of contents
 

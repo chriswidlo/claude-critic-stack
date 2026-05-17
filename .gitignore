@@ -83,20 +83,20 @@ canon/*
 !canon/corpus/**
 canon/corpus/*/source.txt
 
-# ---- Step 6: upgrades/ — the R&D lab. Only the four documented tier folders. ----
-# Adding a new tier requires a deliberate edit to this allowlist.
-!upgrades/
-upgrades/*
-!upgrades/README.md
-!upgrades/LEDGER.md
-!upgrades/no-brainer/
-!upgrades/no-brainer/**
-!upgrades/normal/
-!upgrades/normal/**
-!upgrades/outlandish/
-!upgrades/outlandish/**
-!upgrades/profound/
-!upgrades/profound/**
+# ---- Step 6: garden/ — the R&D lab. Only the four documented category folders. ----
+# Adding a new category requires a deliberate edit to this allowlist.
+# (Renamed from upgrades/ in commit 15529a1; the rename commit missed this file.)
+!garden/
+garden/*
+!garden/README.md
+!garden/heirloom/
+!garden/heirloom/**
+!garden/specimen/
+!garden/specimen/**
+!garden/volunteer/
+!garden/volunteer/**
+!garden/perennial/
+!garden/perennial/**
 
 # ---- Step 7: bin/ — repo-wide scripts ----
 !bin/
