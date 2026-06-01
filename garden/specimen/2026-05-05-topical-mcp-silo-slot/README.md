@@ -12,18 +12,52 @@
 | 🏷️ **tags** | mcp, knowledge-tools, rag, retrieval, infrastructure, slot |
 | 🔗 **relates_to** | 2026-04-26-corpus-bias-compensation-step, 2026-04-26-citation-audit-as-canon-discipline |
 
-| 🌱 created | 🔬 spiked | 📋 prepared | ✅ accepted | ⚙️ run-through-repo | 🔨 implemented | 💎 value-proved | 🏁 completed |
-|---|---|---|---|---|---|---|---|
-| 2026-05-05 | — | — | — | — | — | — | — |
+| 🌱 created | 🔬 spiked | 📋 prepared | ✅ accepted | ⚙️ run-through-repo | 🔨 implemented | 🩺 verified | 🔖 committed | 💎 value-proved | 🏁 completed |
+|---|---|---|---|---|---|---|---|---|---|
+| 2026-05-05 | 2026-06-01 | 2026-06-01 | 2026-06-01 | — | — | — | — | — | — |
 
 ## Table of contents
 
+- [Progress — 2026-06-01 (architecture decided, build accepted)](#progress--2026-06-01-architecture-decided-build-accepted)
 - [The seeing — what kapa.ai actually is](#the-seeing--what-kapaai-actually-is)
 - [Why this is a slot, not an instance](#why-this-is-a-slot-not-an-instance)
 - [The chunk contract — the only thing that must be invariant](#the-chunk-contract--the-only-thing-that-must-be-invariant)
 - [Backend is a per-corpus choice, not a slot decision](#backend-is-a-per-corpus-choice-not-a-slot-decision)
 - [Why this is outlandish — honest scoping](#why-this-is-outlandish--honest-scoping)
 - [Open questions](#open-questions)
+
+## Progress — 2026-06-01 (architecture decided, build accepted)
+
+> **Status: ✅ accepted.** Operator directed the full build, AU banking as the first instance. This block records progress since the seed below; the original body is kept as historical record, and where the two conflict, this block is current.
+>
+> Accepted by operator 2026-06-01.
+
+### Probe & research (spiked)
+
+Two deep research passes (parallel sub-agents; all findings on disk, path-clean) — see the phase folder [research/README.md](garden/specimen/2026-05-05-topical-mcp-silo-slot/research/README.md):
+
+- **SOTA tool architecture** — converged on an owned, thin, eval-driven hybrid-retrieval core (contextual chunks → dense + BM25 + RRF → cross-encoder rerank) exposed via MCP. The kapa shape is the proven default; *build thin, own the core* beats managed RaaS for citation-exact regulated content. Decision: [research/07-recommendation.md](garden/specimen/2026-05-05-topical-mcp-silo-slot/research/07-recommendation.md).
+- **Anti-hallucination** — three-layer defense-in-depth: in-tool citation + abstention; a claim-level verifier harness around tool use; abstention + measurement as a policy wrapper. Decision: [research/anti-hallucination/06-recommendation.md](garden/specimen/2026-05-05-topical-mcp-silo-slot/research/anti-hallucination/06-recommendation.md).
+- **Regulator-API probe (AU banking)** — federate the law (Federal Register of Legislation API, point-in-time free), build-and-version the guidance (APRA / ASIC / AUSTRAC). Source map: [research/00-source-map-au-banking.md](garden/specimen/2026-05-05-topical-mcp-silo-slot/research/00-source-map-au-banking.md).
+
+### Open questions from the seed — now resolved
+
+- *AU banking vs claude-code first* → **AU banking** (operator choice; hardest stress test).
+- *Is the minimal chunk contract enough?* → **No — enrich it.** The contract grows from `{source_url, content}` to add `cited_text`, `match_quality`, and provenance (`instrument_id, section, version, effective_date, superseded`). Load-bearing for a regulated domain and for anti-hallucination.
+- *In-repo vs sibling repo* → **staged**: the vertical slice (S1) builds in this repo; production (S3) is a sibling repo.
+- *Backend tier for the AU instance* → self-host thin (pgvector/Qdrant + `bm25s` + `sentence-transformers` + FastMCP), not managed.
+
+### Plan — three-stage roadmap (next steps)
+
+Each stage is a hard gate on the next: complete and fact-based before the next begins.
+
+| Stage | Name | Done-gate |
+|---|---|---|
+| **S2** (now) | Probe + eval harness | regulator probe ✅ · architecture decided ✅ · **remaining: ~50-pair version-anchored gold Q/A set, including deliberate "abstain" cases** |
+| **S1** | Slot scaffold + AU vertical slice | thin owned core over a bounded free source subset (APRA standards built + Banking Act federated), graded against the S2 gold set, exposed via MCP with the enriched chunk contract |
+| **S3** | Production scale-up | full corpus, refresh SLAs, audit, liability gating; sibling repo |
+
+**Immediate next step: S2b — the gold eval set.** No retrieval code is written before it exists: the eval set is the SOTA lever (every expert says so) and the decider for whether GraphRAG is switched on (≥15–20% multi-hop).
 
 ## The seeing — what kapa.ai actually is
 
